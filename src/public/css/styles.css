@@ -1,0 +1,169 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: red;
+    text-align: center;
+}
+
+h2 {
+    color: blue;
+    text-align: center;
+}
+
+h3 {
+    color: green;
+    text-align: center;
+}
+
+nav {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem auto;
+}
+
+a,
+button {
+    background-color: lightgray;
+    font-size: 1rem;
+    color: black;
+    text-decoration: none;
+    padding: .5rem;
+    border: .1rem solid black;
+    border-radius: .5rem;
+    cursor: pointer;
+}
+
+a:visited,
+button:visited {
+    color: black;
+}
+
+a:hover,
+button:hover {
+    background-color: black;
+    color: white;
+}
+
+form {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    margin: 1rem auto;
+    border: .1rem solid black;
+    border-radius: .5rem;
+}
+
+div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem auto;
+}
+
+label {
+    min-width: 30%;
+}
+
+input,
+select {
+    width: 70%;
+    font-size: 1rem;
+    padding: .5rem;
+    border: .1rem solid black;
+    border-radius: .5rem;
+}
+
+.products-container {
+    flex-wrap: wrap;
+}
+
+.product-card {
+    width: 10rem;
+    height: 10rem;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem;
+    border: .1rem solid black;
+    border-radius: .5rem;
+}
+
+.product-card * {
+    margin: 0;
+}
+
+.product-info {
+    width: 50%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 2rem;
+    border: .1rem solid black;
+    border-radius: .5rem;
+}
+
+.product-add-to-cart {
+    width: 50%;
+}
+
+.product-add-to-cart input {
+    width: 10%;
+}
+
+.cart-product-quantity-input {
+    width: 20%;
+}
+
+.profile-info {
+    width: 30%;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem;
+    border: .1rem solid black;
+    border-radius: .5rem;
+}
+
+.input-chat {
+    width: 25%;
+}
+
+.chat-messages {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    margin: 0;
+}
+
+.chat-messages p {
+    margin: .5rem 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    padding: .5rem;
+    border: .1rem solid black;
+}
+
+td {
+    padding: .5rem;
+    border: .1rem solid black;
+    text-align: center;
+}
+
+.last-td {
+    border: none;
+}

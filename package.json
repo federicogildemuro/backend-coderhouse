@@ -1,0 +1,34 @@
+{
+    "name": "backend-coderhouse",
+    "version": "1.0.0",
+    "description": "Proyecto final del curso de Programación Backend de Coderhouse",
+    "main": "./src/app.js",
+    "type": "module",
+    "scripts": {
+        "mongo": "node ./src/app.js -p mongo",
+        "fs": "node ./src/app.js -p fs",
+        "dev-mongo": "nodemon ./src/app.js -p mongo",
+        "dev-fs": "nodemon ./src/app.js -p fs"
+    },
+    "keywords": [],
+    "author": "Federico Gil de Muro",
+    "license": "ISC",
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "commander": "^12.0.0",
+        "cookie-parser": "^1.4.6",
+        "dotenv": "^16.4.5",
+        "express": "^4.18.2",
+        "express-handlebars": "^7.1.2",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.2.0",
+        "mongoose-paginate-v2": "^1.8.0",
+        "nodemailer": "^6.9.13",
+        "passport": "^0.7.0",
+        "passport-github2": "^0.1.12",
+        "passport-jwt": "^4.0.1",
+        "passport-local": "^1.0.0",
+        "socket.io": "^4.7.5",
+        "uuid": "^9.0.1"
+    }
+}
