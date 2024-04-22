@@ -1,7 +1,7 @@
 import { generateToken, validateToken } from '../utils.js';
 import config from '../config/config.js';
 import UsersRepository from '../repositories/users.repository.js';
-import transport from '../config/nodemailer.config.js';
+import MailingServices from '../services/mailing.services.js';
 
 export default class SessionsController {
     static #instance;
@@ -49,16 +49,7 @@ export default class SessionsController {
             }
             const token = generateToken({ email });
             const resetLink = `${config.frontendUrl}/reset-password?token=${token}`;
-            transport.sendMail({
-                from: `Programación Backend <${config.nodeMailerUser}>`,
-                to: user.email,
-                subject: 'Reestablecer contraseña',
-                html:
-                    `<p>Hola ${user.first_name},</p>
-                    <p>Para reestablecer tu contraseña, haz clic en el siguiente enlace:</p>
-                    <a href="${resetLink}">Reestablecer contraseña</a>
-                    <p>Si no solicitaste reestablecer tu contraseña, ignora este mensaje.</p>`
-            });
+            await MailingServices.getInstance().sendResetPasswordEmail(user, resetLink);
             res.sendSuccessMessage(`Se ha enviado un correo electrónico a ${user.email} con las instrucciones para restaurar tu contraseña`);
         } catch (error) {
             console.log(error);
