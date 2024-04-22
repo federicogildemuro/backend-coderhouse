@@ -26,8 +26,6 @@ export default class ProductsRepository {
                 page = products.totalPages;
                 products = await Products.getInstance().getProducts({ limit, page, status, category, sort });
             }
-            products.prevLink = products.prevPage ? `/products?page=${products.prevPage}` : null;
-            products.nextLink = products.nextPage ? `/products?page=${products.nextPage}` : null;
             return products;
         } catch (error) {
             throw error;

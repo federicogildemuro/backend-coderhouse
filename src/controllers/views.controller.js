@@ -40,6 +40,13 @@ export default class ViewsController {
             const user = req.user;
             const payload = await ProductsRepository.getInstance().getProducts(queryParams);
             const { docs: products, ...pagination } = payload;
+            const baseUrl = '/products';
+            if (pagination.hasPrevPage) {
+                pagination.prevLink = `${baseUrl}?${new URLSearchParams({ ...queryParams, page: pagination.page - 1 }).toString()}`;
+            }
+            if (pagination.hasNextPage) {
+                pagination.nextLink = `${baseUrl}?${new URLSearchParams({ ...queryParams, page: pagination.page + 1 }).toString()}`;
+            }
             res.render('user/products', { user, products, pagination });
         } catch (error) {
             console.log(error);
@@ -93,11 +100,12 @@ export default class ViewsController {
             const user = req.user;
             const payload = await ProductsRepository.getInstance().getProducts(queryParams);
             const { docs: products, ...pagination } = payload;
-            if (pagination.prevLink) {
-                pagination.prevLink = '/admin' + pagination.prevLink;
+            const baseUrl = '/admin/products';
+            if (pagination.hasPrevPage) {
+                pagination.prevLink = `${baseUrl}?${new URLSearchParams({ ...queryParams, page: pagination.page - 1 }).toString()}`;
             }
-            if (pagination.nextLink) {
-                pagination.nextLink = '/admin' + pagination.nextLink;
+            if (pagination.hasNextPage) {
+                pagination.nextLink = `${baseUrl}?${new URLSearchParams({ ...queryParams, page: pagination.page + 1 }).toString()}`;
             }
             res.render('admin/products', { user, products, pagination });
         } catch (error) {
