@@ -84,6 +84,27 @@ select {
     border-radius: .5rem;
 }
 
+.query-params-form {
+    width: 90%;
+    flex-direction: row;
+    margin: 0 auto;
+    border: none;
+}
+
+.query-params-form * {
+    font-size: .75rem;
+}
+
+.query-params-form div {
+    gap: .5rem;
+    margin: .5rem auto;
+}
+
+.query-params-form input,
+.query-params-form select {
+    padding: .25rem;
+}
+
 .products-container {
     flex-wrap: wrap;
 }
