@@ -74,9 +74,6 @@ export default class CartsRepository {
                     cart.products = cart.products.filter(i => i.product._id !== item.product._id);
                     isProductPurchased = true;
                     item.product.stock -= item.quantity;
-                    if (item.product.stock === 0) {
-                        item.product.status = false;
-                    }
                     await ProductsRepository.getInstance().updateProduct(item.product._id, item.product);
                 } else {
                     productsNotPurchased.push(item.product.title);

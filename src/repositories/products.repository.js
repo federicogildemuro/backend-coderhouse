@@ -52,6 +52,9 @@ export default class ProductsRepository {
 
     async createProduct(product) {
         try {
+            if (product.stock === 0) {
+                product.status = false;
+            }
             const newProduct = new ProductDTO(product);
             return await Products.getInstance().createProduct(newProduct);
         } catch (error) {
@@ -61,6 +64,9 @@ export default class ProductsRepository {
 
     async updateProduct(id, product) {
         try {
+            if (product.stock === 0) {
+                product.status = false;
+            }
             const updatedProduct = new ProductDTO(product);
             return await Products.getInstance().updateProduct(id, updatedProduct);
         } catch (error) {
