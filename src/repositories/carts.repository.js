@@ -1,6 +1,7 @@
 import { Carts } from '../dao/factory.js';
 import ProductsRepository from '../repositories/products.repository.js';
 import TicketsRepository from '../repositories/tickets.repository.js';
+import MailingServices from '../services/mailing.services.js';
 
 export default class CartsRepository {
     static #instance;
@@ -86,6 +87,7 @@ export default class CartsRepository {
             }
             cart = await Carts.getInstance().updateCart(cart);
             const ticket = await TicketsRepository.getInstance().createTicket({ amount, purchaser: user.email });
+            await MailingServices.getInstance().sendPurchaseConfirmationEmail(user, ticket);
             if (productsNotPurchased.length > 0) {
                 return { ticket, productsNotPurchased };
             }
