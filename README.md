@@ -34,6 +34,8 @@ El mismo utiliza:
 
 - **Faker.js**: Es una biblioteca que genera datos ficticios de manera realista para facilitar el desarrollo y las pruebas de la aplicación. Se utiliza para crear datos de ejemplo que ayudan a simular situaciones diversas, lo que permite probar la aplicación en diferentes escenarios sin comprometer la integridad de los datos reales.
 
+- **gzip y Brotli**: Son algoritmos de compresión de datos utilizados para reducir el tamaño de los archivos transmitidos a través de la web. Se utilizan para comprimir y descomprimir datos en tiempo de ejecución, mejorando la eficiencia en la transferencia de archivos y el rendimiento del servidor.
+
 ## Requisitos previos
 
 - Node.js instalado en tu sistema. Puedes descargarlo [aquí](https://nodejs.org/).
