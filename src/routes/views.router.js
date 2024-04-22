@@ -1,5 +1,6 @@
 import CustomRouter from './custom.router.js';
 import ViewsController from '../controllers/views.controller.js';
+import { generateFakerProducts } from '../utils.js';
 
 export default class ViewsRouter extends CustomRouter {
     static #instance;
@@ -43,6 +44,8 @@ export default class ViewsRouter extends CustomRouter {
         this.get('/admin/add-product', ['ADMIN'], ViewsController.getInstance().renderAdminAddProduct);
 
         this.get('/admin/edit-product/:pid', ['ADMIN'], ViewsController.getInstance().renderAdminEditProduct);
+
+        this.get('/mockingproducts', ['ALL'], (req, res) => { res.json(generateFakerProducts()) });
 
         this.get('*', ['ALL'], ViewsController.getInstance().renderNotFound);
     }
