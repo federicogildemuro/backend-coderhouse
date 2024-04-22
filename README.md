@@ -8,27 +8,31 @@ El mismo utiliza:
 
 - **Express**: Es un framework de aplicaciones web para Node.js que simplifica el proceso de creación de servidores web y APIs.
 
+- **File System**: Esta opción de persistencia almacena los datos directamente en el sistema de archivos del servidor.
+
 - **Handlebars**: Es un motor de plantillas que permite generar HTML de forma dinámica basado en templates. Se utiliza para renderizar las vistas del lado del servidor.
 
-- **Passport.js**: Es un middleware de autenticación para Node.js que se utiliza en aplicaciones web para autenticar a los usuarios mediante diversas estrategias. Se utiliza junto con las estrategias Local, JWT y GitHub para gestionar la autenticación de usuarios.
+- **Socket.IO**: Es una biblioteca JavaScript para aplicaciones web en tiempo real. Permite la comunicación bidireccional en tiempo real entre clientes web y servidores. Se utiliza para el chat entre usuarios.
+
+- **MongoDB y Mongoose**: MongoDB es una base de datos NoSQL orientada a documentos, mientras que Mongoose es una biblioteca de modelado de objetos MongoDB para Node.js. Se utilizan para almacenar y manipular los datos del ecommerce de forma eficiente.
+
+- **Cookie Parser**: Es una librería de Node.js que analiza las cookies adjuntas a las solicitudes HTTP. Se utiliza para facilitar el manejo de cookies en la autenticación de usuarios y otras funcionalidades relacionadas con la sesión.
 
 - **JSON Web Tokens (JWT)**: Es un estándar abierto (RFC 7519) que define un formato compacto y autónomo para transmitir información de forma segura entre partes como un objeto JSON. Se utiliza para la autenticación y autorización de usuarios.
 
-- **Cookie Parser**: Es una librería de Node.js que analiza las cookies adjuntas a las solicitudes HTTP. Se para facilitar el manejo de cookies en la autenticación de usuarios y otras funcionalidades relacionadas con la sesión.
+- **Passport.js**: Es un middleware de autenticación para Node.js que se utiliza en aplicaciones web para autenticar a los usuarios mediante diversas estrategias. Se utiliza junto con las estrategias Local, JWT y GitHub para gestionar la autenticación de usuarios.
 
-- **Nodemailer**: Es una librería de Node.js que simplifica el proceso de enviar correos electrónicos desde una aplicación Node. Se utiliza para enviar los vínculos de reestablecimiento de contraseñas.
+- **Dotenv**: Es una librería que carga variables de entorno desde un archivo .env en el entorno de ejecución. Se utiliza para cargar configuraciones sensibles de forma segura, sin necesidad de exponerlas en el código fuente.
 
-- **UUID**: Es una biblioteca que ofrece herramientas para generar Identificadores Únicos Universales (UUIDs). En el proyecto se utilizan para la generación de los códigos de los tickets de compra, garantizando la unicidad de cada transacción.
+- **Commander**: Es una librería de Node.js que simplifica la creación de interfaces de línea de comandos (CLI). Se utiliza para definir la persistencia que se utilizará, permitiendo al usuario elegir entre las diferentes opciones de almacenamiento de datos.
 
-- **Socket.IO**: Es una biblioteca JavaScript para aplicaciones web en tiempo real. Permite la comunicación bidireccional en tiempo real entre clientes web y servidores. Se utiliza en este proyecto para el chat entre usuarios.
+- **UUID**: Es una biblioteca que ofrece herramientas para generar Identificadores Únicos Universales (UUIDs), los que se utilizan para la generación de los códigos de los tickets de compra, garantizando la unicidad de cada transacción.
 
-- **MongoDB y Mongoose**: MongoDB es una base de datos NoSQL orientada a documentos, mientras que Mongoose es una biblioteca de modelado de objetos MongoDB para Node.js. En este proyecto se utilizan para almacenar y manipular los datos del ecommerce de forma eficiente.
+- **Nodemailer**: Es una librería de Node.js que simplifica el proceso de enviar correos electrónicos desde una aplicación Node, que se utiliza para enviar los vínculos de reestablecimiento de contraseñas y tickets de compra.
 
-- **File System**: Esta opción de persistencia almacena los datos directamente en el sistema de archivos del servidor.
+- **CORS**: Es un mecanismo de seguridad que permite a los servidores indicar a los navegadores si deben permitir que una solicitud web acceda a recursos de otro dominio. Se utiliza para controlar y autorizar solicitudes HTTP entre diferentes dominios, asegurando un intercambio de datos seguro y controlado.
 
-- **Commander**: Es una librería de Node.js que simplifica la creación de interfaces de línea de comandos (CLI). Se utiliza en este proyecto para definir la persistencia que se utilizará, permitiendo al usuario elegir entre las diferentes opciones de almacenamiento de datos.
-
-- **Dotenv**: Es una librería que carga variables de entorno desde un archivo .env en el entorno de ejecución. Se utiliza en este proyecto para cargar configuraciones sensibles de forma segura, sin necesidad de exponerlas en el código fuente.
+- **Faker.js**: Es una biblioteca que genera datos ficticios de manera realista para facilitar el desarrollo y las pruebas de la aplicación. Se utiliza para crear datos de ejemplo que ayudan a simular situaciones diversas, lo que permite probar la aplicación en diferentes escenarios sin comprometer la integridad de los datos reales.
 
 ## Requisitos previos
 

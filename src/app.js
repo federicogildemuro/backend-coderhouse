@@ -1,6 +1,7 @@
 import { program } from 'commander';
 import initializePersistence from './dao/factory.js';
 import express from 'express';
+import cors from 'cors';
 import { __dirname } from './utils.js';
 import cookieParser from 'cookie-parser';
 import config from './config/config.js';
@@ -22,6 +23,7 @@ initializePersistence(program.opts().persistence);
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
