@@ -25,7 +25,7 @@ initializePersistence(program.opts().persistence);
 const app = express();
 
 app.use(cors());
-app.user(compression({ brotli: { enabled: true, zlib: {} } }));
+app.use(compression({ brotli: { enabled: true, zlib: {} } }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
