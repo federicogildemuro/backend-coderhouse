@@ -3,7 +3,7 @@ import { dirname } from 'path';
 import bcrypt from 'bcrypt';
 import config from './config/config.js';
 import jwt from 'jsonwebtoken';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/es';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
