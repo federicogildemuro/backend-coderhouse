@@ -36,6 +36,8 @@ El mismo utiliza:
 
 - **gzip y Brotli**: Son algoritmos de compresión de datos utilizados para reducir el tamaño de los archivos transmitidos a través de la web. Se utilizan para comprimir y descomprimir datos en tiempo de ejecución, mejorando la eficiencia en la transferencia de archivos y el rendimiento del servidor.
 
+- **Winston**: es una biblioteca de registro para Node.js que simplifica la gestión de registros en aplicaciones, la que se utiliza para registrar errores durante la ejecución del programa.
+
 ## Requisitos previos
 
 - Node.js instalado en tu sistema. Puedes descargarlo [aquí](https://nodejs.org/).
