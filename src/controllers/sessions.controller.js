@@ -52,7 +52,7 @@ export default class SessionsController {
             await MailingServices.getInstance().sendResetPasswordEmail(user, resetLink);
             res.sendSuccessMessage(`Se ha enviado un correo electrónico a ${user.email} con las instrucciones para restaurar tu contraseña`);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -79,7 +79,7 @@ export default class SessionsController {
             await UsersRepository.getInstance().updateUserPassword(user._id, user);
             res.sendSuccessMessage('Contraseña reestablecida exitosamente');
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }

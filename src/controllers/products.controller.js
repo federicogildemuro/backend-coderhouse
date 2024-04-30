@@ -21,7 +21,7 @@ export default class ProductsController {
             const payload = await ProductsRepository.getInstance().getProducts(queryParams);
             res.sendSuccessPayload(payload);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -35,7 +35,7 @@ export default class ProductsController {
             }
             res.sendSuccessPayload(payload);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -59,7 +59,7 @@ export default class ProductsController {
             const payload = await ProductsRepository.getInstance().createProduct(newProduct);
             res.sendSuccessPayload(payload);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             if (error.code === 1) {
                 return res.sendUserError(`${error.message}: ${error.cause}`);
             }
@@ -84,7 +84,7 @@ export default class ProductsController {
             const payload = await ProductsRepository.getInstance().updateProduct(pid, updatedProduct);
             res.sendSuccessPayload(payload);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -99,7 +99,7 @@ export default class ProductsController {
             const payload = await ProductsRepository.getInstance().deleteProduct(pid);
             res.sendSuccessPayload(payload);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }

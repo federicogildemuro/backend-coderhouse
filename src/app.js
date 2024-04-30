@@ -6,6 +6,7 @@ import compression from 'express-compression';
 import { __dirname } from './utils.js';
 import cookieParser from 'cookie-parser';
 import config from './config/config.js';
+import { addLogger } from './config/logger.config.js';
 import handlebars from 'express-handlebars';
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
@@ -30,6 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
 app.use(cookieParser(config.cookieSecret));
+app.use(addLogger);
 
 app.engine('handlebars', handlebars.engine());
 app.set('views', `${__dirname}/views`);

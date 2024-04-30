@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 
-dotenv.config();
+const environment = process.env.NODE_ENV || 'development';
+dotenv.config({ path: environment === 'development' ? './.env.dev' : './.env.prod' });
 
 const config = {
     frontendUrl: process.env.FRONTEND_URL,

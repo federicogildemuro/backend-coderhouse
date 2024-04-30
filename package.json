@@ -5,10 +5,10 @@
     "main": "./src/app.js",
     "type": "module",
     "scripts": {
-        "mongo": "node ./src/app.js -p mongo",
-        "fs": "node ./src/app.js -p fs",
-        "dev-mongo": "nodemon ./src/app.js -p mongo",
-        "dev-fs": "nodemon ./src/app.js -p fs"
+        "start": "cross-env NODE_ENV=production node ./src/app.js -p mongo",
+        "start-fs": "cross-env NODE_ENV=production node ./src/app.js -p fs",
+        "start:dev": "cross-env NODE_ENV=development nodemon ./src/app.js -p mongo",
+        "start:dev-fs": "cross-env NODE_ENV=development nodemon ./src/app.js -p fs"
     },
     "keywords": [],
     "author": "Federico Gil de Muro",
@@ -36,6 +36,7 @@
     },
     "devDependencies": {
         "@faker-js/faker": "^8.4.1",
+        "cross-env": "^7.0.3",
         "nodemon": "^3.1.0"
     }
 }

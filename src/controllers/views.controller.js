@@ -50,7 +50,7 @@ export default class ViewsController {
             }
             res.render('user/products', { user, products, pagination });
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -62,7 +62,7 @@ export default class ViewsController {
             const product = await ProductsRepository.getInstance().getProductById(pid);
             res.render('user/product', { user, product });
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -80,7 +80,7 @@ export default class ViewsController {
             cart.total = cart.products.reduce((acc, product) => acc + product.total, 0).toFixed(2);
             res.render('user/cart', { cart });
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -110,6 +110,7 @@ export default class ViewsController {
             }
             res.render('admin/products', { user, products, pagination });
         } catch (error) {
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -120,7 +121,7 @@ export default class ViewsController {
             const product = await ProductsRepository.getInstance().getProductById(pid);
             res.render('admin/product', { product });
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -135,6 +136,7 @@ export default class ViewsController {
             const product = await ProductsRepository.getInstance().getProductById(pid);
             res.render('admin/edit-product', { product });
         } catch (error) {
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -145,6 +147,16 @@ export default class ViewsController {
             products.push(generateFakerProduct());
         }
         res.json(products);
+    }
+
+    showLoggerTest(req, res) {
+        req.logger.fatal('Este es un mensaje fatal');
+        req.logger.error('Este es un mensaje de error');
+        req.logger.warning('Este es un mensaje de advertencia');
+        req.logger.info('Este es un mensaje de información');
+        req.logger.http('Este es un mensaje HTTP');
+        req.logger.debug('Este es un mensaje de depuración');
+        res.send('Mensajes de registro enviados');
     }
 
     renderNotFound(req, res) {

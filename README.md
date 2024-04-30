@@ -65,19 +65,17 @@ npm install
 
 ## Configuración
 
-Crea un archivo `.env` en el directorio raíz del proyecto y configura las variables de entorno necesarias. Puedes encontrar un ejemplo de las variables requeridas en el archivo `.env.example`.
+Crea un archivo `.env.prod` o `.env.dev` en el directorio raíz del proyecto según el entorno en que se ejecutará el servidor y configura las variables necesarias. Puedes encontrar un ejemplo de las variables requeridas en el archivo `.env.example`.
 
 ## Uso
 
 Para ejecutar el servidor, utiliza el siguiente comando:
 
 ```bash
-npm run <tipo_de_persistencia>
+npm start
 ```
 
-Asegúrate de reemplazar _<tipo_de_persistencia>_ con uno de los siguientes valores: _mongo_ o _fs_, dependiendo de la persistencia que desees utilizar.
-
-El servidor se ejecutará en el puerto especificado en las variables de entorno.
+De esta forma se ejecutará en un entorno de producción utilizando la persistencia en MongoDB como base de datos principal. Para otros entornos y tipos de persistencia, puedes utilizar los restantes scripts del archivo `package.json`.
 
 ## Endpoints de la API
 

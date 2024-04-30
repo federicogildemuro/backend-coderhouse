@@ -18,7 +18,7 @@ export default class CartsController {
             const payload = await CartsRepository.getInstance().createCart();
             res.sendSuccessPayload(payload);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -32,7 +32,7 @@ export default class CartsController {
             }
             res.sendSuccessPayload(payload);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -52,7 +52,7 @@ export default class CartsController {
             const payload = await CartsRepository.getInstance().addProduct(cart, product, quantity);
             res.sendSuccessPayload(payload);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -75,7 +75,7 @@ export default class CartsController {
             }
             res.sendSuccessPayload(payload);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -97,7 +97,7 @@ export default class CartsController {
             }
             res.sendSuccessPayload(payload);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -112,7 +112,7 @@ export default class CartsController {
             const payload = await CartsRepository.getInstance().deleteCart(cid);
             res.sendSuccessPayload(payload);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -131,7 +131,7 @@ export default class CartsController {
             }
             res.sendSuccessPayload(payload);
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
