@@ -57,6 +57,19 @@ export const addLogger = (req, res, next) => {
     Object.keys(customLevelOptions.levels).forEach(level => {
         logger[level] = (message) => logger.log({ level, message });
     });
+    if (!req.originalUrl.startsWith('/api')) {
+        return next();
+    }
+    const currentDate = new Date().toLocaleDateString();
+    const currentTime = new Date().toLocaleTimeString();
+    const start = Date.now();
+    const originalSend = res.send;
+    res.send = function (...args) {
+        const end = Date.now();
+        const executionTime = end - start;
+        logger.http(`${req.method} en ${req.originalUrl}, Fecha: ${currentDate}, Hora: ${currentTime}, Código: ${res.statusCode}, Tiempo de ejecución: ${executionTime}ms`);
+        originalSend.apply(res, args);
+    };
     req.logger = logger;
     next();
 };
