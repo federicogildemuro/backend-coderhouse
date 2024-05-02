@@ -1,7 +1,4 @@
 import ProductsServices from '../services/products.services.js';
-import CustomError from '../services/errors/custom.error.js';
-import { generateNewProductErrorInfo } from '../services/errors/info.js';
-import EErrors from '../services/errors/enums.js';
 
 export default class ProductsController {
     static #instance;
@@ -45,19 +42,10 @@ export default class ProductsController {
 
     async createProduct(req, res) {
         try {
-            const { title, code, price } = req.body;
-            if (!title || !code || !price || isNaN(price) || price <= 0) {
-                CustomError.createError({
-                    name: 'Error de creación de producto',
-                    cause: generateNewProductErrorInfo({ title, code, price }),
-                    message: 'Error al intentar crear producto',
-                    code: EErrors.VALIDATION_ERROR
-                });
-            }
             const newProduct = req.body;
             const product = await ProductsServices.getInstance().getProductByCode(newProduct.code);
             if (product) {
-                req.logger.warn(`Ya existe un producto con el código ${code}`);
+                req.logger.warn(`Ya existe un producto con el código ${newProduct.code}`);
                 return res.sendUserError(`Ya existe un producto con el código ${newProduct.code}`);
             }
             const payload = await ProductsServices.getInstance().createProduct(newProduct);

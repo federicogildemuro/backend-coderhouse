@@ -20,7 +20,7 @@ export default class ProductsRouter extends CustomRouter {
 
         this.get('/:pid', ['USER', 'ADMIN'], ProductsController.getInstance().getProductById);
 
-        this.post('/', ['ADMIN'], ProductsController.getInstance().createProduct);
+        this.post('/', ['ADMIN'], this.validateProduct, ProductsController.getInstance().createProduct);
 
         this.put('/:pid', ['ADMIN'], this.validateProduct, ProductsController.getInstance().updateProduct);
 
@@ -30,9 +30,11 @@ export default class ProductsRouter extends CustomRouter {
     validateProduct(req, res, next) {
         const { title, code, price } = req.body;
         if (!title || !code || !price) {
+            req.logger.warning('Los campos título, código y precio son obligatorios');
             return res.sendUserError('Los campos título, código y precio son obligatorios');
         }
         if (isNaN(price) || price < 0) {
+            req.logger.warning('El precio debe ser un número positivo');
             return res.sendUserError('El precio debe ser un número positivo');
         }
         next();
