@@ -61,7 +61,7 @@ export default class ProductsController {
                 return res.sendUserError(`Ya existe un producto con el código ${newProduct.code}`);
             }
             const payload = await ProductsServices.getInstance().createProduct(newProduct);
-            req.logger.info(`Producto creado con éxito: ${JSON.stringify(payload)}`);
+            req.logger.info(`Producto creado exitosamente: ${JSON.stringify(payload)}`);
             res.sendSuccessPayload(payload);
         } catch (error) {
             req.logger.error(`Error al crear producto: ${error.message}`);
@@ -89,7 +89,7 @@ export default class ProductsController {
                 }
             }
             const payload = await ProductsServices.getInstance().updateProduct(pid, updatedProduct);
-            req.logger.info(`Producto ID ${pid} actualizado con éxito: ${JSON.stringify(payload)}`);
+            req.logger.info(`Producto ID ${pid} actualizado exitosamente: ${JSON.stringify(payload)}`);
             res.sendSuccessPayload(payload);
         } catch (error) {
             req.logger.error(`Error al actualizar producto ID ${pid}: ${error.message}`);
@@ -106,7 +106,7 @@ export default class ProductsController {
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             const payload = await ProductsServices.getInstance().deleteProduct(pid);
-            req.logger.info(`Producto ID ${pid} eliminado con éxito: ${JSON.stringify(payload)}`);
+            req.logger.info(`Producto ID ${pid} eliminado exitosamente: ${JSON.stringify(payload)}`);
             res.sendSuccessPayload(payload);
         } catch (error) {
             req.logger.error(`Error al eliminar producto ID ${pid}: ${error.message}`);
