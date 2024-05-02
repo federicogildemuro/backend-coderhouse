@@ -1,6 +1,6 @@
 import { generateToken, validateToken } from '../utils.js';
 import config from '../config/config.js';
-import UsersRepository from '../repositories/users.repository.js';
+import UsersServices from '../services/users.services.js';
 import MailingServices from '../services/mailing.services.js';
 
 export default class SessionsController {
@@ -48,7 +48,7 @@ export default class SessionsController {
                 req.logger.warn('El correo electrónico ingresado no es válido');
                 return res.sendUserError('El correo electrónico ingresado no es válido');
             }
-            const user = await UsersRepository.getInstance().getUserByEmail(email);
+            const user = await UsersServices.getInstance().getUserByEmail(email);
             if (!user) {
                 req.logger.warn(`No existe un usuario registrado con el correo electrónico ${email}`);
                 return res.sendUserError(`No existe un usuario registrado con el correo electrónico ${email}`);
@@ -81,13 +81,13 @@ export default class SessionsController {
                 req.logger.warn('No se ha proporcionado un token válido');
                 return res.sendUserError('No se ha proporcionado un token válido');
             }
-            const user = await UsersRepository.getInstance().getUserByEmail(decoded.email);
+            const user = await UsersServices.getInstance().getUserByEmail(decoded.email);
             if (!user) {
                 req.logger.warn('No se ha encontrado un usuario asociado al token proporcionado');
                 return res.sendUserError('No se ha encontrado un usuario asociado al token proporcionado');
             }
             user.password = password;
-            await UsersRepository.getInstance().updateUserPassword(user._id, user);
+            await UsersServices.getInstance().updateUserPassword(user._id, user);
             req.logger.info('Contraseña reestablecida exitosamente');
             res.sendSuccessMessage('Contraseña reestablecida exitosamente');
         } catch (error) {

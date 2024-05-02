@@ -1,14 +1,14 @@
 import MessageDTO from '../dao/dtos/message.dto.js';
 import { Messages } from '../dao/factory.js';
 
-export default class MessagesRepository {
+export default class MessagesServices {
     static #instance;
 
     constructor() { }
 
     static getInstance() {
         if (!this.#instance) {
-            this.#instance = new MessagesRepository();
+            this.#instance = new MessagesServices();
         }
         return this.#instance;
     }

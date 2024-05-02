@@ -1,16 +1,16 @@
 import { createHash } from '../utils.js';
-import CartsRepository from '../repositories/carts.repository.js';
+import CartsServices from './carts.services.js';
 import UserDTO from '../dao/dtos/user.dto.js';
 import { Users } from '../dao/factory.js';
 
-export default class UsersRepository {
+export default class UsersServices {
     static #instance;
 
     constructor() { }
 
     static getInstance() {
         if (!this.#instance) {
-            this.#instance = new UsersRepository();
+            this.#instance = new UsersServices();
         }
         return this.#instance;
     }
@@ -20,7 +20,7 @@ export default class UsersRepository {
             if (user.password && user.password.length > 0) {
                 user.password = createHash(user.password);
             }
-            const cart = await CartsRepository.getInstance().createCart();
+            const cart = await CartsServices.getInstance().createCart();
             user.cart = cart._id;
             const newUser = new UserDTO(user);
             return await Users.getInstance().createUser(newUser);

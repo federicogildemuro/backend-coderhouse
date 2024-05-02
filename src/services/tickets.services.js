@@ -1,14 +1,14 @@
 import TicketDTO from '../dao/dtos/ticket.dto.js';
 import { Tickets } from '../dao/factory.js';
 
-export default class TicketsRepository {
+export default class TicketsServices {
     static #instance;
 
     constructor() { }
 
     static getInstance() {
         if (!this.#instance) {
-            this.#instance = new TicketsRepository();
+            this.#instance = new TicketsServices();
         }
         return this.#instance;
     }

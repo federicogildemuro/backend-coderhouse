@@ -1,5 +1,5 @@
-import ProductsRepository from '../repositories/products.repository.js';
-import CartsRepository from '../repositories/carts.repository.js';
+import ProductsServices from '../services/products.services.js';
+import CartsServices from '../services/carts.services.js';
 import { generateFakerProduct } from '../utils.js';
 
 export default class ViewsController {
@@ -39,7 +39,7 @@ export default class ViewsController {
         try {
             const queryParams = req.query;
             const user = req.user;
-            const payload = await ProductsRepository.getInstance().getProducts(queryParams);
+            const payload = await ProductsServices.getInstance().getProducts(queryParams);
             const { docs: products, ...pagination } = payload;
             const baseUrl = '/products';
             if (pagination.hasPrevPage) {
@@ -59,7 +59,7 @@ export default class ViewsController {
         try {
             const { pid } = req.params;
             const user = req.user;
-            const product = await ProductsRepository.getInstance().getProductById(pid);
+            const product = await ProductsServices.getInstance().getProductById(pid);
             res.render('user/product', { user, product });
         } catch (error) {
             req.logger.error(error);
@@ -70,7 +70,7 @@ export default class ViewsController {
     async renderCart(req, res) {
         try {
             const { cid } = req.params;
-            const cart = await CartsRepository.getInstance().getCartById(cid);
+            const cart = await CartsServices.getInstance().getCartById(cid);
             cart.products = cart.products.map(product => {
                 return {
                     ...product,
@@ -99,7 +99,7 @@ export default class ViewsController {
         try {
             const queryParams = req.query;
             const user = req.user;
-            const payload = await ProductsRepository.getInstance().getProducts(queryParams);
+            const payload = await ProductsServices.getInstance().getProducts(queryParams);
             const { docs: products, ...pagination } = payload;
             const baseUrl = '/admin/products';
             if (pagination.hasPrevPage) {
@@ -118,7 +118,7 @@ export default class ViewsController {
     async renderAdminProduct(req, res) {
         try {
             const { pid } = req.params;
-            const product = await ProductsRepository.getInstance().getProductById(pid);
+            const product = await ProductsServices.getInstance().getProductById(pid);
             res.render('admin/product', { product });
         } catch (error) {
             req.logger.error(error);
@@ -133,7 +133,7 @@ export default class ViewsController {
     async renderAdminEditProduct(req, res) {
         try {
             const { pid } = req.params;
-            const product = await ProductsRepository.getInstance().getProductById(pid);
+            const product = await ProductsServices.getInstance().getProductById(pid);
             res.render('admin/edit-product', { product });
         } catch (error) {
             req.logger.error(error);

@@ -1,14 +1,14 @@
 import ProductDTO from '../dao/dtos/product.dto.js';
 import { Products } from '../dao/factory.js';
 
-export default class ProductsRepository {
+export default class ProductsServices {
     static #instance;
 
     constructor() { }
 
     static getInstance() {
         if (!this.#instance) {
-            this.#instance = new ProductsRepository();
+            this.#instance = new ProductsServices();
         }
         return this.#instance;
     }

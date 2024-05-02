@@ -1,16 +1,16 @@
 import { Carts } from '../dao/factory.js';
-import ProductsRepository from '../repositories/products.repository.js';
-import TicketsRepository from '../repositories/tickets.repository.js';
-import MailingServices from '../services/mailing.services.js';
+import ProductsServices from './products.services.js';
+import TicketsServices from './tickets.services.js';
+import MailingServices from './mailing.services.js';
 
-export default class CartsRepository {
+export default class CartsServices {
     static #instance;
 
     constructor() { }
 
     static getInstance() {
         if (!this.#instance) {
-            this.#instance = new CartsRepository();
+            this.#instance = new CartsServices();
         }
         return this.#instance;
     }
@@ -74,7 +74,7 @@ export default class CartsRepository {
                     cart.products = cart.products.filter(i => i.product._id !== item.product._id);
                     isProductPurchased = true;
                     item.product.stock -= item.quantity;
-                    await ProductsRepository.getInstance().updateProduct(item.product._id, item.product);
+                    await ProductsServices.getInstance().updateProduct(item.product._id, item.product);
                 } else {
                     productsNotPurchased.push(item.product.title);
                 }
@@ -83,7 +83,7 @@ export default class CartsRepository {
                 return { ticket: null, productsNotPurchased };
             }
             cart = await Carts.getInstance().updateCart(cart);
-            const ticket = await TicketsRepository.getInstance().createTicket({ amount, purchaser: user.email });
+            const ticket = await TicketsServices.getInstance().createTicket({ amount, purchaser: user.email });
             await MailingServices.getInstance().sendPurchaseConfirmationEmail(user, ticket);
             if (productsNotPurchased.length > 0) {
                 return { ticket, productsNotPurchased };
