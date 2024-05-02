@@ -40,17 +40,17 @@ export default class SessionsController {
         try {
             const { email } = req.body;
             if (!email) {
-                req.logger.warn('El campo correo electrónico es obligatorio');
+                req.logger.warning('El campo correo electrónico es obligatorio');
                 return res.sendUserError('El campo correo electrónico es obligatorio');
             }
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                req.logger.warn('El correo electrónico ingresado no es válido');
+                req.logger.warning('El correo electrónico ingresado no es válido');
                 return res.sendUserError('El correo electrónico ingresado no es válido');
             }
             const user = await UsersServices.getInstance().getUserByEmail(email);
             if (!user) {
-                req.logger.warn(`No existe un usuario registrado con el correo electrónico ${email}`);
+                req.logger.warning(`No existe un usuario registrado con el correo electrónico ${email}`);
                 return res.sendUserError(`No existe un usuario registrado con el correo electrónico ${email}`);
             }
             const token = generateToken({ email });
@@ -68,22 +68,22 @@ export default class SessionsController {
         try {
             const { token, password } = req.body;
             if (!password) {
-                req.logger.warn('El campo contraseña es obligatorio');
+                req.logger.warning('El campo contraseña es obligatorio');
                 return res.sendUserError('El campo contraseña es obligatorio');
             }
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
             if (!passwordRegex.test(password)) {
-                req.logger.warn('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un caracter especial');
+                req.logger.warning('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un caracter especial');
                 return res.sendUserError('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un caracter especial');
             }
             const decoded = validateToken(token);
             if (!decoded) {
-                req.logger.warn('No se ha proporcionado un token válido');
+                req.logger.warning('No se ha proporcionado un token válido');
                 return res.sendUserError('No se ha proporcionado un token válido');
             }
             const user = await UsersServices.getInstance().getUserByEmail(decoded.email);
             if (!user) {
-                req.logger.warn('No se ha encontrado un usuario asociado al token proporcionado');
+                req.logger.warning('No se ha encontrado un usuario asociado al token proporcionado');
                 return res.sendUserError('No se ha encontrado un usuario asociado al token proporcionado');
             }
             user.password = password;

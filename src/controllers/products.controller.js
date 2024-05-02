@@ -29,7 +29,7 @@ export default class ProductsController {
             const { pid } = req.params;
             const payload = await ProductsServices.getInstance().getProductById(pid);
             if (!payload) {
-                req.logger.warn(`No existe un producto con el ID ${pid}`);
+                req.logger.warning(`No existe un producto con el ID ${pid}`);
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             req.logger.info(`Consulta de producto ID ${pid} exitosa`);
@@ -45,7 +45,7 @@ export default class ProductsController {
             const newProduct = req.body;
             const product = await ProductsServices.getInstance().getProductByCode(newProduct.code);
             if (product) {
-                req.logger.warn(`Ya existe un producto con el código ${newProduct.code}`);
+                req.logger.warning(`Ya existe un producto con el código ${newProduct.code}`);
                 return res.sendUserError(`Ya existe un producto con el código ${newProduct.code}`);
             }
             const payload = await ProductsServices.getInstance().createProduct(newProduct);
@@ -66,13 +66,13 @@ export default class ProductsController {
             const updatedProduct = req.body;
             let product = await ProductsServices.getInstance().getProductById(pid);
             if (!product) {
-                req.logger.warn(`No existe un producto con el ID ${pid}`)
+                req.logger.warning(`No existe un producto con el ID ${pid}`)
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             if (updatedProduct.code !== product.code) {
                 product = await ProductsServices.getInstance().getProductByCode(updatedProduct.code);
                 if (product) {
-                    req.logger.warn(`Ya existe un producto con el código ${updatedProduct.code}`);
+                    req.logger.warning(`Ya existe un producto con el código ${updatedProduct.code}`);
                     return res.sendUserError(`Ya existe un producto con el código ${updatedProduct.code}`);
                 }
             }
@@ -90,7 +90,7 @@ export default class ProductsController {
             const { pid } = req.params;
             const product = await ProductsServices.getInstance().getProductById(pid);
             if (!product) {
-                req.logger.warn(`No existe un producto con el ID ${pid}`);
+                req.logger.warning(`No existe un producto con el ID ${pid}`);
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             const payload = await ProductsServices.getInstance().deleteProduct(pid);

@@ -29,7 +29,7 @@ export default class CartsController {
             const { cid } = req.params;
             const payload = await CartsServices.getInstance().getCartById(cid);
             if (!payload) {
-                req.logger.warn(`No existe un carrito con el id ${cid}`);
+                req.logger.warning(`No existe un carrito con el id ${cid}`);
                 return res.sendUserError(`No existe un carrito con el id ${cid}`);
             }
             req.logger.info(`Consulta de carrito ID ${cid} exitosa`);
@@ -46,12 +46,12 @@ export default class CartsController {
             const quantity = req.body.quantity;
             const cart = await CartsServices.getInstance().getCartById(cid);
             if (!cart) {
-                req.logger.warn(`No existe un carrito con el id ${cid}`);
+                req.logger.warning(`No existe un carrito con el id ${cid}`);
                 return res.sendUserError(`No existe un carrito con el id ${cid}`);
             }
             const product = await ProductsServices.getInstance().getProductById(pid);
             if (!product) {
-                req.logger.warn(`No existe un producto con el id ${pid}`);
+                req.logger.warning(`No existe un producto con el id ${pid}`);
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             const payload = await CartsServices.getInstance().addProduct(cart, product, quantity);
@@ -69,17 +69,17 @@ export default class CartsController {
             const quantity = req.body.quantity;
             const cart = await CartsServices.getInstance().getCartById(cid);
             if (!cart) {
-                req.logger.warn(`No existe un carrito con el id ${cid}`);
+                req.logger.warning(`No existe un carrito con el id ${cid}`);
                 return res.sendUserError(`No existe un carrito con el id ${cid}`);
             }
             const product = await ProductsServices.getInstance().getProductById(pid);
             if (!product) {
-                req.logger.warn(`No existe un producto con el id ${pid}`);
+                req.logger.warning(`No existe un producto con el id ${pid}`);
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             const payload = await CartsServices.getInstance().updateProductQuantity(cart, product, quantity);
             if (!payload) {
-                req.logger.warn(`No se encontro el producto con id ${pid} en el carrito con id ${cid}`);
+                req.logger.warning(`No se encontro el producto con id ${pid} en el carrito con id ${cid}`);
                 return res.sendUserError(`No se encontro el producto con id ${pid} en el carrito con id ${cid}`);
             }
             req.logger.info(`Cantidad del producto ID ${pid} en el carrito ID ${cid} actualizada a ${quantity} exitosamente`);
@@ -95,17 +95,17 @@ export default class CartsController {
             const { cid, pid } = req.params;
             const cart = await CartsServices.getInstance().getCartById(cid);
             if (!cart) {
-                req.logger.warn(`No existe un carrito con el id ${cid}`);
+                req.logger.warning(`No existe un carrito con el id ${cid}`);
                 return res.sendUserError(`No existe un carrito con el id ${cid}`);
             }
             const product = await ProductsServices.getInstance().getProductById(pid);
             if (!product) {
-                req.logger.warn(`No existe un producto con el id ${pid}`);
+                req.logger.warning(`No existe un producto con el id ${pid}`);
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             const payload = await CartsServices.getInstance().removeProduct(cart, product);
             if (!payload) {
-                req.logger.warn(`No se encontro el producto con id ${pid} en el carrito con id ${cid}`);
+                req.logger.warning(`No se encontro el producto con id ${pid} en el carrito con id ${cid}`);
                 return res.sendUserError(`No se encontro el producto con id ${pid} en el carrito con id ${cid}`);
             }
             req.logger.info(`Producto ID ${pid} eliminado del carrito ID ${cid} existosamente`);
@@ -121,7 +121,7 @@ export default class CartsController {
             const { cid } = req.params;
             const cart = await CartsServices.getInstance().getCartById(cid);
             if (!cart) {
-                req.logger.warn(`No existe un carrito con el id ${cid}`);
+                req.logger.warning(`No existe un carrito con el id ${cid}`);
                 return res.sendUserError(`No existe un carrito con el id ${cid}`);
             }
             const payload = await CartsServices.getInstance().deleteCart(cid);
@@ -139,12 +139,12 @@ export default class CartsController {
             const user = req.user;
             const cart = await CartsServices.getInstance().getCartById(cid);
             if (!cart) {
-                req.logger.warn(`No existe un carrito con el id ${cid}`);
+                req.logger.warning(`No existe un carrito con el id ${cid}`);
                 return res.sendUserError(`No existe un carrito con el id ${cid}`);
             }
             const payload = await CartsServices.getInstance().purchaseCart(cart, user);
             if (payload.productsNotPurchased && !payload.ticket) {
-                req.logger.warn('No se pudo realizar la compra porque no hay stock suficiente de los productos del carrito');
+                req.logger.warning('No se pudo realizar la compra porque no hay stock suficiente de los productos del carrito');
                 return res.sendUserError('No se pudo realizar la compra porque no hay stock suficiente de los productos del carrito');
             }
             req.logger.info(`Compra del carrito ID ${cid} realizada exitosamente`);
