@@ -3,7 +3,7 @@ import local from 'passport-local';
 import github from 'passport-github2';
 import jwt from 'passport-jwt';
 import { ExtractJwt } from 'passport-jwt';
-import { isValidPassword } from '../utils.js';
+import { isValidPassword } from '../utils/passwords.utils.js';
 import UsersServices from '../services/users.services.js';
 import config from './config.js';
 

@@ -1,4 +1,4 @@
-import { createHash } from '../utils.js';
+import { createHash } from '../utils/passwords.utils.js';
 import CartsServices from './carts.services.js';
 import UserDTO from '../dao/dtos/user.dto.js';
 import { Users } from '../dao/factory.js';

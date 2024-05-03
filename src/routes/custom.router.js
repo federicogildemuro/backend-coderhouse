@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { validateToken } from '../utils.js';
+import { validateToken } from '../utils/tokens.utils.js';
 
 export default class CustomRouter {
     constructor() {

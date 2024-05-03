@@ -1,4 +1,4 @@
-import { generateToken, validateToken } from '../utils.js';
+import { generateToken, validateToken } from '../utils/tokens.utils.js';
 import config from '../config/config.js';
 import UsersServices from '../services/users.services.js';
 import MailingServices from '../services/mailing.services.js';

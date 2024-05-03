@@ -1,6 +1,6 @@
 import ProductsServices from '../services/products.services.js';
 import CartsServices from '../services/carts.services.js';
-import { generateFakerProduct } from '../utils.js';
+import { generateFakerProduct } from '../utils/mocks.utils.js';
 
 export default class ViewsController {
     static #instance;
