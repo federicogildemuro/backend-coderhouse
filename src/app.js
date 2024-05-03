@@ -3,7 +3,8 @@ import initializePersistence from './dao/factory.js';
 import express from 'express';
 import cors from 'cors';
 import compression from 'express-compression';
-import __dirname from './utils/dirname.utils.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import cookieParser from 'cookie-parser';
 import config from './config/config.js';
 import { addLogger } from './config/logger.config.js';
@@ -24,6 +25,9 @@ if (!program.opts().persistence) {
 initializePersistence(program.opts().persistence);
 
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.use(cors());
 app.use(compression({ brotli: { enabled: true, zlib: {} } }));
