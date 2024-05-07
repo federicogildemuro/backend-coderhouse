@@ -32,6 +32,7 @@ export default class CartsRouter extends CustomRouter {
     }
 
     validateQuantity(req, res, next) {
+        // Si la cantidad es menor a 1 o no es un número, se asigna 1
         req.quantity = req.body.quantity ? (parseInt(req.body.quantity) < 1 || isNaN(parseInt(req.body.quantity)) ? 1 : parseInt(req.body.quantity)) : 1;
         next();
     }

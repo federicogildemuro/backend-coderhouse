@@ -68,26 +68,37 @@ export default class CartsServices {
             const productsNotPurchased = [];
             let isProductPurchased = false;
             let amount = 0;
+            // Se recorre el carrito de compras para verificar si hay stock de los productos
             for (const item of cart.products) {
+                // Si hay stock
                 if (item.product.stock >= item.quantity) {
+                    // Se suma el precio del producto al monto total
                     amount += item.product.price * item.quantity;
+                    // Se elimina el producto del carrito
                     cart.products = cart.products.filter(i => i.product._id !== item.product._id);
+                    // Se verifica que se haya comprado al menos un producto
                     isProductPurchased = true;
+                    // Se actualiza el stock del producto
                     item.product.stock -= item.quantity;
                     await ProductsServices.getInstance().updateProduct(item.product._id, item.product);
                 } else {
+                    // Si no hay stock, se agrega el producto a la lista de productos no comprados
                     productsNotPurchased.push(item.product.title);
                 }
             }
+            // Si no se compró ningún producto, se retorna un mensaje de error
             if (!isProductPurchased) {
                 return { ticket: null, productsNotPurchased };
             }
+            // Si se compraron productos, se actualiza el carrito, se crea el ticket y se envía un correo
             cart = await Carts.getInstance().updateCart(cart);
             const ticket = await TicketsServices.getInstance().createTicket({ amount, purchaser: user.email });
             await MailingServices.getInstance().sendPurchaseConfirmationEmail(user, ticket);
+            // Si hay productos no comprados, se retornan junto con el ticket
             if (productsNotPurchased.length > 0) {
                 return { ticket, productsNotPurchased };
             }
+            // Si se compraron todos los productos, se retorna el ticket
             return { ticket, productsNotPurchased: null };
         } catch (error) {
             throw error;

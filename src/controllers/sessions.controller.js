@@ -53,8 +53,11 @@ export default class SessionsController {
                 req.logger.warning(`No existe un usuario registrado con el correo electrónico ${email}`);
                 return res.sendUserError(`No existe un usuario registrado con el correo electrónico ${email}`);
             }
+            // Se genera un token con la información del usuario
             const token = generateToken({ email });
+            // Se genera el enlace para reestablecer la contraseña
             const resetLink = `${config.frontendUrl}/reset-password?token=${token}`;
+            // Se envía un correo electrónico con el enlace de reestablecimiento
             await MailingServices.getInstance().sendResetPasswordEmail(user, resetLink);
             req.logger.info(`Se ha enviado un correo electrónico a ${user.email} con las instrucciones para restaurar tu contraseña`);
             res.sendSuccessMessage(`Se ha enviado un correo electrónico a ${user.email} con las instrucciones para restaurar tu contraseña`);
@@ -76,16 +79,19 @@ export default class SessionsController {
                 req.logger.warning('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un caracter especial');
                 return res.sendUserError('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un caracter especial');
             }
+            // Se valida el token
             const decoded = validateToken(token);
             if (!decoded) {
                 req.logger.warning('No se ha proporcionado un token válido');
                 return res.sendUserError('No se ha proporcionado un token válido');
             }
+            // Se busca el usuario asociado al token
             const user = await UsersServices.getInstance().getUserByEmail(decoded.email);
             if (!user) {
                 req.logger.warning('No se ha encontrado un usuario asociado al token proporcionado');
                 return res.sendUserError('No se ha encontrado un usuario asociado al token proporcionado');
             }
+            // Se actualiza la contraseña del usuario
             user.password = password;
             await UsersServices.getInstance().updateUserPassword(user._id, user);
             req.logger.info('Contraseña reestablecida exitosamente');

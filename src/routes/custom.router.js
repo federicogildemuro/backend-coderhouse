@@ -32,9 +32,12 @@ export default class CustomRouter {
 
     handlePolicies(policies) {
         return (req, res, next) => {
+            // Se obtiene el token del usuario, se valida y se guarda en la petición
             const token = req.signedCookies.token;
             const user = validateToken(token);
             req.user = user;
+
+            // Si la ruta no es de la API (views), se redirige según el rol del usuario
             if (!req.originalUrl.startsWith('/api')) {
                 if (policies.includes('ALL')) {
                     return next();
@@ -50,18 +53,23 @@ export default class CustomRouter {
                 }
                 return next();
             }
+            // Si la ruta es pública y el usuario no está autenticado, se permite el acceso
             if (policies.includes('PUBLIC') && !token) {
                 return next();
             }
+            // Si el usuario no está autenticado, se devuelve un error
             if (!token) {
                 return res.status(401).json({ status: 'error', message: 'Debes iniciar sesión para realizar esta acción' });
             }
+            // Si el token no es válido, se devuelve un error
             if (!user) {
                 return res.status(401).json({ status: 'error', message: 'Token inválido' });
             }
+            // Si el usuario no tiene permisos, se devuelve un error
             if (!policies.includes(user.role.toUpperCase())) {
                 return res.status(403).json({ status: 'error', message: 'No tienes permisos para realizar esta acción' });
             }
+            // Si el usuario tiene permisos, se permite el acceso
             next();
         }
     }

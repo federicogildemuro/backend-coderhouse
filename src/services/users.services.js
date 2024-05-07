@@ -17,9 +17,11 @@ export default class UsersServices {
 
     async createUser(user) {
         try {
+            // Se valida si el usuario tiene una contraseña y si la tiene, se encripta
             if (user.password && user.password.length > 0) {
                 user.password = createHash(user.password);
             }
+            // Se crea un carrito para el usuario y se le asigna
             const cart = await CartsServices.getInstance().createCart();
             user.cart = cart._id;
             const newUser = new UserDTO(user);

@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 
+// Se obtiene el entorno de ejecución
 const environment = process.env.NODE_ENV || 'development';
+// Se carga el archivo de configuración correspondiente al entorno
 dotenv.config({ path: environment === 'development' ? './.env.dev' : './.env.prod' });
 
 const config = {

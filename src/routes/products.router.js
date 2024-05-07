@@ -29,10 +29,12 @@ export default class ProductsRouter extends CustomRouter {
 
     validateProduct(req, res, next) {
         const { title, code, price } = req.body;
+        // Se valida que los campos título, código y precio sean obligatorios
         if (!title || !code || !price) {
             req.logger.warning('Los campos título, código y precio son obligatorios');
             return res.sendUserError('Los campos título, código y precio son obligatorios');
         }
+        // Se valida que el precio sea un número positivo
         if (isNaN(price) || price < 0) {
             req.logger.warning('El precio debe ser un número positivo');
             return res.sendUserError('El precio debe ser un número positivo');

@@ -41,6 +41,7 @@ export default class ViewsController {
             const user = req.user;
             const payload = await ProductsServices.getInstance().getProducts(queryParams);
             const { docs: products, ...pagination } = payload;
+            // Se generan los enlaces de paginación
             const baseUrl = '/products';
             if (pagination.hasPrevPage) {
                 pagination.prevLink = `${baseUrl}?${new URLSearchParams({ ...queryParams, page: pagination.page - 1 }).toString()}`;
@@ -71,12 +72,14 @@ export default class ViewsController {
         try {
             const { cid } = req.params;
             const cart = await CartsServices.getInstance().getCartById(cid);
+            // Se calcula el total de cada producto
             cart.products = cart.products.map(product => {
                 return {
                     ...product,
                     total: product.product.price * product.quantity
                 };
             });
+            // Se calcula el total del carrito
             cart.total = cart.products.reduce((acc, product) => acc + product.total, 0).toFixed(2);
             res.render('user/cart', { cart });
         } catch (error) {
@@ -101,6 +104,7 @@ export default class ViewsController {
             const user = req.user;
             const payload = await ProductsServices.getInstance().getProducts(queryParams);
             const { docs: products, ...pagination } = payload;
+            // Se generan los enlaces de paginación
             const baseUrl = '/admin/products';
             if (pagination.hasPrevPage) {
                 pagination.prevLink = `${baseUrl}?${new URLSearchParams({ ...queryParams, page: pagination.page - 1 }).toString()}`;

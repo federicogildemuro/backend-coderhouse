@@ -44,6 +44,7 @@ export default class ProductsController {
         try {
             const newProduct = req.body;
             const product = await ProductsServices.getInstance().getProductByCode(newProduct.code);
+            // Se valida que no exista un producto con el mismo código
             if (product) {
                 req.logger.warning(`Ya existe un producto con el código ${newProduct.code}`);
                 return res.sendUserError(`Ya existe un producto con el código ${newProduct.code}`);
@@ -53,9 +54,6 @@ export default class ProductsController {
             res.sendSuccessPayload(payload);
         } catch (error) {
             req.logger.error(`Error al crear producto: ${error.message}`);
-            if (error.code === 1) {
-                return res.sendUserError(`${error.message}: ${error.cause}`);
-            }
             res.sendServerError(error.message);
         }
     }
@@ -71,6 +69,7 @@ export default class ProductsController {
             }
             if (updatedProduct.code !== product.code) {
                 product = await ProductsServices.getInstance().getProductByCode(updatedProduct.code);
+                // Se valida que no exista un producto con el mismo código
                 if (product) {
                     req.logger.warning(`Ya existe un producto con el código ${updatedProduct.code}`);
                     return res.sendUserError(`Ya existe un producto con el código ${updatedProduct.code}`);

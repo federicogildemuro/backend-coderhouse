@@ -38,12 +38,15 @@ export default class SessionsRouter extends CustomRouter {
     passportAuthentication(...args) {
         return async (req, res, next) => {
             passport.authenticate(...args, { session: false }, (error, user, info) => {
+                // Si hay un error, se devuelve un error de servidor
                 if (error) {
                     return res.sendServerError(error.message);
                 }
+                // Si no se encuentra el usuario, se devuelve un error de usuario
                 if (!user) {
                     return res.sendUserError(info);
                 }
+                // Se guarda el usuario sin la contraseña en la petición usando el DTO
                 const UserWithoutPassword = new UserWithoutPasswordDTO(user);
                 req.user = { ...UserWithoutPassword };
                 next();
