@@ -1,6 +1,5 @@
 import ProductsServices from '../services/products.services.js';
 import CartsServices from '../services/carts.services.js';
-import { generateFakerProduct } from '../utils/mocks.utils.js';
 
 export default class ViewsController {
     static #instance;
@@ -137,14 +136,6 @@ export default class ViewsController {
         } catch (error) {
             res.sendServerError(error.message);
         }
-    }
-
-    showMockingProducts(req, res) {
-        const products = [];
-        for (let i = 0; i < 100; i++) {
-            products.push(generateFakerProduct());
-        }
-        res.json(products);
     }
 
     renderNotFound(req, res) {

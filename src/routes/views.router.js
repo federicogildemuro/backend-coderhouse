@@ -44,8 +44,6 @@ export default class ViewsRouter extends CustomRouter {
 
         this.get('/admin/edit-product/:pid', ['ADMIN'], ViewsController.getInstance().renderAdminEditProduct);
 
-        this.get('/mocking-products', ['ALL'], ViewsController.getInstance().showMockingProducts);
-
         this.get('*', ['ALL'], ViewsController.getInstance().renderNotFound);
     }
 }

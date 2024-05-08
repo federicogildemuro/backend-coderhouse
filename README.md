@@ -32,8 +32,6 @@ El mismo utiliza:
 
 - **CORS**: Es un mecanismo de seguridad que permite a los servidores indicar a los navegadores si deben permitir que una solicitud web acceda a recursos de otro dominio. Se utiliza para controlar y autorizar solicitudes HTTP entre diferentes dominios, asegurando un intercambio de datos seguro y controlado.
 
-- **Faker.js**: Es una biblioteca que genera datos ficticios de manera realista para facilitar el desarrollo y las pruebas de la aplicación. Se utiliza para crear datos de ejemplo que ayudan a simular situaciones diversas, lo que permite probar la aplicación en diferentes escenarios sin comprometer la integridad de los datos reales.
-
 - **gzip y Brotli**: Son algoritmos de compresión de datos utilizados para reducir el tamaño de los archivos transmitidos a través de la web. Se utilizan para comprimir y descomprimir datos en tiempo de ejecución, mejorando la eficiencia en la transferencia de archivos y el rendimiento del servidor.
 
 - **Winston**: es una biblioteca de registro para Node.js que simplifica la gestión de registros en aplicaciones, la que se utiliza para registrar errores durante la ejecución del programa.
