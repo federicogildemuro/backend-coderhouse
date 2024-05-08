@@ -153,16 +153,6 @@ export default class ViewsController {
         res.json(products);
     }
 
-    showLoggerTest(req, res) {
-        req.logger.fatal('Este es un mensaje fatal');
-        req.logger.error('Este es un mensaje de error');
-        req.logger.warninging('Este es un mensaje de advertencia');
-        req.logger.info('Este es un mensaje de información');
-        req.logger.http('Este es un mensaje HTTP');
-        req.logger.debug('Este es un mensaje de depuración');
-        res.send('Mensajes de registro enviados');
-    }
-
     renderNotFound(req, res) {
         res.redirect('/');
     }
