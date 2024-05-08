@@ -16,7 +16,7 @@ export default class SessionsController {
     }
 
     register(req, res) {
-        req.logger.info('Usuario registrado exitosamente');
+        req.logger.info(`Usuario ${req.body.email} registrado exitosamente`);
         res.sendSuccessMessage('Usuario registrado exitosamente');
     }
 
@@ -24,7 +24,7 @@ export default class SessionsController {
         const user = req.user;
         const token = generateToken(user);
         res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
-        req.logger.info('Sesión iniciada exitosamente');
+        req.logger.info(`Sesión de usuario ${user.email} iniciada exitosamente`);
         res.sendSuccessPayload(req.user);
     }
 
@@ -32,7 +32,7 @@ export default class SessionsController {
         const user = req.user;
         const token = generateToken(user);
         res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
-        req.logger.info('Sesión con GitHub iniciada exitosamente');
+        req.logger.info(`Sesión de usuario ${user.email} iniciada exitosamente con GitHub`);
         res.redirect('/products');
     }
 
@@ -59,10 +59,10 @@ export default class SessionsController {
             const resetLink = `${config.frontendUrl}/reset-password?token=${token}`;
             // Se envía un correo electrónico con el enlace de reestablecimiento
             await MailingServices.getInstance().sendResetPasswordEmail(user, resetLink);
-            req.logger.info(`Se ha enviado un correo electrónico a ${user.email} con las instrucciones para restaurar tu contraseña`);
+            req.logger.info(`Correo electrónico enviado exitosamente a ${user.email} con las instrucciones para restaurar tu contraseña`);
             res.sendSuccessMessage(`Se ha enviado un correo electrónico a ${user.email} con las instrucciones para restaurar tu contraseña`);
         } catch (error) {
-            req.loger.error(`Error al restaurar contraseña: ${error.message}`);
+            req.loger.error(`Error al restaurar contraseña de usuario ${email}: ${error.message}`);
             res.sendServerError(error.message);
         }
     }
@@ -94,10 +94,10 @@ export default class SessionsController {
             // Se actualiza la contraseña del usuario
             user.password = password;
             await UsersServices.getInstance().updateUserPassword(user._id, user);
-            req.logger.info('Contraseña reestablecida exitosamente');
+            req.logger.info(`Contraseña de usuario ${user.email} reestablecida exitosamente`);
             res.sendSuccessMessage('Contraseña reestablecida exitosamente');
         } catch (error) {
-            req.logger.error(`Error al reestablecer contraseña: ${error.message}`);
+            req.logger.error(`Error al reestablecer contraseña de usuario ${decoded.email}: ${error.message}`);
             res.sendServerError(error.message);
         }
     }
@@ -108,7 +108,7 @@ export default class SessionsController {
 
     logout(req, res) {
         res.clearCookie('token');
-        req.logger.info('Sesión cerrada exitosamente');
+        req.logger.info('Sesión de usuario ${req.user.email} cerrada exitosamente');
         res.sendSuccessMessage('Sesión cerrada exitosamente');
     }
 }

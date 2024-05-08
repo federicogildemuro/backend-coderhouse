@@ -29,13 +29,13 @@ export default class ProductsController {
             const { pid } = req.params;
             const payload = await ProductsServices.getInstance().getProductById(pid);
             if (!payload) {
-                req.logger.warning(`No existe un producto con el ID ${pid}`);
+                req.logger.warning(`No existe un producto con el id ${pid}`);
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
-            req.logger.info(`Consulta de producto ID ${pid} exitosa`);
+            req.logger.info(`Consulta del producto id ${pid} exitosa`);
             res.sendSuccessPayload(payload);
         } catch (error) {
-            req.logger.error(`Error al consultar producto ID ${pid}: ${error.message}`);
+            req.logger.error(`Error al consultar producto id ${pid}: ${error.message}`);
             res.sendServerError(error.message);
         }
     }
@@ -50,7 +50,7 @@ export default class ProductsController {
                 return res.sendUserError(`Ya existe un producto con el código ${newProduct.code}`);
             }
             const payload = await ProductsServices.getInstance().createProduct(newProduct);
-            req.logger.info(`Producto creado exitosamente: ${JSON.stringify(payload)}`);
+            req.logger.info(`Producto id ${payload._id} creado exitosamente`);
             res.sendSuccessPayload(payload);
         } catch (error) {
             req.logger.error(`Error al crear producto: ${error.message}`);
@@ -64,7 +64,7 @@ export default class ProductsController {
             const updatedProduct = req.body;
             let product = await ProductsServices.getInstance().getProductById(pid);
             if (!product) {
-                req.logger.warning(`No existe un producto con el ID ${pid}`)
+                req.logger.warning(`No existe un producto con el id ${pid}`)
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             if (updatedProduct.code !== product.code) {
@@ -76,10 +76,10 @@ export default class ProductsController {
                 }
             }
             const payload = await ProductsServices.getInstance().updateProduct(pid, updatedProduct);
-            req.logger.info(`Producto ID ${pid} actualizado exitosamente: ${JSON.stringify(payload)}`);
+            req.logger.info(`Producto id ${pid} actualizado exitosamente`);
             res.sendSuccessPayload(payload);
         } catch (error) {
-            req.logger.error(`Error al actualizar producto ID ${pid}: ${error.message}`);
+            req.logger.error(`Error al actualizar producto id ${pid}: ${error.message}`);
             res.sendServerError(error.message);
         }
     }
@@ -89,14 +89,14 @@ export default class ProductsController {
             const { pid } = req.params;
             const product = await ProductsServices.getInstance().getProductById(pid);
             if (!product) {
-                req.logger.warning(`No existe un producto con el ID ${pid}`);
+                req.logger.warning(`No existe un producto con el id ${pid}`);
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             const payload = await ProductsServices.getInstance().deleteProduct(pid);
-            req.logger.info(`Producto ID ${pid} eliminado exitosamente: ${JSON.stringify(payload)}`);
+            req.logger.info(`Producto id ${pid} eliminado exitosamente`);
             res.sendSuccessPayload(payload);
         } catch (error) {
-            req.logger.error(`Error al eliminar producto ID ${pid}: ${error.message}`);
+            req.logger.error(`Error al eliminar producto id ${pid}: ${error.message}`);
             res.sendServerError(error.message);
         }
     }

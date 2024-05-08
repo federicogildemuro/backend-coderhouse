@@ -51,7 +51,6 @@ export default class ViewsController {
             }
             res.render('user/products', { user, products, pagination });
         } catch (error) {
-            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -63,7 +62,6 @@ export default class ViewsController {
             const product = await ProductsServices.getInstance().getProductById(pid);
             res.render('user/product', { user, product });
         } catch (error) {
-            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -83,7 +81,6 @@ export default class ViewsController {
             cart.total = cart.products.reduce((acc, product) => acc + product.total, 0).toFixed(2);
             res.render('user/cart', { cart });
         } catch (error) {
-            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -114,7 +111,6 @@ export default class ViewsController {
             }
             res.render('admin/products', { user, products, pagination });
         } catch (error) {
-            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -125,7 +121,6 @@ export default class ViewsController {
             const product = await ProductsServices.getInstance().getProductById(pid);
             res.render('admin/product', { product });
         } catch (error) {
-            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
@@ -140,7 +135,6 @@ export default class ViewsController {
             const product = await ProductsServices.getInstance().getProductById(pid);
             res.render('admin/edit-product', { product });
         } catch (error) {
-            req.logger.error(error);
             res.sendServerError(error.message);
         }
     }
