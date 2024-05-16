@@ -16,15 +16,15 @@ export default class ProductsRouter extends CustomRouter {
     }
 
     init() {
-        this.get('/', ['USER', 'ADMIN'], ProductsController.getInstance().getProducts);
+        this.get('/', ['USER', 'PREMIUM', 'ADMIN'], ProductsController.getInstance().getProducts);
 
-        this.get('/:pid', ['USER', 'ADMIN'], ProductsController.getInstance().getProductById);
+        this.get('/:pid', ['USER', 'PREMIUM', 'ADMIN'], ProductsController.getInstance().getProductById);
 
-        this.post('/', ['ADMIN'], this.validateProduct, ProductsController.getInstance().createProduct);
+        this.post('/', ['PREMIUM', 'ADMIN'], this.validateProduct, ProductsController.getInstance().createProduct);
 
-        this.put('/:pid', ['ADMIN'], this.validateProduct, ProductsController.getInstance().updateProduct);
+        this.put('/:pid', ['PREMIUM', 'ADMIN'], this.validateProduct, ProductsController.getInstance().updateProduct);
 
-        this.delete('/:pid', ['ADMIN'], ProductsController.getInstance().deleteProduct);
+        this.delete('/:pid', ['PREMIUM', 'ADMIN'], ProductsController.getInstance().deleteProduct);
     }
 
     validateProduct(req, res, next) {

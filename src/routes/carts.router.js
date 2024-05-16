@@ -18,17 +18,17 @@ export default class CartsRouter extends CustomRouter {
     init() {
         this.post('/', ['PUBLIC'], CartsController.getInstance().createCart);
 
-        this.get('/:cid', ['USER'], CartsController.getInstance().getCartById);
+        this.get('/:cid', ['USER', 'PREMIUM'], CartsController.getInstance().getCartById);
 
-        this.post('/:cid/products/:pid', ['USER'], this.validateQuantity, CartsController.getInstance().addProduct);
+        this.post('/:cid/products/:pid', ['USER', 'PREMIUM'], this.validateQuantity, CartsController.getInstance().addProduct);
 
-        this.put('/:cid/products/:pid', ['USER'], this.validateQuantity, CartsController.getInstance().updateProductQuantity);
+        this.put('/:cid/products/:pid', ['USER', 'PREMIUM'], this.validateQuantity, CartsController.getInstance().updateProductQuantity);
 
-        this.delete('/:cid/products/:pid', ['USER'], CartsController.getInstance().removeProduct);
+        this.delete('/:cid/products/:pid', ['USER', 'PREMIUM'], CartsController.getInstance().removeProduct);
 
-        this.delete('/:cid', ['USER'], CartsController.getInstance().deleteCart);
+        this.delete('/:cid', ['USER', 'PREMIUM'], CartsController.getInstance().deleteCart);
 
-        this.post('/:cid/purchase', ['USER'], CartsController.getInstance().purchaseCart);
+        this.post('/:cid/purchase', ['USER', 'PREMIUM'], CartsController.getInstance().purchaseCart);
     }
 
     validateQuantity(req, res, next) {
