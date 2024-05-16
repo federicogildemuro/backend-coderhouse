@@ -7,6 +7,6 @@ export default class UserDTO {
         this.age = user.age ? (Number.isInteger(parseInt(user.age)) && parseInt(user.age) >= 0 ? parseInt(user.age) : 0) : 0;
         this.password = user.password || '';
         this.cart = user.cart;
-        this.role = 'user';
+        this.role = user.role || 'user';
     }
 }
