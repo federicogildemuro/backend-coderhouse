@@ -43,12 +43,12 @@ export default class CustomRouter {
                     return next();
                 }
                 if (token) {
-                    if (user.role === 'user' && (policies.includes('PUBLIC') || policies.includes('ADMIN'))) {
+                    if ((user.role === 'user' || user.role === 'premium') && (policies.includes('PUBLIC') || policies.includes('ADMIN'))) {
                         return res.redirect('/products');
-                    } else if (user.role === 'admin' && (policies.includes('PUBLIC') || policies.includes('USER'))) {
+                    } else if (user.role === 'admin' && (policies.includes('PUBLIC') || policies.includes('USER') || policies.includes('PREMIUM'))) {
                         return res.redirect('/admin/products');
                     }
-                } else if (policies.includes('USER') || policies.includes('ADMIN')) {
+                } else if (policies.includes('USER') || policies.includes('PREMIUM') || policies.includes('ADMIN')) {
                     return res.redirect('/');
                 }
                 return next();
