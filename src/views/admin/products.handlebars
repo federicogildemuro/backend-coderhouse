@@ -57,6 +57,7 @@
         <th>Status</th>
         <th>Stock</th>
         <th>Categoría</th>
+        <th>Propietario</th>
     </tr>
 
     {{#each products}}
@@ -69,6 +70,7 @@
         <td>{{status}}</td>
         <td>{{stock}}</td>
         <td>{{category}}</td>
+        <td>{{owner}}</td>
         <td class="last-td">
             <a href="/admin/product/{{_id}}">Ver</a>
         </td>
