@@ -108,6 +108,27 @@ export default class SessionsController {
         }
     }
 
+    async changeUserRole(req, res) {
+        try {
+            const { uid } = req.params;
+            const user = req.user;
+            if (user.role === 'user') {
+                user.role = 'premium';
+                await UsersServices.getInstance().updateUser(uid, user);
+                req.logger.info(`Rol de usuario ${user.email} cambiado a premium`);
+                res.sendSuccessMessage(`Rol de usuario ${user.email} cambiado a premium`);
+            } else {
+                user.role = 'user';
+                await UsersServices.getInstance().updateUser(uid, user);
+                req.logger.info(`Rol de usuario ${user.email} cambiado a usuario`);
+                res.sendSuccessMessage(`Rol de usuario ${user.email} cambiado a usuario`);
+            }
+        } catch (error) {
+            req.logger.error(`Error al cambiar rol de usuario ${user.email}: ${error.message}`);
+            res.sendServerError(error.message);
+        }
+    }
+
     current(req, res) {
         res.sendSuccessPayload(req.user);
     }
