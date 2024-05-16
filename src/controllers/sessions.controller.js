@@ -3,6 +3,7 @@ import config from '../config/config.js';
 import UsersServices from '../services/users.services.js';
 import MailingServices from '../services/mailing.services.js';
 import { isValidPassword } from '../utils/passwords.utils.js';
+import UserWithoutPasswordDTO from '../dao/dtos/user.without.password.dto.js';
 
 export default class SessionsController {
     static #instance;
@@ -111,18 +112,19 @@ export default class SessionsController {
     async changeUserRole(req, res) {
         try {
             const { uid } = req.params;
-            const user = req.user;
-            if (user.role === 'user') {
-                user.role = 'premium';
-                await UsersServices.getInstance().updateUser(uid, user);
-                req.logger.info(`Rol de usuario ${user.email} cambiado a premium`);
-                res.sendSuccessMessage(`Rol de usuario ${user.email} cambiado a premium`);
-            } else {
-                user.role = 'user';
-                await UsersServices.getInstance().updateUser(uid, user);
-                req.logger.info(`Rol de usuario ${user.email} cambiado a usuario`);
-                res.sendSuccessMessage(`Rol de usuario ${user.email} cambiado a usuario`);
-            }
+            // Se busca el usuario por su id
+            const user = await UsersServices.getInstance().getUserById(uid);
+            // Se cambia el rol  y se actualiza el usuario
+            user.role = user.role === 'user' ? 'premium' : 'user';
+            await UsersServices.getInstance().updateUser(uid, user);
+            // Se elimina la contraseña del usuario y se actualiza la petición
+            const UserWithoutPassword = new UserWithoutPasswordDTO(user);
+            req.user = { ...UserWithoutPassword };
+            // Se genera un nuevo token con el usuario actualizado y se almacena en una cookie
+            const token = generateToken(req.user);
+            res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
+            req.logger.info(`Rol de usuario ${user.email} modificado exitosamente a ${user.role}`);
+            res.sendSuccessMessage(`Rol de usuario ${user.email} modificado exitosamente a ${user.role}`);
         } catch (error) {
             req.logger.error(`Error al cambiar rol de usuario ${user.email}: ${error.message}`);
             res.sendServerError(error.message);
@@ -135,7 +137,7 @@ export default class SessionsController {
 
     logout(req, res) {
         res.clearCookie('token');
-        req.logger.info('Sesión de usuario ${req.user.email} cerrada exitosamente');
+        req.logger.info(`Sesión de usuario ${req.user.email} cerrada exitosamente`);
         res.sendSuccessMessage('Sesión cerrada exitosamente');
     }
 }
