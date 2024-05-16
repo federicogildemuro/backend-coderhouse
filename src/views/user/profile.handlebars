@@ -9,4 +9,11 @@
     <p>Apellido: {{user.last_name}}</p>
     <p>Correo electrónico: {{user.email}}</p>
     <p>Edad: {{user.age}}</p>
+    <p>Rol: {{user.role}}</p>
+
+    <div>
+        <button onclick="changeUserRole('{{user._id}}')">Cambiar rol</button>
+    </div>
 </div>
+
+<script src="/js/user/profile.js"></script>
