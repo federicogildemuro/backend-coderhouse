@@ -31,6 +31,14 @@ export default class UsersServices {
         }
     }
 
+    async getUserById(id) {
+        try {
+            return await Users.getInstance().getUserById(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async getUserByEmail(email) {
         try {
             return await Users.getInstance().getUserByEmail(email);
@@ -44,6 +52,15 @@ export default class UsersServices {
             if (user.password && user.password.length > 0) {
                 user.password = createHash(user.password);
             }
+            const updatedUser = new UserDTO(user);
+            return await Users.getInstance().updateUser(id, updatedUser);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async updateUser(id, user) {
+        try {
             const updatedUser = new UserDTO(user);
             return await Users.getInstance().updateUser(id, updatedUser);
         } catch (error) {
