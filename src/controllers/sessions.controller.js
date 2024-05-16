@@ -2,6 +2,7 @@ import { generateToken, validateToken } from '../utils/tokens.utils.js';
 import config from '../config/config.js';
 import UsersServices from '../services/users.services.js';
 import MailingServices from '../services/mailing.services.js';
+import { isValidPassword } from '../utils/passwords.utils.js';
 
 export default class SessionsController {
     static #instance;
@@ -59,7 +60,7 @@ export default class SessionsController {
             const resetLink = `${config.frontendUrl}/reset-password?token=${token}`;
             // Se envía un correo electrónico con el enlace de reestablecimiento
             await MailingServices.getInstance().sendResetPasswordEmail(user, resetLink);
-            req.logger.info(`Correo electrónico enviado exitosamente a ${user.email} con las instrucciones para restaurar tu contraseña`);
+            req.logger.info(`Correo electrónico enviado exitosamente a ${user.email} con las instrucciones para restaurar contraseña`);
             res.sendSuccessMessage(`Se ha enviado un correo electrónico a ${user.email} con las instrucciones para restaurar tu contraseña`);
         } catch (error) {
             req.loger.error(`Error al restaurar contraseña de usuario ${email}: ${error.message}`);
@@ -90,6 +91,11 @@ export default class SessionsController {
             if (!user) {
                 req.logger.warning('No se ha encontrado un usuario asociado al token proporcionado');
                 return res.sendUserError('No se ha encontrado un usuario asociado al token proporcionado');
+            }
+            // Se verifica que la nueva contraseña sea diferente a la anterior
+            if (isValidPassword(password, user)) {
+                req.logger.warning('La nueva contraseña no puede ser igual a la anterior');
+                return res.sendUserError('La nueva contraseña no puede ser igual a la anterior');
             }
             // Se actualiza la contraseña del usuario
             user.password = password;
