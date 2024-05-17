@@ -9,6 +9,10 @@
 
     <a href="/chat">Chat</a>
 
+    {{#if user.isPremium}}
+    <a href="/premium/products">Premium</a>
+    {{/if}}
+
     <button onclick="logout()">Cerrar sesión</button>
 </nav>
 
