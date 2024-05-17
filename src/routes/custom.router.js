@@ -43,7 +43,9 @@ export default class CustomRouter {
                     return next();
                 }
                 if (token) {
-                    if ((user.role === 'user' || user.role === 'premium') && (policies.includes('PUBLIC') || policies.includes('ADMIN'))) {
+                    if (user.role === 'user' && (policies.includes('PUBLIC') || policies.includes('PREMIUM') || policies.includes('ADMIN'))) {
+                        return res.redirect('/products');
+                    } else if (user.role === 'premium' && (policies.includes('PUBLIC') || policies.includes('ADMIN'))) {
                         return res.redirect('/products');
                     } else if (user.role === 'admin' && (policies.includes('PUBLIC') || policies.includes('USER') || policies.includes('PREMIUM'))) {
                         return res.redirect('/admin/products');
