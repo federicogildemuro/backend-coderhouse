@@ -26,15 +26,23 @@ export default class ViewsRouter extends CustomRouter {
 
         this.get('/reset-password', ['PUBLIC'], ViewsController.getInstance().renderResetPassword);
 
-        this.get('/products', ['USER', 'PREMIUM'], ViewsController.getInstance().renderProducts);
+        this.get('/products', ['USER'], ViewsController.getInstance().renderProducts);
 
-        this.get('/product/:pid', ['USER', 'PREMIUM'], ViewsController.getInstance().renderProduct);
+        this.get('/product/:pid', ['USER'], ViewsController.getInstance().renderProduct);
 
-        this.get('/cart/:cid', ['USER', 'PREMIUM'], ViewsController.getInstance().renderCart);
+        this.get('/cart/:cid', ['USER'], ViewsController.getInstance().renderCart);
 
-        this.get('/profile', ['USER', 'PREMIUM'], ViewsController.getInstance().renderProfile);
+        this.get('/profile', ['USER'], ViewsController.getInstance().renderProfile);
 
-        this.get('/chat', ['USER', 'PREMIUM'], ViewsController.getInstance().renderChat);
+        this.get('/chat', ['USER'], ViewsController.getInstance().renderChat);
+
+        this.get('/premium/products', ['PREMIUM'], ViewsController.getInstance().renderPremiumProducts);
+
+        this.get('/premium/product/:pid', ['PREMIUM'], ViewsController.getInstance().renderPremiumProduct);
+
+        this.get('/premium/add-product', ['PREMIUM'], ViewsController.getInstance().renderPremiumAddProduct);
+
+        this.get('/premium/edit-product/:pid', ['PREMIUM'], ViewsController.getInstance().renderPremiumEditProduct);
 
         this.get('/admin/products', ['ADMIN'], ViewsController.getInstance().renderAdminProducts);
 
