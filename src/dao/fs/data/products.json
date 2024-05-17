@@ -11,7 +11,8 @@
         "thumbnails": [
             "https://example.com/led_tv.jpg",
             "https://example.com/led_tv2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 2,
@@ -25,7 +26,8 @@
         "thumbnails": [
             "https://example.com/smart_tv.jpg",
             "https://example.com/smart_tv2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 3,
@@ -39,7 +41,8 @@
         "thumbnails": [
             "https://example.com/4k_tv.jpg",
             "https://example.com/4k_tv2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 4,
@@ -53,7 +56,8 @@
         "thumbnails": [
             "https://example.com/curved_tv.jpg",
             "https://example.com/curved_tv2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 5,
@@ -67,7 +71,8 @@
         "thumbnails": [
             "https://example.com/oled_tv.jpg",
             "https://example.com/oled_tv2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 6,
@@ -81,7 +86,8 @@
         "thumbnails": [
             "https://example.com/altavoces1.jpg",
             "https://example.com/altavoces2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 7,
@@ -95,7 +101,8 @@
         "thumbnails": [
             "https://example.com/auriculares1.jpg",
             "https://example.com/auriculares2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 8,
@@ -109,7 +116,8 @@
         "thumbnails": [
             "https://example.com/barradesonido1.jpg",
             "https://example.com/barradesonido2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 9,
@@ -123,7 +131,8 @@
         "thumbnails": [
             "https://example.com/microfono1.jpg",
             "https://example.com/microfono2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 10,
@@ -137,7 +146,8 @@
         "thumbnails": [
             "https://example.com/amplificador1.jpg",
             "https://example.com/amplificador2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 11,
@@ -151,7 +161,8 @@
         "thumbnails": [
             "https://example.com/laptop1.jpg",
             "https://example.com/laptop1_2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 12,
@@ -165,7 +176,8 @@
         "thumbnails": [
             "https://example.com/monitor1.jpg",
             "https://example.com/monitor1_2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 13,
@@ -179,7 +191,8 @@
         "thumbnails": [
             "https://example.com/teclado1.jpg",
             "https://example.com/teclado1_2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 14,
@@ -193,7 +206,8 @@
         "thumbnails": [
             "https://example.com/mouse1.jpg",
             "https://example.com/mouse1_2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 15,
@@ -207,7 +221,8 @@
         "thumbnails": [
             "https://example.com/impresora1.jpg",
             "https://example.com/impresora1_2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 16,
@@ -221,7 +236,8 @@
         "thumbnails": [
             "https://example.com/refrigerator.jpg",
             "https://example.com/refrigerator2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 17,
@@ -235,7 +251,8 @@
         "thumbnails": [
             "https://example.com/washingmachine.jpg",
             "https://example.com/washingmachine2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 18,
@@ -249,7 +266,8 @@
         "thumbnails": [
             "https://example.com/vacuum.jpg",
             "https://example.com/vacuum2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 19,
@@ -263,7 +281,8 @@
         "thumbnails": [
             "https://example.com/microwave.jpg",
             "https://example.com/microwave2.jpg"
-        ]
+        ],
+        "owner": "admin"
     },
     {
         "_id": 20,
@@ -277,6 +296,7 @@
         "thumbnails": [
             "https://example.com/coffeemaker.jpg",
             "https://example.com/coffeemaker2.jpg"
-        ]
+        ],
+        "owner": "admin"
     }
 ]
