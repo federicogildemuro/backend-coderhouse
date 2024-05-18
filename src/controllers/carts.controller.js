@@ -44,6 +44,7 @@ export default class CartsController {
         try {
             const { cid, pid } = req.params;
             const quantity = req.body.quantity;
+            const user = req.user;
             const cart = await CartsServices.getInstance().getCartById(cid);
             if (!cart) {
                 req.logger.warning(`No existe un carrito con el id ${cid}`);
@@ -53,6 +54,10 @@ export default class CartsController {
             if (!product) {
                 req.logger.warning(`No existe un producto con el id ${pid}`);
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
+            }
+            if (product.owner === user.email) {
+                req.logger.warning('No se puede agregar un producto propio al carrito');
+                return res.sendUserError('No se puede agregar un producto propio al carrito');
             }
             const payload = await CartsServices.getInstance().addProduct(cart, product, quantity);
             req.logger.info(`Producto id ${pid} agregado al carrito id ${cid} existosamente`);
