@@ -18,23 +18,23 @@ export default class SessionsRouter extends CustomRouter {
     }
 
     init() {
-        this.post('/register', ['PUBLIC'], this.passportAuthentication('register'), SessionsController.getInstance().register);
+        this.post('/register', ['PUBLIC'], this.passportAuthentication('register'), SessionsController.register);
 
-        this.post('/login', ['PUBLIC'], this.passportAuthentication('login'), SessionsController.getInstance().login);
+        this.post('/login', ['PUBLIC'], this.passportAuthentication('login'), SessionsController.login);
 
         this.get('/github', ['PUBLIC'], this.passportAuthentication('github', { scope: ['user:email'] }));
 
-        this.get('/githubcallback', ['PUBLIC'], this.passportAuthentication('github'), SessionsController.getInstance().githubCallback);
+        this.get('/githubcallback', ['PUBLIC'], this.passportAuthentication('github'), SessionsController.githubCallback);
 
-        this.post('/restore-password', ['PUBLIC'], SessionsController.getInstance().restorePassword);
+        this.post('/restore-password', ['PUBLIC'], SessionsController.restorePassword);
 
-        this.post('/reset-password', ['PUBLIC'], SessionsController.getInstance().resetPassword);
+        this.post('/reset-password', ['PUBLIC'], SessionsController.resetPassword);
 
-        this.put('/premium/:uid', ['USER', 'PREMIUM'], SessionsController.getInstance().changeUserRole);
+        this.put('/premium/:uid', ['USER', 'PREMIUM'], SessionsController.changeUserRole);
 
-        this.get('/current', ['USER', 'PREMIUM', 'ADMIN'], this.passportAuthentication('current'), SessionsController.getInstance().current);
+        this.get('/current', ['USER', 'PREMIUM', 'ADMIN'], this.passportAuthentication('current'), SessionsController.current);
 
-        this.post('/logout', ['USER', 'PREMIUM', 'ADMIN'], SessionsController.getInstance().logout);
+        this.post('/logout', ['USER', 'PREMIUM', 'ADMIN'], SessionsController.logout);
     }
 
     passportAuthentication(...args) {

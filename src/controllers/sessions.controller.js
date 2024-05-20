@@ -6,23 +6,12 @@ import { isValidPassword } from '../utils/passwords.utils.js';
 import UserWithoutPasswordDTO from '../dao/dtos/user.without.password.dto.js';
 
 export default class SessionsController {
-    static #instance;
-
-    constructor() { }
-
-    static getInstance() {
-        if (!this.#instance) {
-            this.#instance = new SessionsController();
-        }
-        return this.#instance;
-    }
-
-    register(req, res) {
+    static register(req, res) {
         req.logger.info(`Usuario ${req.body.email} registrado exitosamente`);
         res.sendSuccessMessage('Usuario registrado exitosamente');
     }
 
-    login(req, res) {
+    static login(req, res) {
         const user = req.user;
         const token = generateToken(user);
         res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
@@ -30,7 +19,7 @@ export default class SessionsController {
         res.sendSuccessPayload(req.user);
     }
 
-    githubCallback(req, res) {
+    static githubCallback(req, res) {
         const user = req.user;
         const token = generateToken(user);
         res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
@@ -38,7 +27,7 @@ export default class SessionsController {
         res.redirect('/products');
     }
 
-    async restorePassword(req, res) {
+    static async restorePassword(req, res) {
         try {
             const { email } = req.body;
             if (!email) {
@@ -69,7 +58,7 @@ export default class SessionsController {
         }
     }
 
-    async resetPassword(req, res) {
+    static async resetPassword(req, res) {
         try {
             const { token, password } = req.body;
             if (!password) {
@@ -109,7 +98,7 @@ export default class SessionsController {
         }
     }
 
-    async changeUserRole(req, res) {
+    static async changeUserRole(req, res) {
         try {
             const { uid } = req.params;
             // Se busca el usuario por su id
@@ -131,11 +120,11 @@ export default class SessionsController {
         }
     }
 
-    current(req, res) {
+    static current(req, res) {
         res.sendSuccessPayload(req.user);
     }
 
-    logout(req, res) {
+    static logout(req, res) {
         res.clearCookie('token');
         req.logger.info(`Sesión de usuario ${req.user.email} cerrada exitosamente`);
         res.sendSuccessMessage('Sesión cerrada exitosamente');
