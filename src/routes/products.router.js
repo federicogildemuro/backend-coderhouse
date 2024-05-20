@@ -20,14 +20,14 @@ export default class ProductsRouter extends CustomRouter {
 
         this.get('/:pid', ['USER', 'PREMIUM', 'ADMIN'], ProductsController.getInstance().getProductById);
 
-        this.post('/', ['PREMIUM', 'ADMIN'], this.validateProduct, ProductsController.getInstance().createProduct);
+        this.post('/', ['PREMIUM', 'ADMIN'], this.validateProductFields, ProductsController.getInstance().createProduct);
 
-        this.put('/:pid', ['PREMIUM', 'ADMIN'], this.validateProduct, ProductsController.getInstance().updateProduct);
+        this.put('/:pid', ['PREMIUM', 'ADMIN'], this.validateProductFields, ProductsController.getInstance().updateProduct);
 
         this.delete('/:pid', ['PREMIUM', 'ADMIN'], ProductsController.getInstance().deleteProduct);
     }
 
-    validateProduct(req, res, next) {
+    validateProductFields(req, res, next) {
         const { title, code, price } = req.body;
         // Se valida que los campos título, código y precio sean obligatorios
         if (!title || !code || !price) {
