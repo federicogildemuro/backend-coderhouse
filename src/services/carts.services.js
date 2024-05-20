@@ -4,18 +4,7 @@ import TicketsServices from './tickets.services.js';
 import MailingServices from './mailing.services.js';
 
 export default class CartsServices {
-    static #instance;
-
-    constructor() { }
-
-    static getInstance() {
-        if (!this.#instance) {
-            this.#instance = new CartsServices();
-        }
-        return this.#instance;
-    }
-
-    async createCart() {
+    static async createCart() {
         try {
             return await Carts.getInstance().createCart();
         } catch (error) {
@@ -23,7 +12,7 @@ export default class CartsServices {
         }
     }
 
-    async getCartById(id) {
+    static async getCartById(id) {
         try {
             return await Carts.getInstance().getCartById(id);
         } catch (error) {
@@ -31,7 +20,7 @@ export default class CartsServices {
         }
     }
 
-    async addProduct(cart, product, quantity) {
+    static async addProduct(cart, product, quantity) {
         try {
             return await Carts.getInstance().addProduct(cart, product, quantity);
         } catch (error) {
@@ -39,7 +28,7 @@ export default class CartsServices {
         }
     }
 
-    async updateProductQuantity(cart, product, quantity) {
+    static async updateProductQuantity(cart, product, quantity) {
         try {
             return await Carts.getInstance().updateProductQuantity(cart, product, quantity);
         } catch (error) {
@@ -47,7 +36,7 @@ export default class CartsServices {
         }
     }
 
-    async removeProduct(cart, product) {
+    static async removeProduct(cart, product) {
         try {
             return await Carts.getInstance().removeProduct(cart, product);
         } catch (error) {
@@ -55,7 +44,7 @@ export default class CartsServices {
         }
     }
 
-    async deleteCart(id) {
+    static async deleteCart(id) {
         try {
             return await Carts.getInstance().deleteCart(id);
         } catch (error) {
@@ -63,7 +52,7 @@ export default class CartsServices {
         }
     }
 
-    async purchaseCart(cart, user) {
+    static async purchaseCart(cart, user) {
         try {
             const productsNotPurchased = [];
             let isProductPurchased = false;
@@ -80,7 +69,7 @@ export default class CartsServices {
                     isProductPurchased = true;
                     // Se actualiza el stock del producto
                     item.product.stock -= item.quantity;
-                    await ProductsServices.getInstance().updateProduct(item.product._id, item.product);
+                    await ProductsServices.updateProduct(item.product._id, item.product);
                 } else {
                     // Si no hay stock, se agrega el producto a la lista de productos no comprados
                     productsNotPurchased.push(item.product.title);
@@ -92,7 +81,7 @@ export default class CartsServices {
             }
             // Si se compraron productos, se actualiza el carrito, se crea el ticket y se envía un correo
             cart = await Carts.getInstance().updateCart(cart);
-            const ticket = await TicketsServices.getInstance().createTicket({ amount, purchaser: user.email });
+            const ticket = await TicketsServices.createTicket({ amount, purchaser: user.email });
             await MailingServices.getInstance().sendPurchaseConfirmationEmail(user, ticket);
             // Si hay productos no comprados, se retornan junto con el ticket
             if (productsNotPurchased.length > 0) {

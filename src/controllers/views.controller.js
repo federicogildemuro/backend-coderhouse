@@ -39,7 +39,7 @@ export default class ViewsController {
             const queryParams = req.query;
             const user = req.user;
             user.isPremium = user.role === 'premium';
-            const payload = await ProductsServices.getInstance().getProducts(queryParams);
+            const payload = await ProductsServices.getProducts(queryParams);
             const { docs: products, ...pagination } = payload;
             // Se generan los enlaces de paginación
             const baseUrl = '/products';
@@ -59,7 +59,7 @@ export default class ViewsController {
         try {
             const { pid } = req.params;
             const user = req.user;
-            const product = await ProductsServices.getInstance().getProductById(pid);
+            const product = await ProductsServices.getProductById(pid);
             res.render('user/product', { user, product });
         } catch (error) {
             res.sendServerError(error.message);
@@ -69,7 +69,7 @@ export default class ViewsController {
     async renderCart(req, res) {
         try {
             const { cid } = req.params;
-            const cart = await CartsServices.getInstance().getCartById(cid);
+            const cart = await CartsServices.getCartById(cid);
             // Se calcula el total de cada producto
             cart.products = cart.products.map(product => {
                 return {
@@ -99,7 +99,7 @@ export default class ViewsController {
         try {
             const queryParams = req.query;
             const user = req.user;
-            const payload = await ProductsServices.getInstance().getProductsByOwner(queryParams, user.email);
+            const payload = await ProductsServices.getProductsByOwner(queryParams, user.email);
             const { docs: products, ...pagination } = payload;
             // Se generan los enlaces de paginación
             const baseUrl = '/premium/products';
@@ -119,7 +119,7 @@ export default class ViewsController {
         try {
             const { pid } = req.params;
             const user = req.user;
-            const product = await ProductsServices.getInstance().getProductById(pid);
+            const product = await ProductsServices.getProductById(pid);
             res.render('premium/product', { user, product });
         } catch (error) {
             res.sendServerError(error.message);
@@ -135,7 +135,7 @@ export default class ViewsController {
         try {
             const { pid } = req.params;
             const user = req.user;
-            const product = await ProductsServices.getInstance().getProductById(pid);
+            const product = await ProductsServices.getProductById(pid);
             res.render('premium/edit-product', { user, product });
         } catch (error) {
             res.sendServerError(error.message);
@@ -146,7 +146,7 @@ export default class ViewsController {
         try {
             const queryParams = req.query;
             const user = req.user;
-            const payload = await ProductsServices.getInstance().getProducts(queryParams);
+            const payload = await ProductsServices.getProducts(queryParams);
             const { docs: products, ...pagination } = payload;
             // Se generan los enlaces de paginación
             const baseUrl = '/admin/products';
@@ -165,7 +165,7 @@ export default class ViewsController {
     async renderAdminProduct(req, res) {
         try {
             const { pid } = req.params;
-            const product = await ProductsServices.getInstance().getProductById(pid);
+            const product = await ProductsServices.getProductById(pid);
             res.render('admin/product', { product });
         } catch (error) {
             res.sendServerError(error.message);
@@ -179,7 +179,7 @@ export default class ViewsController {
     async renderAdminEditProduct(req, res) {
         try {
             const { pid } = req.params;
-            const product = await ProductsServices.getInstance().getProductById(pid);
+            const product = await ProductsServices.getProductById(pid);
             res.render('admin/edit-product', { product });
         } catch (error) {
             res.sendServerError(error.message);

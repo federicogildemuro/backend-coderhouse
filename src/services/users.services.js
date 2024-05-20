@@ -22,7 +22,7 @@ export default class UsersServices {
                 user.password = createHash(user.password);
             }
             // Se crea un carrito para el usuario y se le asigna
-            const cart = await CartsServices.getInstance().createCart();
+            const cart = await CartsServices.createCart();
             user.cart = cart._id;
             const newUser = new UserDTO(user);
             return await Users.getInstance().createUser(newUser);

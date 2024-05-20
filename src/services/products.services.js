@@ -2,18 +2,7 @@ import ProductDTO from '../dao/dtos/product.dto.js';
 import { Products } from '../dao/factory.js';
 
 export default class ProductsServices {
-    static #instance;
-
-    constructor() { }
-
-    static getInstance() {
-        if (!this.#instance) {
-            this.#instance = new ProductsServices();
-        }
-        return this.#instance;
-    }
-
-    async getProducts(queryParams) {
+    static async getProducts(queryParams) {
         try {
             let { limit, page, status, category, sort } = queryParams;
             // Si el valor de limit es mayor a 10, se asigna 10, si es menor a 1, se asigna 1, si no es un número, se asigna 10
@@ -39,7 +28,7 @@ export default class ProductsServices {
         }
     }
 
-    async getProductsByOwner(queryParams, owner) {
+    static async getProductsByOwner(queryParams, owner) {
         try {
             let { limit, page, status, category, sort } = queryParams;
             // Si el valor de limit es mayor a 10, se asigna 10, si es menor a 1, se asigna 1, si no es un número, se asigna 10
@@ -65,7 +54,7 @@ export default class ProductsServices {
         }
     }
 
-    async getProductById(id) {
+    static async getProductById(id) {
         try {
             return await Products.getInstance().getProductById(id);
         } catch (error) {
@@ -73,7 +62,7 @@ export default class ProductsServices {
         }
     }
 
-    async getProductByCode(code) {
+    static async getProductByCode(code) {
         try {
             return await Products.getInstance().getProductByCode(code);
         } catch (error) {
@@ -81,7 +70,7 @@ export default class ProductsServices {
         }
     }
 
-    async createProduct(product) {
+    static async createProduct(product) {
         try {
             if (product.stock === 0) {
                 product.status = false;
@@ -93,7 +82,7 @@ export default class ProductsServices {
         }
     }
 
-    async updateProduct(id, product) {
+    static async updateProduct(id, product) {
         try {
             if (product.stock === 0) {
                 product.status = false;
@@ -105,7 +94,7 @@ export default class ProductsServices {
         }
     }
 
-    async deleteProduct(id) {
+    static async deleteProduct(id) {
         try {
             return await Products.getInstance().deleteProduct(id);
         } catch (error) {
