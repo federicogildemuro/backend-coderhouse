@@ -16,9 +16,9 @@ export default class CartsRouter extends CustomRouter {
     }
 
     init() {
-        this.post('/', ['PUBLIC'], CartsController.getInstance().createCart);
+        this.post('/', ['PUBLIC'], CartsController.createCart);
 
-        this.get('/:cid', ['USER', 'PREMIUM'], CartsController.getInstance().getCartById);
+        this.get('/:cid', ['USER', 'PREMIUM'], CartsController.getCartById);
 
         this.post('/:cid/products/:pid', ['USER', 'PREMIUM'], this.validateProductQuantity, CartsController.addProduct);
 
