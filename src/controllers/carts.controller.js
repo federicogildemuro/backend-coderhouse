@@ -2,21 +2,10 @@ import CartsServices from '../services/carts.services.js';
 import ProductsServices from '../services/products.services.js';
 
 export default class CartsController {
-    static #instance;
-
-    constructor() { }
-
-    static getInstance() {
-        if (!this.#instance) {
-            this.#instance = new CartsController();
-        }
-        return this.#instance;
-    }
-
-    async createCart(req, res) {
+    static async createCart(req, res) {
         try {
             const payload = await CartsServices.getInstance().createCart();
-            req.logger.info('Carrito id ${payload._id} creado exitosamente');
+            req.logger.info(`Carrito id ${payload._id} creado exitosamente`);
             res.sendSuccessPayload(payload);
         } catch (error) {
             req.logger.error(`Error al crear carrito: ${error.message}`);
@@ -24,7 +13,7 @@ export default class CartsController {
         }
     }
 
-    async getCartById(req, res) {
+    static async getCartById(req, res) {
         try {
             const { cid } = req.params;
             const payload = await CartsServices.getInstance().getCartById(cid);
@@ -40,7 +29,7 @@ export default class CartsController {
         }
     }
 
-    async addProduct(req, res) {
+    static async addProduct(req, res) {
         try {
             const { cid, pid } = req.params;
             const quantity = req.body.quantity;
@@ -56,8 +45,8 @@ export default class CartsController {
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             if (product.owner === user.email) {
-                req.logger.warning('No se puede agregar un producto propio al carrito');
-                return res.sendUserError('No se puede agregar un producto propio al carrito');
+                req.logger.warning(`El producto id ${pid} pertenece al usuario ${user.email} y no se puede agregar al carrito`);
+                return res.sendUserError(`El producto id ${pid} pertenece al usuario ${user.email} y no se puede agregar al carrito`);
             }
             const payload = await CartsServices.getInstance().addProduct(cart, product, quantity);
             req.logger.info(`Producto id ${pid} agregado al carrito id ${cid} existosamente`);
@@ -68,7 +57,7 @@ export default class CartsController {
         }
     }
 
-    async updateProductQuantity(req, res) {
+    static async updateProductQuantity(req, res) {
         try {
             const { cid, pid } = req.params;
             const quantity = req.body.quantity;
@@ -95,7 +84,7 @@ export default class CartsController {
         }
     }
 
-    async removeProduct(req, res) {
+    static async removeProduct(req, res) {
         try {
             const { cid, pid } = req.params;
             const cart = await CartsServices.getInstance().getCartById(cid);
@@ -121,7 +110,7 @@ export default class CartsController {
         }
     }
 
-    async deleteCart(req, res) {
+    static async deleteCart(req, res) {
         try {
             const { cid } = req.params;
             const cart = await CartsServices.getInstance().getCartById(cid);
@@ -138,7 +127,7 @@ export default class CartsController {
         }
     }
 
-    async purchaseCart(req, res) {
+    static async purchaseCart(req, res) {
         try {
             const { cid } = req.params;
             const user = req.user;

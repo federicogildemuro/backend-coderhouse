@@ -20,15 +20,15 @@ export default class CartsRouter extends CustomRouter {
 
         this.get('/:cid', ['USER', 'PREMIUM'], CartsController.getInstance().getCartById);
 
-        this.post('/:cid/products/:pid', ['USER', 'PREMIUM'], this.validateProductQuantity, CartsController.getInstance().addProduct);
+        this.post('/:cid/products/:pid', ['USER', 'PREMIUM'], this.validateProductQuantity, CartsController.addProduct);
 
-        this.put('/:cid/products/:pid', ['USER', 'PREMIUM'], this.validateProductQuantity, CartsController.getInstance().updateProductQuantity);
+        this.put('/:cid/products/:pid', ['USER', 'PREMIUM'], this.validateProductQuantity, CartsController.updateProductQuantity);
 
-        this.delete('/:cid/products/:pid', ['USER', 'PREMIUM'], CartsController.getInstance().removeProduct);
+        this.delete('/:cid/products/:pid', ['USER', 'PREMIUM'], CartsController.removeProduct);
 
-        this.delete('/:cid', ['USER', 'PREMIUM'], CartsController.getInstance().deleteCart);
+        this.delete('/:cid', ['USER', 'PREMIUM'], CartsController.deleteCart);
 
-        this.post('/:cid/purchase', ['USER', 'PREMIUM'], CartsController.getInstance().purchaseCart);
+        this.post('/:cid/purchase', ['USER', 'PREMIUM'], CartsController.purchaseCart);
     }
 
     validateProductQuantity(req, res, next) {
