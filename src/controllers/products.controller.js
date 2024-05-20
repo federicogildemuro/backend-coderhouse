@@ -1,18 +1,7 @@
 import ProductsServices from '../services/products.services.js';
 
 export default class ProductsController {
-    static #instance;
-
-    constructor() { }
-
-    static getInstance() {
-        if (!this.#instance) {
-            this.#instance = new ProductsController();
-        }
-        return this.#instance;
-    }
-
-    async getProducts(req, res) {
+    static async getProducts(req, res) {
         try {
             const queryParams = req.query;
             const payload = await ProductsServices.getInstance().getProducts(queryParams);
@@ -24,7 +13,7 @@ export default class ProductsController {
         }
     }
 
-    async getProductById(req, res) {
+    static async getProductById(req, res) {
         try {
             const { pid } = req.params;
             const payload = await ProductsServices.getInstance().getProductById(pid);
@@ -40,11 +29,10 @@ export default class ProductsController {
         }
     }
 
-    async createProduct(req, res) {
+    static async createProduct(req, res) {
         try {
             const newProduct = req.body;
             const product = await ProductsServices.getInstance().getProductByCode(newProduct.code);
-            // Se valida que no exista un producto con el mismo código
             if (product) {
                 req.logger.warning(`Ya existe un producto con el código ${newProduct.code}`);
                 return res.sendUserError(`Ya existe un producto con el código ${newProduct.code}`);
@@ -58,7 +46,7 @@ export default class ProductsController {
         }
     }
 
-    async updateProduct(req, res) {
+    static async updateProduct(req, res) {
         try {
             const { pid } = req.params;
             const updatedProduct = req.body;
@@ -69,12 +57,11 @@ export default class ProductsController {
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             if (product.owner !== user.email && user.role !== 'admin') {
-                req.logger.warning(`No se puede actualizar un producto de otro usuario`);
-                return res.sendUserError(`No se puede actualizar un producto de otro usuario`);
+                req.logger.warning(`El producto id ${pid} no pertenece al usuario ${user.email}`);
+                return res.sendUserError(`El producto id ${pid} no pertenece al usuario ${user.email}`);
             }
             if (updatedProduct.code !== product.code) {
                 product = await ProductsServices.getInstance().getProductByCode(updatedProduct.code);
-                // Se valida que no exista un producto con el mismo código
                 if (product) {
                     req.logger.warning(`Ya existe un producto con el código ${updatedProduct.code}`);
                     return res.sendUserError(`Ya existe un producto con el código ${updatedProduct.code}`);
@@ -89,7 +76,7 @@ export default class ProductsController {
         }
     }
 
-    async deleteProduct(req, res) {
+    static async deleteProduct(req, res) {
         try {
             const { pid } = req.params;
             const user = req.user;
@@ -99,8 +86,8 @@ export default class ProductsController {
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             if (product.owner !== user.email && user.role !== 'admin') {
-                req.logger.warning(`No se puede eliminar un producto de otro usuario`);
-                return res.sendUserError(`No se puede eliminar un producto de otro usuario`);
+                req.logger.warning(`El producto id ${pid} no pertenece al usuario ${user.email}`);
+                return res.sendUserError(`El producto id ${pid} no pertenece al usuario ${user.email}`);
             }
             const payload = await ProductsServices.getInstance().deleteProduct(pid);
             req.logger.info(`Producto id ${pid} eliminado exitosamente`);
