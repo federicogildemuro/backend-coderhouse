@@ -60,8 +60,8 @@ export const addLogger = (req, res, next) => {
     Object.keys(customLevelOptions.levels).forEach(level => {
         logger[level] = (message) => logger.log({ level, message });
     });
-    // Solo se loguean las peticiones a la API
-    if (!req.originalUrl.startsWith('/api')) {
+    // No se loguean las peticiones a las rutas de las vistas y de la documentación de la API
+    if (!req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/api/docs')) {
         return next();
     }
     // Se añade la fecha y hora de cada petición
