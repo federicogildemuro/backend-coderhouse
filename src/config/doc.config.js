@@ -1,6 +1,5 @@
 import __dirname from "../utils.js";
 import swaggerJsDoc from 'swagger-jsdoc';
-import path from 'path';
 
 const swaggerOptions = {
     definition: {
@@ -11,7 +10,7 @@ const swaggerOptions = {
             description: 'Definición de endpoints de la API del ecommerce'
         }
     },
-    apis: [`${path.join(__dirname, '../docs/**/*.yaml')}`]
+    apis: [`${__dirname}/docs/**/*.yaml`]
 };
 
 const swaggerSpecs = swaggerJsDoc(swaggerOptions);
