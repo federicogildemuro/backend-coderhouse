@@ -36,6 +36,8 @@ El mismo utiliza:
 
 - **Winston**: es una biblioteca de registro para Node.js que simplifica la gestión de registros en aplicaciones, la que se utiliza para registrar errores durante la ejecución del programa.
 
+- **Swagger**: es una herramienta de documentación y diseño de APIs que permite describir, producir, consumir y visualizar APIs RESTful de manera interactiva, la que se utiliza con relación a las rutas api/products y api/carts.
+
 ## Requisitos previos
 
 - Node.js instalado en tu sistema. Puedes descargarlo [aquí](https://nodejs.org/).
