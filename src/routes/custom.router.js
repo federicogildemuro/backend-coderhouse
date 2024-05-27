@@ -32,6 +32,10 @@ export default class CustomRouter {
 
     handlePolicies(policies) {
         return (req, res, next) => {
+            // Si la ruta es de la documentación, se permite el acceso
+            if (req.originalUrl.startsWith('/api/docs')) {
+                return next();
+            }
             // Se obtiene el token del usuario, se valida y se guarda en la petición
             const token = req.signedCookies.token;
             const user = validateToken(token);
