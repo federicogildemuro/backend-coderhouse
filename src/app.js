@@ -13,6 +13,8 @@ import initializePassport from './config/passport.config.js';
 import ProductsRouter from './routes/products.router.js';
 import CartsRouter from './routes/carts.router.js';
 import SessionsRouter from './routes/sessions.router.js';
+import swaggerSpecs from './config/doc.config.js';
+import swaggerUi from 'swagger-ui-express';
 import ViewsRouter from './routes/views.router.js';
 import initializeSocket from './config/socket.config.js';
 
@@ -45,10 +47,15 @@ app.set('view engine', 'handlebars');
 initializePassport();
 app.use(passport.initialize());
 
-// Rutas
+// Rutas de la API
 app.use('/api/products', ProductsRouter.getInstance().getRouter());
 app.use('/api/carts', CartsRouter.getInstance().getRouter());
 app.use('/api/sessions', SessionsRouter.getInstance().getRouter());
+
+// Documentación de la API
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+
+// Rutas de las vistas
 app.use('/', ViewsRouter.getInstance().getRouter());
 
 // Inicialización del servidor
