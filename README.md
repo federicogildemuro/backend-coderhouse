@@ -38,6 +38,8 @@ El mismo utiliza:
 
 - **Swagger**: es una herramienta de documentación y diseño de APIs que permite describir, producir, consumir y visualizar APIs RESTful de manera interactiva, la que se utiliza con relación a las rutas api/products y api/carts.
 
+**Mocha, Chai y Supertest**: bibliotecas que se utilizan en forma conjunta para pruebas de solicitudes HTTP y validación de las respuestas del servidor, asegurando que las rutas y los controladores funcionen correctamente.
+
 ## Requisitos previos
 
 - Node.js instalado en tu sistema. Puedes descargarlo [aquí](https://nodejs.org/).
