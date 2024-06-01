@@ -1,5 +1,7 @@
 import UsersServices from '../services/users.services.js';
 import UserWithoutPasswordDTO from '../dao/dtos/user.without.password.dto.js';
+import { generateToken } from '../utils/tokens.utils.js';
+import config from '../config/config.js';
 
 export default class UsersController {
     static async getUsers(req, res) {
