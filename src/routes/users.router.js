@@ -26,6 +26,8 @@ export default class UsersRouter extends CustomRouter {
 
         this.put('/:uid', ['USER', 'PREMIUM', 'ADMIN'], UsersController.updateUser);
 
+        this.put('/premium/:uid', ['USER', 'PREMIUM'], UsersController.changeUserRole);
+
         this.delete('/', ['ADMIN'], UsersController.deleteUsers);
 
         this.delete('/:uid', ['USER', 'PREMIUM', 'ADMIN'], UsersController.deleteUser);

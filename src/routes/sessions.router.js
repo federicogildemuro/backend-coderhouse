@@ -30,8 +30,6 @@ export default class SessionsRouter extends CustomRouter {
 
         this.post('/reset-password', ['PUBLIC'], SessionsController.resetPassword);
 
-        this.put('/premium/:uid', ['USER', 'PREMIUM'], SessionsController.changeUserRole);
-
         this.get('/current', ['USER', 'PREMIUM', 'ADMIN'], this.passportAuthentication('current'), SessionsController.current);
 
         this.post('/logout', ['USER', 'PREMIUM', 'ADMIN'], SessionsController.logout);

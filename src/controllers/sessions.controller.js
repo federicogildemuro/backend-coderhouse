@@ -3,7 +3,6 @@ import config from '../config/config.js';
 import UsersServices from '../services/users.services.js';
 import MailingServices from '../services/mailing.services.js';
 import { isValidPassword } from '../utils/passwords.utils.js';
-import UserWithoutPasswordDTO from '../dao/dtos/user.without.password.dto.js';
 
 export default class SessionsController {
     static register(req, res) {
@@ -94,28 +93,6 @@ export default class SessionsController {
             res.sendSuccessMessage('Contraseña reestablecida exitosamente');
         } catch (error) {
             req.logger.error(`Error al reestablecer contraseña de usuario ${decoded.email}: ${error.message}`);
-            res.sendServerError(error.message);
-        }
-    }
-
-    static async changeUserRole(req, res) {
-        try {
-            const { uid } = req.params;
-            // Se busca el usuario por su id
-            const user = await UsersServices.getInstance().getUserById(uid);
-            // Se cambia el rol  y se actualiza el usuario
-            user.role = user.role === 'user' ? 'premium' : 'user';
-            await UsersServices.getInstance().updateUser(uid, user);
-            // Se elimina la contraseña del usuario y se actualiza la petición
-            const UserWithoutPassword = new UserWithoutPasswordDTO(user);
-            req.user = { ...UserWithoutPassword };
-            // Se genera un nuevo token con el usuario actualizado y se almacena en una cookie
-            const token = generateToken(req.user);
-            res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
-            req.logger.info(`Rol de usuario ${user.email} modificado exitosamente a ${user.role}`);
-            res.sendSuccessMessage(`Rol de usuario ${user.email} modificado exitosamente a ${user.role}`);
-        } catch (error) {
-            req.logger.error(`Error al cambiar rol de usuario ${user.email}: ${error.message}`);
             res.sendServerError(error.message);
         }
     }
