@@ -65,4 +65,20 @@ export default class MailingServices {
             throw error;
         }
     }
+
+    async sendProductDeletedEmail(user, product) {
+        try {
+            return await this.transport.sendMail({
+                from: `Programación Backend <${config.nodeMailerUser}>`,
+                to: user.email,
+                subject: 'Producto eliminado',
+                html:
+                    `<p>Hola ${user.first_name},</p>
+                    <p>El producto ${product.title} ha sido eliminado</p>
+                    <p>Si tienes alguna duda, por favor contáctanos.</p>`
+            });
+        } catch (error) {
+            throw error;
+        }
+    }
 }

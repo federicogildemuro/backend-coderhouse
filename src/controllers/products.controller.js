@@ -1,4 +1,5 @@
 import ProductsServices from '../services/products.services.js';
+import MailingServices from '../services/mailing.services.js';
 
 export default class ProductsController {
     static async getProducts(req, res) {
@@ -91,6 +92,9 @@ export default class ProductsController {
             }
             const payload = await ProductsServices.deleteProduct(pid);
             req.logger.info(`Producto id ${pid} eliminado exitosamente`);
+            if (product.owner !== 'admin') {
+                MailingServices.getInstance().sendProductDeletedEmail(user, product);
+            }
             res.sendSuccessPayload(payload);
         } catch (error) {
             req.logger.error(`Error al eliminar producto id ${pid}: ${error.message}`);
