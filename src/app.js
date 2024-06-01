@@ -12,6 +12,7 @@ import passport from 'passport';
 import initializePassport from './config/passport.config.js';
 import ProductsRouter from './routes/products.router.js';
 import CartsRouter from './routes/carts.router.js';
+import UsersRouter from './routes/users.router.js';
 import SessionsRouter from './routes/sessions.router.js';
 import swaggerSpecs from './config/doc.config.js';
 import swaggerUi from 'swagger-ui-express';
@@ -50,6 +51,7 @@ app.use(passport.initialize());
 // Rutas de la API
 app.use('/api/products', ProductsRouter.getInstance().getRouter());
 app.use('/api/carts', CartsRouter.getInstance().getRouter());
+app.use('/api/users', UsersRouter.getInstance().getRouter());
 app.use('/api/sessions', SessionsRouter.getInstance().getRouter());
 
 // Documentación de la API
