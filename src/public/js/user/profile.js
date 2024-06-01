@@ -1,6 +1,6 @@
 async function changeUserRole(userId) {
     try {
-        const response = await fetch(`/api/sessions/premium/${userId}`, { method: 'PUT' });
+        const response = await fetch(`/api/users/premium/${userId}`, { method: 'PUT' });
         const data = await response.json();
         if (data.status === 'success') {
             alert(data.message);
