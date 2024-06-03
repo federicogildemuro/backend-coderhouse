@@ -90,6 +90,11 @@ export default class ViewsController {
         res.render('user/profile', { user });
     }
 
+    renderUploadDocuments(req, res) {
+        const user = req.user;
+        res.render('user/upload-documents', { user });
+    }
+
     renderChat(req, res) {
         const user = req.user;
         res.render('user/chat', { user });

@@ -34,6 +34,8 @@ export default class ViewsRouter extends CustomRouter {
 
         this.get('/profile', ['USER'], ViewsController.getInstance().renderProfile);
 
+        this.get('/upload-documents', ['USER'], ViewsController.getInstance().renderUploadDocuments);
+
         this.get('/chat', ['USER'], ViewsController.getInstance().renderChat);
 
         this.get('/premium/products', ['PREMIUM'], ViewsController.getInstance().renderPremiumProducts);
