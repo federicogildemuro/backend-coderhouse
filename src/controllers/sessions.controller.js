@@ -14,10 +14,12 @@ export default class SessionsController {
         try {
             const token = generateToken(req.user);
             res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
-            const user = await UsersServices.getInstance().getUserById(req.user._id);
-            user.last_connection = new Date();
-            await UsersServices.getInstance().updateUser(user._id, user);
-            req.logger.info(`Sesión de usuario ${user.email} iniciada exitosamente`);
+            if (req.user.role !== 'admin') {
+                const user = await UsersServices.getInstance().getUserById(req.user._id);
+                user.last_connection = new Date();
+                await UsersServices.getInstance().updateUser(user._id, user);
+            }
+            req.logger.info(`Sesión de usuario ${req.user.email} iniciada exitosamente`);
             res.sendSuccessPayload(req.user);
         } catch (error) {
             req.logger.error(`Error al iniciar sesión de usuario ${req.user.email}: ${error.message}`);
@@ -111,9 +113,11 @@ export default class SessionsController {
     static async logout(req, res) {
         try {
             res.clearCookie('token');
-            const user = await UsersServices.getInstance().getUserById(req.user._id);
-            user.last_connection = new Date();
-            await UsersServices.getInstance().updateUser(user._id, user);
+            if (req.user.role !== 'admin') {
+                const user = await UsersServices.getInstance().getUserById(req.user._id);
+                user.last_connection = new Date();
+                await UsersServices.getInstance().updateUser(user._id, user);
+            }
             req.logger.info(`Sesión de usuario ${req.user.email} cerrada exitosamente`);
             res.sendSuccessMessage('Sesión cerrada exitosamente');
         } catch (error) {
