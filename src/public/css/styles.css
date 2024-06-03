@@ -50,7 +50,7 @@ button:hover {
 }
 
 form {
-    width: 40%;
+    width: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -82,6 +82,10 @@ select {
     padding: .5rem;
     border: .1rem solid black;
     border-radius: .5rem;
+}
+
+.input-document {
+    border: none;
 }
 
 .query-params-form {
@@ -146,10 +150,21 @@ select {
 }
 
 .profile-info {
-    width: 30%;
+    width: 50%;
     flex-direction: column;
     align-items: flex-start;
     padding: 2rem;
+    border: .1rem solid black;
+    border-radius: .5rem;
+}
+
+.profile-document {
+    flex-direction: column;
+}
+
+.document-img {
+    width: 10rem;
+    height: 10rem;
     border: .1rem solid black;
     border-radius: .5rem;
 }
