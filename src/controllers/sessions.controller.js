@@ -10,12 +10,19 @@ export default class SessionsController {
         res.sendSuccessMessage('Usuario registrado exitosamente');
     }
 
-    static login(req, res) {
-        const user = req.user;
-        const token = generateToken(user);
-        res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
-        req.logger.info(`Sesión de usuario ${user.email} iniciada exitosamente`);
-        res.sendSuccessPayload(req.user);
+    static async login(req, res) {
+        try {
+            const token = generateToken(req.user);
+            res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
+            const user = await UsersServices.getInstance().getUserById(req.user._id);
+            user.last_connection = new Date();
+            await UsersServices.getInstance().updateUser(user._id, user);
+            req.logger.info(`Sesión de usuario ${user.email} iniciada exitosamente`);
+            res.sendSuccessPayload(req.user);
+        } catch (error) {
+            req.logger.error(`Error al iniciar sesión de usuario ${req.user.email}: ${error.message}`);
+            res.sendServerError(error.message);
+        }
     }
 
     static githubCallback(req, res) {
@@ -101,9 +108,17 @@ export default class SessionsController {
         res.sendSuccessPayload(req.user);
     }
 
-    static logout(req, res) {
-        res.clearCookie('token');
-        req.logger.info(`Sesión de usuario ${req.user.email} cerrada exitosamente`);
-        res.sendSuccessMessage('Sesión cerrada exitosamente');
+    static async logout(req, res) {
+        try {
+            res.clearCookie('token');
+            const user = await UsersServices.getInstance().getUserById(req.user._id);
+            user.last_connection = new Date();
+            await UsersServices.getInstance().updateUser(user._id, user);
+            req.logger.info(`Sesión de usuario ${req.user.email} cerrada exitosamente`);
+            res.sendSuccessMessage('Sesión cerrada exitosamente');
+        } catch (error) {
+            req.logger.error(`Error al cerrar sesión de usuario ${req.user.email}: ${error.message}`);
+            res.sendServerError(error.message);
+        }
     }
 }
