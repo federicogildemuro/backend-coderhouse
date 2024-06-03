@@ -8,5 +8,7 @@ export default class UserDTO {
         this.password = user.password || '';
         this.cart = user.cart;
         this.role = user.role || 'user';
+        this.documents = user.documents || [];
+        this.last_connection = user.last_connection || new Date();
     }
 }
