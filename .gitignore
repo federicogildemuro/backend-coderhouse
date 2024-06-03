@@ -1,5 +1,6 @@
 node_modules/
 src/dao/fs/data/
+src/public/uploads/
 .env.dev
 .env.prod
 errors.log
