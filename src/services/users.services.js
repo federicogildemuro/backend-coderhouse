@@ -15,17 +15,9 @@ export default class UsersServices {
         return this.#instance;
     }
 
-    async createUser(user) {
+    async getUsers() {
         try {
-            // Se valida si el usuario tiene una contraseña y si la tiene, se encripta
-            if (user.password && user.password.length > 0) {
-                user.password = createHash(user.password);
-            }
-            // Se crea un carrito para el usuario y se le asigna
-            const cart = await CartsServices.createCart();
-            user.cart = cart._id;
-            const newUser = new UserDTO(user);
-            return await Users.getInstance().createUser(newUser);
+            return await Users.getInstance().getUsers();
         } catch (error) {
             throw error;
         }
@@ -47,6 +39,31 @@ export default class UsersServices {
         }
     }
 
+    async createUser(user) {
+        try {
+            // Se valida si el usuario tiene una contraseña y si la tiene, se encripta
+            if (user.password && user.password.length > 0) {
+                user.password = createHash(user.password);
+            }
+            // Se crea un carrito para el usuario y se le asigna
+            const cart = await CartsServices.createCart();
+            user.cart = cart._id;
+            const newUser = new UserDTO(user);
+            return await Users.getInstance().createUser(newUser);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async updateUser(id, user) {
+        try {
+            const updatedUser = new UserDTO(user);
+            return await Users.getInstance().updateUser(id, updatedUser);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async updateUserPassword(id, user) {
         try {
             if (user.password && user.password.length > 0) {
@@ -59,10 +76,17 @@ export default class UsersServices {
         }
     }
 
-    async updateUser(id, user) {
+    async deleteUsers() {
         try {
-            const updatedUser = new UserDTO(user);
-            return await Users.getInstance().updateUser(id, updatedUser);
+            return await Users.getInstance().deleteUsers();
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteUser(id) {
+        try {
+            return await Users.getInstance().deleteUser(id);
         } catch (error) {
             throw error;
         }

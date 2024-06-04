@@ -6,16 +6,33 @@ import config from '../config/config.js';
 export default class UsersController {
     static async getUsers(req, res) {
         try {
+            const payload = await UsersServices.getInstance().getUsers();
+            payload.forEach(user => delete user.password);
+            req.logger.info('Consulta de usuarios exitosa');
+            res.sendSuccessPayload(payload);
         } catch (error) {
+            req.logger.error(`Error al consultar usuarios: ${error.message}`);
+            res.sendServerError(error.message);
         }
     }
 
     static async getUserById(req, res) {
         try {
+            const { uid } = req.params;
+            const payload = await UsersServices.getInstance().getUserById(uid);
+            if (!payload) {
+                req.logger.warning(`No existe un usuario con el id ${uid}`);
+                return res.sendUserError(`No existe un usuario con el id ${uid}`);
+            }
+            req.logger.info(`Consulta del usuario id ${uid} exitosa`);
+            res.sendSuccessPayload(payload);
         } catch (error) {
+            req.logger.error(`Error al consultar usuario id ${uid}: ${error.message}`);
+            res.sendServerError(error.message);
         }
     }
 
+    // ver de pasar el registro de usuarios desde sessions
     static async createUser(req, res) {
         try {
         } catch (error) {
@@ -66,7 +83,26 @@ export default class UsersController {
 
     static async updateUser(req, res) {
         try {
+            const { uid } = req.params;
+            const updatedUser = req.body;
+            const user = await UsersServices.getInstance().getUserById(uid);
+            if (!user) {
+                req.logger.warning(`No existe un usuario con el id ${uid}`);
+                return res.sendUserError(`No existe un usuario con el id ${uid}`);
+            }
+            if (updatedUser.email !== user.email) {
+                const existingUser = await UsersServices.getInstance().getUserByEmail(updatedUser.email);
+                if (existingUser) {
+                    req.logger.warning(`Ya existe un usuario con el email ${updatedUser.email}`);
+                    return res.sendUserError(`Ya existe un usuario con el email ${updatedUser.email}`);
+                }
+            }
+            const payload = await UsersServices.getInstance().updateUser(uid, updatedUser);
+            req.logger.info(`Usuario id ${uid} actualizado exitosamente`);
+            res.sendSuccessPayload(payload);
         } catch (error) {
+            req.logger.error(`Error al actualizar usuario id ${uid}: ${error.message}`);
+            res.sendServerError(error.message);
         }
     }
 
@@ -101,13 +137,29 @@ export default class UsersController {
 
     static async deleteUsers(req, res) {
         try {
+            await UsersServices.getInstance().deleteUsers();
+            req.logger.info('Usuarios eliminados exitosamente');
+            res.sendSuccessMessage('Usuarios eliminados exitosamente');
         } catch (error) {
+            req.logger.error(`Error al eliminar usuarios: ${error.message}`);
+            res.sendServerError(error.message);
         }
     }
 
     static async deleteUser(req, res) {
         try {
+            const { uid } = req.params;
+            const user = await UsersServices.getInstance().getUserById(uid);
+            if (!user) {
+                req.logger.warning(`No existe un usuario con el id ${uid}`);
+                return res.sendUserError(`No existe un usuario con el id ${uid}`);
+            }
+            await UsersServices.getInstance().deleteUser(uid);
+            req.logger.info(`Usuario id ${uid} eliminado exitosamente`);
+            res.sendSuccessMessage(`Usuario id ${uid} eliminado exitosamente`);
         } catch (error) {
+            req.logger.error(`Error al eliminar usuario id ${uid}: ${error.message}`);
+            res.sendServerError(error.message);
         }
     }
 }

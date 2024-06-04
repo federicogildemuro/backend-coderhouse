@@ -16,16 +16,9 @@ export default class UsersFsDAO {
         return this.#instance;
     }
 
-    createUser(user) {
+    getUsers() {
         try {
-            const lastUser = this.users[this.users.length - 1];
-            const newUser = {
-                _id: lastUser?._id + 1 || 1,
-                ...user,
-            }
-            this.users.push(newUser);
-            fs.writeFileSync(this.url, JSON.stringify(this.users, null, '\t'));
-            return newUser;
+            return this.users;
         } catch (error) {
             throw error;
         }
@@ -47,6 +40,21 @@ export default class UsersFsDAO {
         }
     }
 
+    createUser(user) {
+        try {
+            const lastUser = this.users[this.users.length - 1];
+            const newUser = {
+                _id: lastUser?._id + 1 || 1,
+                ...user,
+            }
+            this.users.push(newUser);
+            fs.writeFileSync(this.url, JSON.stringify(this.users, null, '\t'));
+            return newUser;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     updateUser(id, user) {
         try {
             const index = this.users.findIndex(user => user._id === id);
@@ -60,6 +68,31 @@ export default class UsersFsDAO {
             this.users[index] = updatedUser;
             fs.writeFileSync(this.url, JSON.stringify(this.users, null, '\t'));
             return updatedUser;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    deleteUsers() {
+        try {
+            // dos días
+            /* const cutOffDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); */
+            // 30 minutos
+            const cutOffDate = new Date(Date.now() - 30 * 60 * 1000);
+            const updatedUsers = users.filter(user => new Date(user.last_connection) >= cutOffDate);
+            fs.writeFileSync(this.url, JSON.stringify(updatedUsers, null, '\t'));
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    deleteUser(id) {
+        try {
+            id = parseInt(id);
+            const index = this.users.findIndex(user => user._id === id);
+            const deletedUser = this.users.splice(index, 1);
+            fs.writeFileSync(this.url, JSON.stringify(this.users, null, '\t'));
+            return deletedUser;
         } catch (error) {
             throw error;
         }
