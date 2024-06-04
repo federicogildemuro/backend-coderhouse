@@ -15,9 +15,9 @@ export default class SessionsController {
             const token = generateToken(req.user);
             res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
             if (req.user.role !== 'admin') {
-                const user = await UsersServices.getInstance().getUserById(req.user._id);
+                const user = await UsersServices.getUserById(req.user._id);
                 user.last_connection = new Date();
-                await UsersServices.getInstance().updateUser(user._id, user);
+                await UsersServices.updateUser(user._id, user);
             }
             req.logger.info(`Sesión de usuario ${req.user.email} iniciada exitosamente`);
             res.sendSuccessPayload(req.user);
@@ -47,7 +47,7 @@ export default class SessionsController {
                 req.logger.warning('El correo electrónico ingresado no es válido');
                 return res.sendUserError('El correo electrónico ingresado no es válido');
             }
-            const user = await UsersServices.getInstance().getUserByEmail(email);
+            const user = await UsersServices.getUserByEmail(email);
             if (!user) {
                 req.logger.warning(`No existe un usuario registrado con el correo electrónico ${email}`);
                 return res.sendUserError(`No existe un usuario registrado con el correo electrónico ${email}`);
@@ -85,7 +85,7 @@ export default class SessionsController {
                 return res.sendUserError('No se ha proporcionado un token válido');
             }
             // Se busca el usuario asociado al token
-            const user = await UsersServices.getInstance().getUserByEmail(decoded.email);
+            const user = await UsersServices.getUserByEmail(decoded.email);
             if (!user) {
                 req.logger.warning('No se ha encontrado un usuario asociado al token proporcionado');
                 return res.sendUserError('No se ha encontrado un usuario asociado al token proporcionado');
@@ -97,7 +97,7 @@ export default class SessionsController {
             }
             // Se actualiza la contraseña del usuario
             user.password = password;
-            await UsersServices.getInstance().updateUserPassword(user._id, user);
+            await UsersServices.updateUserPassword(user._id, user);
             req.logger.info(`Contraseña de usuario ${user.email} reestablecida exitosamente`);
             res.sendSuccessMessage('Contraseña reestablecida exitosamente');
         } catch (error) {
@@ -114,9 +114,9 @@ export default class SessionsController {
         try {
             res.clearCookie('token');
             if (req.user.role !== 'admin') {
-                const user = await UsersServices.getInstance().getUserById(req.user._id);
+                const user = await UsersServices.getUserById(req.user._id);
                 user.last_connection = new Date();
-                await UsersServices.getInstance().updateUser(user._id, user);
+                await UsersServices.updateUser(user._id, user);
             }
             req.logger.info(`Sesión de usuario ${req.user.email} cerrada exitosamente`);
             res.sendSuccessMessage('Sesión cerrada exitosamente');

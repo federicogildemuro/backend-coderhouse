@@ -6,8 +6,7 @@ import config from '../config/config.js';
 export default class UsersController {
     static async getUsers(req, res) {
         try {
-            const payload = await UsersServices.getInstance().getUsers();
-            payload.forEach(user => delete user.password);
+            const payload = await UsersServices.getUsers(queryParams);
             req.logger.info('Consulta de usuarios exitosa');
             res.sendSuccessPayload(payload);
         } catch (error) {
@@ -19,7 +18,7 @@ export default class UsersController {
     static async getUserById(req, res) {
         try {
             const { uid } = req.params;
-            const payload = await UsersServices.getInstance().getUserById(uid);
+            const payload = await UsersServices.getUserById(uid);
             if (!payload) {
                 req.logger.warning(`No existe un usuario con el id ${uid}`);
                 return res.sendUserError(`No existe un usuario con el id ${uid}`);
@@ -43,7 +42,7 @@ export default class UsersController {
         try {
             const { uid } = req.params;
             const documents = req.files;
-            const user = await UsersServices.getInstance().getUserById(uid);
+            const user = await UsersServices.getUserById(uid);
             // Se recorren los documentos subidos
             Object.keys(documents).forEach(documentKey => {
                 // Se obtiene el array de documentos por cada tipo
@@ -66,7 +65,7 @@ export default class UsersController {
                 });
             });
             // Se actualiza el usuario con los documentos subidos
-            await UsersServices.getInstance().updateUser(uid, user);
+            await UsersServices.updateUser(uid, user);
             // Se elimina la contraseña del usuario y se actualiza la petición
             const UserWithoutPassword = new UserWithoutPasswordDTO(user);
             req.user = { ...UserWithoutPassword };
@@ -85,19 +84,19 @@ export default class UsersController {
         try {
             const { uid } = req.params;
             const updatedUser = req.body;
-            const user = await UsersServices.getInstance().getUserById(uid);
+            const user = await UsersServices.getUserById(uid);
             if (!user) {
                 req.logger.warning(`No existe un usuario con el id ${uid}`);
                 return res.sendUserError(`No existe un usuario con el id ${uid}`);
             }
             if (updatedUser.email !== user.email) {
-                const existingUser = await UsersServices.getInstance().getUserByEmail(updatedUser.email);
+                const existingUser = await UsersServices.getUserByEmail(updatedUser.email);
                 if (existingUser) {
                     req.logger.warning(`Ya existe un usuario con el email ${updatedUser.email}`);
                     return res.sendUserError(`Ya existe un usuario con el email ${updatedUser.email}`);
                 }
             }
-            const payload = await UsersServices.getInstance().updateUser(uid, updatedUser);
+            const payload = await UsersServices.updateUser(uid, updatedUser);
             req.logger.info(`Usuario id ${uid} actualizado exitosamente`);
             res.sendSuccessPayload(payload);
         } catch (error) {
@@ -109,7 +108,7 @@ export default class UsersController {
     static async changeUserRole(req, res) {
         try {
             const { uid } = req.params;
-            const user = await UsersServices.getInstance().getUserById(uid);
+            const user = await UsersServices.getUserById(uid);
             // Se verifica si el usuario es de tipo user y si ha subido los documentos necesarios para cambiar a premium
             if (user.role === 'user') {
                 const documents = user.documents.map(document => document.name);
@@ -120,7 +119,7 @@ export default class UsersController {
             }
             // Se cambia el rol del usuario y se actualiza en la base de datos
             user.role = user.role === 'user' ? 'premium' : 'user';
-            await UsersServices.getInstance().updateUser(uid, user);
+            await UsersServices.updateUser(uid, user);
             // Se elimina la contraseña del usuario y se actualiza la petición
             const UserWithoutPassword = new UserWithoutPasswordDTO(user);
             req.user = { ...UserWithoutPassword };
@@ -137,7 +136,7 @@ export default class UsersController {
 
     static async deleteUsers(req, res) {
         try {
-            await UsersServices.getInstance().deleteUsers();
+            const payload = await UsersServices.deleteUsers();
             req.logger.info('Usuarios eliminados exitosamente');
             res.sendSuccessMessage('Usuarios eliminados exitosamente');
         } catch (error) {
@@ -149,12 +148,12 @@ export default class UsersController {
     static async deleteUser(req, res) {
         try {
             const { uid } = req.params;
-            const user = await UsersServices.getInstance().getUserById(uid);
+            const user = await UsersServices.getUserById(uid);
             if (!user) {
                 req.logger.warning(`No existe un usuario con el id ${uid}`);
                 return res.sendUserError(`No existe un usuario con el id ${uid}`);
             }
-            await UsersServices.getInstance().deleteUser(uid);
+            await UsersServices.deleteUser(uid);
             req.logger.info(`Usuario id ${uid} eliminado exitosamente`);
             res.sendSuccessMessage(`Usuario id ${uid} eliminado exitosamente`);
         } catch (error) {

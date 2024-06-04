@@ -26,11 +26,11 @@ const initializePassport = () => {
                 if (!passwordRegex.test(password)) {
                     return done(null, false, 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un caracter especial');
                 }
-                const user = await UsersServices.getInstance().getUserByEmail(username);
+                const user = await UsersServices.getUserByEmail(username);
                 if (user) {
                     return done(null, false, `Ya existe un usuario registrado con el correo electrónico ${username}`);
                 }
-                const newUser = await UsersServices.getInstance().createUser({
+                const newUser = await UsersServices.createUser({
                     first_name,
                     last_name,
                     email: username,
@@ -59,7 +59,7 @@ const initializePassport = () => {
                         role: 'admin'
                     });
                 }
-                const user = await UsersServices.getInstance().getUserByEmail(username);
+                const user = await UsersServices.getUserByEmail(username);
                 if (!user) {
                     return done(null, false, `No existe un usuario registrado con el correo electrónico ${username}`);
                 }
@@ -81,11 +81,11 @@ const initializePassport = () => {
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                const user = await UsersServices.getInstance().getUserByEmail(profile._json.email);
+                const user = await UsersServices.getUserByEmail(profile._json.email);
                 if (user) {
                     return done(null, user);
                 } else {
-                    const newUser = await UsersServices.getInstance().createUser({
+                    const newUser = await UsersServices.createUser({
                         first_name: profile._json.name,
                         email: profile._json.email,
                     });

@@ -4,18 +4,7 @@ import UserDTO from '../dao/dtos/user.dto.js';
 import { Users } from '../dao/factory.js';
 
 export default class UsersServices {
-    static #instance;
-
-    constructor() { }
-
-    static getInstance() {
-        if (!this.#instance) {
-            this.#instance = new UsersServices();
-        }
-        return this.#instance;
-    }
-
-    async getUsers() {
+    static async getUsers() {
         try {
             return await Users.getInstance().getUsers();
         } catch (error) {
@@ -23,7 +12,7 @@ export default class UsersServices {
         }
     }
 
-    async getUserById(id) {
+    static async getUserById(id) {
         try {
             return await Users.getInstance().getUserById(id);
         } catch (error) {
@@ -31,7 +20,7 @@ export default class UsersServices {
         }
     }
 
-    async getUserByEmail(email) {
+    static async getUserByEmail(email) {
         try {
             return await Users.getInstance().getUserByEmail(email);
         } catch (error) {
@@ -39,7 +28,7 @@ export default class UsersServices {
         }
     }
 
-    async createUser(user) {
+    static async createUser(user) {
         try {
             // Se valida si el usuario tiene una contraseña y si la tiene, se encripta
             if (user.password && user.password.length > 0) {
@@ -55,7 +44,7 @@ export default class UsersServices {
         }
     }
 
-    async updateUser(id, user) {
+    static async updateUser(id, user) {
         try {
             const updatedUser = new UserDTO(user);
             return await Users.getInstance().updateUser(id, updatedUser);
@@ -64,7 +53,7 @@ export default class UsersServices {
         }
     }
 
-    async updateUserPassword(id, user) {
+    static async updateUserPassword(id, user) {
         try {
             if (user.password && user.password.length > 0) {
                 user.password = createHash(user.password);
@@ -76,7 +65,7 @@ export default class UsersServices {
         }
     }
 
-    async deleteUsers() {
+    static async deleteUsers() {
         try {
             return await Users.getInstance().deleteUsers();
         } catch (error) {
@@ -84,7 +73,7 @@ export default class UsersServices {
         }
     }
 
-    async deleteUser(id) {
+    static async deleteUser(id) {
         try {
             return await Users.getInstance().deleteUser(id);
         } catch (error) {
