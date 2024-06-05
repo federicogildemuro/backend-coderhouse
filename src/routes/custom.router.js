@@ -52,7 +52,7 @@ export default class CustomRouter {
                     } else if (user.role === 'premium' && (policies.includes('PUBLIC') || policies.includes('ADMIN'))) {
                         return res.redirect('/products');
                     } else if (user.role === 'admin' && (policies.includes('PUBLIC') || policies.includes('USER') || policies.includes('PREMIUM'))) {
-                        return res.redirect('/admin/products');
+                        return res.redirect('/admin/main');
                     }
                 } else if (policies.includes('USER') || policies.includes('PREMIUM') || policies.includes('ADMIN')) {
                     return res.redirect('/');
