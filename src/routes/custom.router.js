@@ -32,6 +32,10 @@ export default class CustomRouter {
 
     handlePolicies(policies) {
         return (req, res, next) => {
+            // Si la ruta es de acceso libre, se permite el acceso
+            if (policies.includes('ALL')) {
+                return next();
+            }
             // Si la ruta es de la documentación, se permite el acceso
             if (req.originalUrl.startsWith('/api/docs')) {
                 return next();
@@ -43,9 +47,6 @@ export default class CustomRouter {
 
             // Si la ruta no es de la API (views), se redirige según el rol del usuario
             if (!req.originalUrl.startsWith('/api')) {
-                if (policies.includes('ALL')) {
-                    return next();
-                }
                 if (token) {
                     if (user.role === 'user' && (policies.includes('PUBLIC') || policies.includes('PREMIUM') || policies.includes('ADMIN'))) {
                         return res.redirect('/products');
