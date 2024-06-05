@@ -105,7 +105,8 @@ export default class ViewsController {
         try {
             const queryParams = req.query;
             const user = req.user;
-            const payload = await ProductsServices.getProductsByOwner(queryParams, user.email);
+            queryParams.owner = user.email;
+            const payload = await ProductsServices.getProducts(queryParams);
             const { docs: products, ...pagination } = payload;
             // Se generan los enlaces de paginación
             const baseUrl = '/premium/products';
