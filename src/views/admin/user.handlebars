@@ -1,0 +1,33 @@
+<h1>Usuario ID {{user._id}}</h1>
+
+<nav>
+    <a href="/admin/users">Volver</a>
+</nav>
+
+<div class="user-info">
+    <p>Nombre: {{user.first_name}}</p>
+    <p>Apellido: {{user.last_name}}</p>
+    <p>Correo electrónico: {{user.email}}</p>
+    <p>Edad: {{user.age}}</p>
+    <p>Rol: {{user.role}}</p>
+    {{#if user.documents}}
+    <p>Documentos:</p>
+    <div class="profile-documents">
+        {{#each user.documents}}
+        <div class="profile-document">
+            <img class="document-img" src="{{this.reference}}" alt="{{this.name}}" />
+            <p>{{this.name}}</p>
+        </div>
+        {{/each}}
+    </div>
+    {{else}}
+    <p>Documentos: no se ha cargado ninguno</p>
+    {{/if}}
+    <p>Última conexión: {{user.last_connection}}</p>
+    <div>
+        <button onclick="changeUserRole('{{user._id}}')">Cambiar rol</button>
+        <button onclick="deleteUser('{{user._id}}')">Eliminar</button>
+    </div>
+</div>
+
+<script src="/js/admin/user.js"></script>
