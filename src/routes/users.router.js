@@ -1,6 +1,6 @@
 import CustomRouter from './custom.router.js';
 import UsersController from '../controllers/users.controller.js';
-import { uploader } from '../utils/multer.utils.js';
+import uploader from '../utils/multer.utils.js';
 
 export default class UsersRouter extends CustomRouter {
     static #instance;
@@ -23,12 +23,7 @@ export default class UsersRouter extends CustomRouter {
 
         this.post('/', ['PUBLIC'], UsersController.createUser);
 
-        this.post('/:uid/documents', ['USER', 'PREMIUM'], uploader.fields([
-            { name: 'profile', maxCount: 1 },
-            { name: 'id', maxCount: 1 },
-            { name: 'adress', maxCount: 1 },
-            { name: 'account', maxCount: 1 },
-        ]), UsersController.uploadDocuments);
+        this.post('/:uid/documents', ['USER', 'PREMIUM'], uploader, UsersController.uploadDocuments);
 
         this.put('/:uid', ['USER', 'PREMIUM', 'ADMIN'], UsersController.updateUser);
 

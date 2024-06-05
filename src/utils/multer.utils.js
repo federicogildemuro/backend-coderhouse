@@ -29,4 +29,12 @@ const storage = multer.diskStorage({
     }
 });
 
-export const uploader = multer({ storage });
+const uploader = multer({ storage }).fields([
+    { name: 'product', maxCount: 2 },
+    { name: 'profile', maxCount: 1 },
+    { name: 'id', maxCount: 1 },
+    { name: 'adress', maxCount: 1 },
+    { name: 'account', maxCount: 1 }
+]);
+
+export default uploader;
