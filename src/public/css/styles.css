@@ -127,7 +127,8 @@ select {
     margin: 0;
 }
 
-.product-info {
+.product-info,
+.user-info {
     width: 50%;
     flex-direction: column;
     align-items: flex-start;
