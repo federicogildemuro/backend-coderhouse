@@ -3,6 +3,7 @@ import UserWithoutPasswordDTO from '../dao/dtos/user.without.password.dto.js';
 import { generateToken } from '../utils/tokens.utils.js';
 import config from '../config/config.js';
 import CartsServices from '../services/carts.services.js';
+import MailingServices from '../services/mailing.services.js';
 
 export default class UsersController {
     static async getUsers(req, res) {
@@ -119,6 +120,7 @@ export default class UsersController {
             const deletedUsers = await UsersServices.deleteInactiveUsers();
             deletedUsers.forEach(async user => {
                 await CartsServices.deleteCart(user.cart);
+                await MailingServices.getInstance().sendUserDeletedEmail(user);
             });
             req.logger.info('Usuarios eliminados exitosamente');
             res.sendSuccessPayload(deletedUsers);
@@ -138,6 +140,7 @@ export default class UsersController {
             }
             const deletedUser = await UsersServices.deleteUser(uid);
             await CartsServices.deleteCart(user.cart);
+            await MailingServices.getInstance().sendUserDeletedEmail(user);
             req.logger.info(`Usuario id ${uid} eliminado exitosamente`);
             res.sendSuccessPayload(deletedUser);
         } catch (error) {

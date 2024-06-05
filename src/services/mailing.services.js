@@ -81,4 +81,20 @@ export default class MailingServices {
             throw error;
         }
     }
+
+    async sendUserDeletedEmail(user) {
+        try {
+            return await this.transport.sendMail({
+                from: `Programación Backend <${config.nodeMailerUser}>`,
+                to: user.email,
+                subject: 'Cuenta eliminada',
+                html:
+                    `<p>Hola ${user.first_name},</p>
+                    <p>Tu cuenta ha sido eliminada</p>
+                    <p>Si tienes alguna duda, por favor contáctanos.</p>`
+            });
+        } catch (error) {
+            throw error;
+        }
+    }
 }
