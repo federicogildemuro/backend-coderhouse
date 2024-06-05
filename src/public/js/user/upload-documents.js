@@ -14,9 +14,11 @@ uploadDocumentsForm.addEventListener('submit', async (event) => {
             body: formData,
         });
         const data = await response.json();
-        alert(data.message);
         if (data.status === 'success') {
+            alert('Documentos subidos exitosamente');
             window.location.href = '/profile';
+        } else {
+            alert(data.message);
         }
     } catch (error) {
         alert(error);

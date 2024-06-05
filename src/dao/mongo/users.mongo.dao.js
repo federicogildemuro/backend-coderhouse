@@ -53,10 +53,13 @@ export default class UsersMongoDAO {
         }
     }
 
-    async deleteUsers() {
+    async deleteInactiveUsers() {
         try {
-            const cutOffDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
-            return await userModel.deleteMany({ last_connection: { $lt: cutOffDate } });
+            /* const cutOffDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); */
+            const cutOffDate = new Date(Date.now() - 30 * 60 * 1000);
+            const deletedUsers = await userModel.find({ last_connection: { $lt: cutOffDate } });
+            await userModel.deleteMany({ last_connection: { $lt: cutOffDate } });
+            return deletedUsers;
         } catch (error) {
             throw error;
         }

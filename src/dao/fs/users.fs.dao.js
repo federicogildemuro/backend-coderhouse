@@ -96,14 +96,13 @@ export default class UsersFsDAO {
         }
     }
 
-    deleteUsers() {
+    deleteInactiveUsers() {
         try {
-            // dos días
-            /* const cutOffDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); */
-            // 30 minutos
-            const cutOffDate = new Date(Date.now() - 30 * 60 * 1000);
+            const cutOffDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
+            const deletedUsers = this.users.filter(user => new Date(user.last_connection) < cutOffDate);
             const updatedUsers = users.filter(user => new Date(user.last_connection) >= cutOffDate);
             fs.writeFileSync(this.url, JSON.stringify(updatedUsers, null, '\t'));
+            return deletedUsers;
         } catch (error) {
             throw error;
         }

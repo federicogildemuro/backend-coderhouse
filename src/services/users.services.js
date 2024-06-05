@@ -67,9 +67,9 @@ export default class UsersServices {
         }
     }
 
-    static async deleteUsers() {
+    static async deleteInactiveUsers() {
         try {
-            return await Users.getInstance().deleteUsers();
+            return await Users.getInstance().deleteInactiveUsers();
         } catch (error) {
             throw error;
         }

@@ -21,16 +21,12 @@ export default class UsersRouter extends CustomRouter {
 
         this.get('/:uid', ['USER', 'PREMIUM', 'ADMIN'], UsersController.getUserById);
 
-        this.post('/', ['PUBLIC'], UsersController.createUser);
-
-        this.post('/:uid/documents', ['USER', 'PREMIUM'], uploader, UsersController.uploadDocuments);
-
-        this.put('/:uid', ['USER', 'PREMIUM', 'ADMIN'], UsersController.updateUser);
+        this.post('/:uid/documents', ['USER', 'PREMIUM'], uploader, UsersController.uploadUserDocuments);
 
         this.put('/premium/:uid', ['USER', 'PREMIUM', 'ADMIN'], UsersController.changeUserRole);
 
-        this.delete('/', ['ADMIN'], UsersController.deleteUsers);
+        this.delete('/', ['ADMIN'], UsersController.deleteInactiveUsers);
 
-        this.delete('/:uid', ['USER', 'PREMIUM', 'ADMIN'], UsersController.deleteUser);
+        this.delete('/:uid', ['ADMIN'], UsersController.deleteUser);
     }
 }

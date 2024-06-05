@@ -2,6 +2,7 @@ import UsersServices from '../services/users.services.js';
 import UserWithoutPasswordDTO from '../dao/dtos/user.without.password.dto.js';
 import { generateToken } from '../utils/tokens.utils.js';
 import config from '../config/config.js';
+import CartsServices from '../services/carts.services.js';
 
 export default class UsersController {
     static async getUsers(req, res) {
@@ -34,18 +35,15 @@ export default class UsersController {
         }
     }
 
-    // ver de pasar el registro de usuarios desde sessions
-    static async createUser(req, res) {
-        try {
-        } catch (error) {
-        }
-    }
-
-    static async uploadDocuments(req, res) {
+    static async uploadUserDocuments(req, res) {
         try {
             const { uid } = req.params;
             const documents = req.files;
             const user = await UsersServices.getUserById(uid);
+            if (!user) {
+                req.logger.warning(`No existe un usuario con el id ${uid}`);
+                return res.sendUserError(`No existe un usuario con el id ${uid}`);
+            }
             // Se recorren los documentos subidos
             Object.keys(documents).forEach(documentKey => {
                 // Se obtiene el array de documentos por cada tipo
@@ -75,35 +73,10 @@ export default class UsersController {
             // Se genera un nuevo token con el usuario actualizado y se almacena en una cookie
             const token = generateToken(req.user);
             res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
-            req.logger.info(`Documentos subidos exitosamente por el usuario ${user.email}`);
-            res.sendSuccessMessage(`Documentos subidos exitosamente por el usuario ${user.email}`);
+            req.logger.info(`Documentos subidos exitosamente por el usuario id ${uid}`);
+            res.sendSuccessPayload(user);
         } catch (error) {
-            req.logger.error(`Error al subir documentos del usuario ${user.email}: ${error.message}`);
-            res.sendServerError(error.message);
-        }
-    }
-
-    static async updateUser(req, res) {
-        try {
-            const { uid } = req.params;
-            const updatedUser = req.body;
-            const user = await UsersServices.getUserById(uid);
-            if (!user) {
-                req.logger.warning(`No existe un usuario con el id ${uid}`);
-                return res.sendUserError(`No existe un usuario con el id ${uid}`);
-            }
-            if (updatedUser.email !== user.email) {
-                const existingUser = await UsersServices.getUserByEmail(updatedUser.email);
-                if (existingUser) {
-                    req.logger.warning(`Ya existe un usuario con el email ${updatedUser.email}`);
-                    return res.sendUserError(`Ya existe un usuario con el email ${updatedUser.email}`);
-                }
-            }
-            const payload = await UsersServices.updateUser(uid, updatedUser);
-            req.logger.info(`Usuario id ${uid} actualizado exitosamente`);
-            res.sendSuccessPayload(payload);
-        } catch (error) {
-            req.logger.error(`Error al actualizar usuario id ${uid}: ${error.message}`);
+            req.logger.error(`Error al subir documentos del usuario ${uid}: ${error.message}`);
             res.sendServerError(error.message);
         }
     }
@@ -112,12 +85,16 @@ export default class UsersController {
         try {
             const { uid } = req.params;
             const user = await UsersServices.getUserById(uid);
+            if (!user) {
+                req.logger.warning(`No existe un usuario con el id ${uid}`);
+                return res.sendUserError(`No existe un usuario con el id ${uid}`);
+            }
             // Se verifica si el usuario es de tipo user y si ha subido los documentos necesarios para cambiar a premium
             if (user.role === 'user') {
                 const documents = user.documents.map(document => document.name);
                 if (!documents.includes('id') || !documents.includes('adress') || !documents.includes('account')) {
-                    req.logger.warning('No se puede cambiar el rol del usuario a premium si no se han subido los documentos necesarios');
-                    return res.sendUserError('No se puede cambiar el rol del usuario a premium si no ha subido su identificación, comprobante de domicilio y comprobante de estado de cuenta');
+                    req.logger.warning(`No se puedo cambiar el rol del usuario id ${uid} a premium porque no ha subido los documentos necesarios`);
+                    return res.sendUserError('No se puede cambiar el rol del usuario a premium si no se han subido los documentos necesarios');
                 }
             }
             // Se cambia el rol del usuario y se actualiza en la base de datos
@@ -129,19 +106,22 @@ export default class UsersController {
             // Se genera un nuevo token con el usuario actualizado y se almacena en una cookie
             const token = generateToken(req.user);
             res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
-            req.logger.info(`Rol de usuario ${user.email} modificado exitosamente a ${user.role}`);
-            res.sendSuccessMessage(`Rol de usuario ${user.email} modificado exitosamente a ${user.role}`);
+            req.logger.info(`Rol de usuario id ${uid} modificado exitosamente a ${user.role}`);
+            res.sendSuccessPayload(user);
         } catch (error) {
-            req.logger.error(`Error al cambiar rol de usuario ${user.email}: ${error.message}`);
+            req.logger.error(`Error al cambiar rol de usuario id ${uid}: ${error.message}`);
             res.sendServerError(error.message);
         }
     }
 
-    static async deleteUsers(req, res) {
+    static async deleteInactiveUsers(req, res) {
         try {
-            await UsersServices.deleteUsers();
+            const deletedUsers = await UsersServices.deleteInactiveUsers();
+            deletedUsers.forEach(async user => {
+                await CartsServices.deleteCart(user.cart);
+            });
             req.logger.info('Usuarios eliminados exitosamente');
-            res.sendSuccessMessage('Usuarios eliminados exitosamente');
+            res.sendSuccessPayload(deletedUsers);
         } catch (error) {
             req.logger.error(`Error al eliminar usuarios: ${error.message}`);
             res.sendServerError(error.message);
@@ -156,9 +136,10 @@ export default class UsersController {
                 req.logger.warning(`No existe un usuario con el id ${uid}`);
                 return res.sendUserError(`No existe un usuario con el id ${uid}`);
             }
-            await UsersServices.deleteUser(uid);
+            const deletedUser = await UsersServices.deleteUser(uid);
+            await CartsServices.deleteCart(user.cart);
             req.logger.info(`Usuario id ${uid} eliminado exitosamente`);
-            res.sendSuccessMessage(`Usuario id ${uid} eliminado exitosamente`);
+            res.sendSuccessPayload(deletedUser);
         } catch (error) {
             req.logger.error(`Error al eliminar usuario id ${uid}: ${error.message}`);
             res.sendServerError(error.message);

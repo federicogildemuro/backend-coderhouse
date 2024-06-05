@@ -3,7 +3,7 @@ async function changeUserRole(userId) {
         const response = await fetch(`/api/users/premium/${userId}`, { method: 'PUT' });
         const data = await response.json();
         if (data.status === 'success') {
-            alert(data.message);
+            alert('Rol de usuario cambiado exitosamente');
             window.location.reload();
         } else {
             alert(data.message);
