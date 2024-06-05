@@ -44,6 +44,14 @@ export default class CartsServices {
         }
     }
 
+    static async clearCart(id) {
+        try {
+            return await Carts.getInstance().clearCart(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async deleteCart(id) {
         try {
             return await Carts.getInstance().deleteCart(id);

@@ -29,9 +29,9 @@ async function removeProductFromCart(productId, cartId) {
     }
 }
 
-async function deleteCart(cartId) {
+async function clearCart(cartId) {
     try {
-        const response = await fetch(`/api/carts/${cartId}`, { method: 'DELETE' });
+        const response = await fetch(`/api/carts/${cartId}`, { method: 'PUT' });
         const data = await response.json();
         if (data.status === 'success') {
             alert('Carrito vaciado exitosamente');

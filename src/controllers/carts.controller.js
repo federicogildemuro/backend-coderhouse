@@ -110,7 +110,7 @@ export default class CartsController {
         }
     }
 
-    static async deleteCart(req, res) {
+    static async clearCart(req, res) {
         try {
             const { cid } = req.params;
             const cart = await CartsServices.getCartById(cid);
@@ -118,7 +118,7 @@ export default class CartsController {
                 req.logger.warning(`No existe un carrito con el id ${cid}`);
                 return res.sendUserError(`No existe un carrito con el id ${cid}`);
             }
-            const payload = await CartsServices.deleteCart(cid);
+            const payload = await CartsServices.clearCart(cid);
             req.logger.info(`Carrito id ${cid} vaciado exitosamente`);
             res.sendSuccessPayload(payload);
         } catch (error) {

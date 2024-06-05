@@ -89,7 +89,7 @@ export default class CartsFsDAO {
         }
     }
 
-    deleteCart(id) {
+    clearCart(id) {
         try {
             id = parseInt(id);
             const cartIndex = this.carts.findIndex(cart => cart._id === id);
@@ -107,6 +107,18 @@ export default class CartsFsDAO {
             this.carts[cartIndex] = cart;
             fs.writeFileSync(this.url, JSON.stringify(this.carts, null, '\t'));
             return this.carts[cartIndex];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    deleteCart(id) {
+        try {
+            id = parseInt(id);
+            const index = this.carts.findIndex(cart => cart._id === id);
+            const deletedCart = this.carts.splice(index, 1);
+            fs.writeFileSync(this.url, JSON.stringify(this.carts, null, '\t'));
+            return deletedCart;
         } catch (error) {
             throw error;
         }

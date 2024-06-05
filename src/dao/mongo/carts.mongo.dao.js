@@ -76,7 +76,7 @@ export default class CartsMongoDAO {
         }
     }
 
-    async deleteCart(id) {
+    async clearCart(id) {
         try {
             return await cartModel.findByIdAndUpdate(id, { products: [] }, { new: true });
         } catch (error) {
@@ -87,6 +87,14 @@ export default class CartsMongoDAO {
     async updateCart(cart) {
         try {
             return await cartModel.findByIdAndUpdate(cart._id, { products: cart.products }, { new: true });
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteCart(id) {
+        try {
+            return await cartModel.findByIdAndDelete(id);
         } catch (error) {
             throw error;
         }

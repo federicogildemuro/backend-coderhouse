@@ -26,7 +26,7 @@ export default class CartsRouter extends CustomRouter {
 
         this.delete('/:cid/products/:pid', ['USER', 'PREMIUM'], CartsController.removeProduct);
 
-        this.delete('/:cid', ['USER', 'PREMIUM'], CartsController.deleteCart);
+        this.put('/:cid', ['USER', 'PREMIUM'], CartsController.clearCart);
 
         this.post('/:cid/purchase', ['USER', 'PREMIUM'], CartsController.purchaseCart);
     }
