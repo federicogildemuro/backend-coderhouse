@@ -16,9 +16,32 @@ export default class UsersFsDAO {
         return this.#instance;
     }
 
-    getUsers() {
+    getUsers(queryParams) {
         try {
-            return this.users;
+            const { page } = queryParams;
+            const limit = 10;
+            const totalDocs = this.users.length;
+            const startIndex = (page - 1) * limit;
+            const endIndex = startIndex + limit;
+            const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+            const totalPages = Math.ceil(totalDocs / limit);
+            const pagingCounter = (page - 1) * limit + 1;
+            const hasPrevPage = page > 1;
+            const hasNextPage = page < totalPages;
+            const prevPage = hasPrevPage ? page - 1 : null;
+            const nextPage = hasNextPage ? page + 1 : null;
+            return {
+                docs: paginatedUsers,
+                totalDocs,
+                limit,
+                totalPages,
+                page,
+                pagingCounter,
+                hasPrevPage,
+                hasNextPage,
+                prevPage,
+                nextPage
+            };
         } catch (error) {
             throw error;
         }

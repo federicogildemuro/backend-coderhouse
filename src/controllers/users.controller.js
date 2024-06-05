@@ -6,7 +6,10 @@ import config from '../config/config.js';
 export default class UsersController {
     static async getUsers(req, res) {
         try {
+            const queryParams = req.query;
             const payload = await UsersServices.getUsers(queryParams);
+            // Se eliminan las contraseñas de los usuarios
+            payload.docs = payload.docs.map(user => new UserWithoutPasswordDTO(user));
             req.logger.info('Consulta de usuarios exitosa');
             res.sendSuccessPayload(payload);
         } catch (error) {
@@ -136,7 +139,7 @@ export default class UsersController {
 
     static async deleteUsers(req, res) {
         try {
-            const payload = await UsersServices.deleteUsers();
+            await UsersServices.deleteUsers();
             req.logger.info('Usuarios eliminados exitosamente');
             res.sendSuccessMessage('Usuarios eliminados exitosamente');
         } catch (error) {

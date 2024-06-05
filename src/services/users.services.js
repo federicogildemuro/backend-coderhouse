@@ -1,12 +1,14 @@
+import { Users } from '../dao/factory.js';
 import { createHash } from '../utils/passwords.utils.js';
 import CartsServices from './carts.services.js';
 import UserDTO from '../dao/dtos/user.dto.js';
-import { Users } from '../dao/factory.js';
 
 export default class UsersServices {
-    static async getUsers() {
+    static async getUsers(queryParams) {
         try {
-            return await Users.getInstance().getUsers();
+            let { page } = queryParams;
+            page = page ? (parseInt(page) < 1 || isNaN(parseInt(page)) ? 1 : parseInt(page)) : 1;
+            return await Users.getInstance().getUsers({ page });
         } catch (error) {
             throw error;
         }

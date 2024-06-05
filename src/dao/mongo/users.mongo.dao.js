@@ -12,9 +12,10 @@ export default class UsersMongoDAO {
         return this.#instance;
     }
 
-    async getUsers() {
+    async getUsers(queryParams) {
         try {
-            return await userModel.find();
+            const { page } = queryParams;
+            return await userModel.paginate({}, { page, lean: true });
         } catch (error) {
             throw error;
         }
@@ -22,7 +23,7 @@ export default class UsersMongoDAO {
 
     async getUserById(id) {
         try {
-            return await userModel.findById(id);
+            return await userModel.findById(id).lean();
         } catch (error) {
             throw error;
         }
@@ -30,7 +31,7 @@ export default class UsersMongoDAO {
 
     async getUserByEmail(email) {
         try {
-            return await userModel.findOne({ email });
+            return await userModel.findOne({ email }).lean();
         } catch (error) {
             throw error;
         }
@@ -54,10 +55,7 @@ export default class UsersMongoDAO {
 
     async deleteUsers() {
         try {
-            // dos días
-            /* const cutOffDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); */
-            // 30 minutos
-            const cutOffDate = new Date(Date.now() - 30 * 60 * 1000);
+            const cutOffDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
             return await userModel.deleteMany({ last_connection: { $lt: cutOffDate } });
         } catch (error) {
             throw error;
