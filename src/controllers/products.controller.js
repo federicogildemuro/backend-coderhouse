@@ -57,9 +57,9 @@ export default class ProductsController {
                 req.logger.warning(`No existe un producto con el id ${pid}`)
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
-            if (product.owner !== user.email && user.role !== 'admin') {
-                req.logger.warning(`El producto id ${pid} no pertenece al usuario ${user.email}`);
-                return res.sendUserError(`El producto id ${pid} no pertenece al usuario ${user.email}`);
+            if (user.role !== 'admin' && product.owner !== user.email) {
+                req.logger.warning(`El producto id ${pid} no pertenece al usuario id ${user._id}`);
+                return res.sendUserError(`El producto id ${pid} no pertenece al usuario id ${user._id}`);
             }
             if (updatedProduct.code !== product.code) {
                 product = await ProductsServices.getProductByCode(updatedProduct.code);
@@ -86,9 +86,9 @@ export default class ProductsController {
                 req.logger.warning(`No existe un producto con el id ${pid}`);
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
-            if (product.owner !== user.email && user.role !== 'admin') {
-                req.logger.warning(`El producto id ${pid} no pertenece al usuario ${user.email}`);
-                return res.sendUserError(`El producto id ${pid} no pertenece al usuario ${user.email}`);
+            if (user.role !== 'admin' && product.owner !== user.email) {
+                req.logger.warning(`El producto id ${pid} no pertenece al usuario id ${user._id}`);
+                return res.sendUserError(`El producto id ${pid} no pertenece al usuario ${user._id}`);
             }
             const payload = await ProductsServices.deleteProduct(pid);
             req.logger.info(`Producto id ${pid} eliminado exitosamente`);

@@ -9,6 +9,7 @@ export default class ProductDTO {
         // Si el valor de product.stock es un número, se asigna tal cual. Si no es un número o es menor a 0, se asigna 0.
         this.stock = product.stock ? (isNaN(product.stock) || product.stock < 0 ? 1 : parseInt(product.stock)) : 0;
         this.category = product.category?.trim() || 'Otros';
+        // Si el valor de product.thumbnails es un array, se asigna tal cual. Si es un string, se separa por comas y se eliminan los espacios en blanco.
         this.thumbnails = Array.isArray(product.thumbnails) ? product.thumbnails : (product.thumbnails ? product.thumbnails.split(',').map(thumbnail => thumbnail.trim()) : []);
         this.owner = product.owner?.trim() || 'admin';
     }
