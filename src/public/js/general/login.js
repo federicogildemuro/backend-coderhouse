@@ -21,7 +21,7 @@ loginForm.addEventListener('submit', async (event) => {
             alert('Sesión iniciada exitosamente');
             const user = data.payload;
             if (user.role === 'admin') {
-                window.location.href = '/admin/products';
+                window.location.href = '/admin/main';
                 return;
             }
             window.location.href = '/products';
