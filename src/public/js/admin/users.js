@@ -2,7 +2,6 @@ async function deleteUsers() {
     try {
         const response = await fetch('/api/users', { method: 'DELETE' });
         const data = await response.json();
-        console.log(data);
         if (data.status === 'success') {
             if (data.payload.length === 0) {
                 alert('No hay usuarios inactivos para eliminar');
