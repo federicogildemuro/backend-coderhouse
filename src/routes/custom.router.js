@@ -66,14 +66,17 @@ export default class CustomRouter {
             }
             // Si el usuario no está autenticado, se devuelve un error
             if (!token) {
+                req.logger.warning('Debes iniciar sesión para realizar esta acción');
                 return res.status(401).json({ status: 'error', message: 'Debes iniciar sesión para realizar esta acción' });
             }
             // Si el token no es válido, se devuelve un error
             if (!user) {
+                req.logger.warning('Token inválido');
                 return res.status(401).json({ status: 'error', message: 'Token inválido' });
             }
             // Si el usuario no tiene permisos, se devuelve un error
             if (!policies.includes(user.role.toUpperCase())) {
+                req.logger.warning('No tienes permisos para realizar esta acción');
                 return res.status(403).json({ status: 'error', message: 'No tienes permisos para realizar esta acción' });
             }
             // Si el usuario tiene permisos, se permite el acceso
