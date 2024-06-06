@@ -16,6 +16,15 @@ export default class CartsFsDAO {
         return this.#instance;
     }
 
+    getCartById(id) {
+        try {
+            id = parseInt(id);
+            return this.carts.find(cart => cart._id === id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     createCart() {
         try {
             const lastCart = this.carts[this.carts.length - 1];
@@ -31,10 +40,25 @@ export default class CartsFsDAO {
         }
     }
 
-    getCartById(id) {
+    clearCart(id) {
         try {
             id = parseInt(id);
-            return this.carts.find(cart => cart._id === id);
+            const cartIndex = this.carts.findIndex(cart => cart._id === id);
+            this.carts[cartIndex].products = [];
+            fs.writeFileSync(this.url, JSON.stringify(this.carts, null, '\t'));
+            return this.carts[cartIndex];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    deleteCart(id) {
+        try {
+            id = parseInt(id);
+            const index = this.carts.findIndex(cart => cart._id === id);
+            const deletedCart = this.carts.splice(index, 1);
+            fs.writeFileSync(this.url, JSON.stringify(this.carts, null, '\t'));
+            return deletedCart;
         } catch (error) {
             throw error;
         }
@@ -89,36 +113,12 @@ export default class CartsFsDAO {
         }
     }
 
-    clearCart(id) {
-        try {
-            id = parseInt(id);
-            const cartIndex = this.carts.findIndex(cart => cart._id === id);
-            this.carts[cartIndex].products = [];
-            fs.writeFileSync(this.url, JSON.stringify(this.carts, null, '\t'));
-            return this.carts[cartIndex];
-        } catch (error) {
-            throw error;
-        }
-    }
-
     updateCart(cart) {
         try {
             const cartIndex = this.carts.findIndex(c => c._id === cart._id);
             this.carts[cartIndex] = cart;
             fs.writeFileSync(this.url, JSON.stringify(this.carts, null, '\t'));
             return this.carts[cartIndex];
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    deleteCart(id) {
-        try {
-            id = parseInt(id);
-            const index = this.carts.findIndex(cart => cart._id === id);
-            const deletedCart = this.carts.splice(index, 1);
-            fs.writeFileSync(this.url, JSON.stringify(this.carts, null, '\t'));
-            return deletedCart;
         } catch (error) {
             throw error;
         }

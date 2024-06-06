@@ -4,6 +4,14 @@ import TicketsServices from './tickets.services.js';
 import MailingServices from './mailing.services.js';
 
 export default class CartsServices {
+    static async getCartById(id) {
+        try {
+            return await Carts.getInstance().getCartById(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async createCart() {
         try {
             return await Carts.getInstance().createCart();
@@ -12,9 +20,17 @@ export default class CartsServices {
         }
     }
 
-    static async getCartById(id) {
+    static async clearCart(id) {
         try {
-            return await Carts.getInstance().getCartById(id);
+            return await Carts.getInstance().clearCart(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async deleteCart(id) {
+        try {
+            return await Carts.getInstance().deleteCart(id);
         } catch (error) {
             throw error;
         }
@@ -39,22 +55,6 @@ export default class CartsServices {
     static async removeProduct(cart, product) {
         try {
             return await Carts.getInstance().removeProduct(cart, product);
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    static async clearCart(id) {
-        try {
-            return await Carts.getInstance().clearCart(id);
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    static async deleteCart(id) {
-        try {
-            return await Carts.getInstance().deleteCart(id);
         } catch (error) {
             throw error;
         }

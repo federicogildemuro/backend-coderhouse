@@ -16,17 +16,19 @@ export default class CartsRouter extends CustomRouter {
     }
 
     init() {
-        this.post('/', ['PUBLIC'], CartsController.createCart);
+        this.get('/:cid', ['USER', 'PREMIUM', 'ADMIN'], CartsController.getCartById);
 
-        this.get('/:cid', ['USER', 'PREMIUM'], CartsController.getCartById);
+        this.post('/', ['ADMIN'], CartsController.createCart);
 
-        this.post('/:cid/products/:pid', ['USER', 'PREMIUM'], this.validateProductQuantity, CartsController.addProduct);
+        this.put('/:cid', ['USER', 'PREMIUM', 'ADMIN'], CartsController.clearCart);
 
-        this.put('/:cid/products/:pid', ['USER', 'PREMIUM'], this.validateProductQuantity, CartsController.updateProductQuantity);
+        this.delete('/:cid', ['ADMIN'], CartsController.deleteCart);
 
-        this.delete('/:cid/products/:pid', ['USER', 'PREMIUM'], CartsController.removeProduct);
+        this.post('/:cid/products/:pid', ['USER', 'PREMIUM', 'ADMIN'], this.validateProductQuantity, CartsController.addProduct);
 
-        this.put('/:cid', ['USER', 'PREMIUM'], CartsController.clearCart);
+        this.put('/:cid/products/:pid', ['USER', 'PREMIUM', 'ADMIN'], this.validateProductQuantity, CartsController.updateProductQuantity);
+
+        this.delete('/:cid/products/:pid', ['USER', 'PREMIUM', 'ADMIN'], CartsController.removeProduct);
 
         this.post('/:cid/purchase', ['USER', 'PREMIUM'], CartsController.purchaseCart);
     }

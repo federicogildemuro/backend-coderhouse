@@ -12,6 +12,14 @@ export default class CartsMongoDAO {
         return this.#instance;
     }
 
+    async getCartById(id) {
+        try {
+            return await cartModel.findOne({ _id: id }).lean();
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async createCart() {
         try {
             return await cartModel.create({});
@@ -20,9 +28,17 @@ export default class CartsMongoDAO {
         }
     }
 
-    async getCartById(id) {
+    async clearCart(id) {
         try {
-            return await cartModel.findOne({ _id: id }).lean();
+            return await cartModel.findByIdAndUpdate(id, { products: [] }, { new: true });
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteCart(id) {
+        try {
+            return await cartModel.findByIdAndDelete(id);
         } catch (error) {
             throw error;
         }
@@ -76,25 +92,9 @@ export default class CartsMongoDAO {
         }
     }
 
-    async clearCart(id) {
-        try {
-            return await cartModel.findByIdAndUpdate(id, { products: [] }, { new: true });
-        } catch (error) {
-            throw error;
-        }
-    }
-
     async updateCart(cart) {
         try {
             return await cartModel.findByIdAndUpdate(cart._id, { products: cart.products }, { new: true });
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async deleteCart(id) {
-        try {
-            return await cartModel.findByIdAndDelete(id);
         } catch (error) {
             throw error;
         }
