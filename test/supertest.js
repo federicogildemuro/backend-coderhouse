@@ -18,6 +18,7 @@ const newProduct = {
     title: 'Producto de prueba premium',
     code: 'PDPP',
     price: 100,
+    stock: 10,
     owner: 'fgildemuro@hotmail.com'
 };
 let newProductId;
@@ -50,6 +51,13 @@ const productWithoutPrice = {
     title: 'Producto de prueba',
     code: 'PDPP'
 };
+let userCartId = '6660d81a2a9abd672389746b';
+let premiumCartId = '6660d80a2a9abd6723897466';
+let unexistingCartId = '60b7b3b3b3b3b3b3b3b3b3b3';
+let newCartId;
+const quantity = Math.floor(Math.random() * 10) + 1;
+const updatedQuantity = Math.floor(Math.random() * 10) + 1;
+updatedQuantity === quantity ? updatedQuantity + 1 : updatedQuantity;
 
 /* let userId;
 let userEmail;
@@ -98,11 +106,7 @@ const userWithInvalidPassword = {
 const unregisteredUser = {
     email: 'unregistered@mail.com',
     password: 'unregistered'
-};
-let cartId;
-const quantity = Math.floor(Math.random() * 10) + 1;
-const updatedQuantity = Math.floor(Math.random() * 10) + 1;
-updatedQuantity === quantity ? updatedQuantity + 1 : updatedQuantity; */
+}; */
 
 describe('Test del proyecto final del curso de Programación Backend de Coderhouse', () => {
     before(async () => {
@@ -117,7 +121,7 @@ describe('Test del proyecto final del curso de Programación Backend de Coderhou
             cookies = response.headers['set-cookie'];
             adminToken = cookies.find(cookie => cookie.startsWith('token='));
         } catch (error) {
-            console.log(`Error en before: ${error.message}`);
+            console.log(`Error en before general: ${error.message}`);
         }
     });
 
@@ -374,66 +378,505 @@ describe('Test del proyecto final del curso de Programación Backend de Coderhou
     });
 
     describe('Test de Carts', () => {
-        /* describe('GET /api/carts/:cid', () => {
-            it('Debería devolver un carrito', async () => {
-                const response = await requester.get(`/api/carts/${cartId}`).set('Cookie', token);
+        before(async () => {
+            try {
+                let response = await requester.post('/api/products').set('Cookie', premiumToken).send(newProduct);
+                newProductId = response.body.payload._id;
+            } catch (error) {
+                console.log(`Error en before de carts: ${error.message}`);
+            }
+        });
+
+        describe('GET /api/carts/:cid', () => {
+            it('No debería devolver un carrito sin estar logueado', async () => {
+                const response = await requester.get(`/api/carts/${userCartId}`);
+                expect(response.status).to.equal(401);
+                expect(response.body.status).to.equal('error');
+            });
+            it('Debería devolver un carrito logueado como user', async () => {
+                const response = await requester.get(`/api/carts/${userCartId}`).set('Cookie', userToken);
                 expect(response.status).to.equal(200);
                 expect(response.body.status).to.equal('success');
+                expect(response.body.payload._id).to.equal(userCartId);
+            });
+            it('Debería devolver un carrito logueado como premium', async () => {
+                const response = await requester.get(`/api/carts/${premiumCartId}`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+                expect(response.body.payload._id).to.equal(premiumCartId);
+            });
+            it('Debería devolver un carrito logueado como admin', async () => {
+                const response = await requester.get(`/api/carts/${userCartId}`).set('Cookie', adminToken);
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+                expect(response.body.payload._id).to.equal(userCartId);
+            });
+            it('No debería devolver un carrito que no le pertenece logueado como user', async () => {
+                const response = await requester.get(`/api/carts/${premiumCartId}`).set('Cookie', userToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería devolver un carrito que no le pertenece logueado como premium', async () => {
+                const response = await requester.get(`/api/carts/${userCartId}`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería devolver un carrito inexistente logueado como user', async () => {
+                const response = await requester.get(`/api/carts/${unexistingCartId}`).set('Cookie', userToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería devolver un carrito inexistente logueado como premium', async () => {
+                const response = await requester.get(`/api/carts/${unexistingCartId}`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería devolver un carrito inexistente logueado como admin', async () => {
+                const response = await requester.get(`/api/carts/${unexistingCartId}`).set('Cookie', adminToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+        });
+
+        describe('POST /api/carts', () => {
+            it('No debería crear un carrito sin estar logueado', async () => {
+                const response = await requester.post('/api/carts');
+                expect(response.status).to.equal(401);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería crear un carrito logueado como user', async () => {
+                const response = await requester.post('/api/carts').set('Cookie', userToken);
+                expect(response.status).to.equal(403);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería crear un carrito logueado como premium', async () => {
+                const response = await requester.post('/api/carts').set('Cookie', premiumToken);
+                expect(response.status).to.equal(403);
+                expect(response.body.status).to.equal('error');
+            });
+            it('Debería crear un carrito logueado como admin', async () => {
+                const response = await requester.post('/api/carts').set('Cookie', adminToken);
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+                expect(response.body.payload._id).to.not.be.null;
+                expect(response.body.payload.products).to.be.an('array').that.is.empty;
+                newCartId = response.body.payload._id;
             });
         });
 
         describe('POST /api/carts/:cid/products/:pid', () => {
-            it('Debería agregar un producto al carrito', async () => {
-                const response = await requester.post(`/api/carts/${cartId}/products/${existingProductId1}`).set('Cookie', token).send({ quantity: quantity });
-                expect(response.status).to.equal(200);
-                expect(response.body.status).to.equal('success');
-                expect(response.body.payload.products).to.have.lengthOf(1);
+            it('No debería agregar un producto a un carrito sin estar logueado', async () => {
+                const response = await requester.post(`/api/carts/${userCartId}/products/${existingProductId1}`).send({ quantity: quantity });
+                expect(response.status).to.equal(401);
+                expect(response.body.status).to.equal('error');
             });
-            it('Si el producto ya está en el carrito, debería incrementar la cantidad', async () => {
-                const response = await requester.post(`/api/carts/${cartId}/products/${existingProductId1}`).set('Cookie', token).send({ quantity: quantity });
+            it('Debería agregar un producto a un carrito logueado como user', async () => {
+                const response = await requester.post(`/api/carts/${userCartId}/products/${existingProductId1}`).set('Cookie', userToken).send({ quantity: quantity });
                 expect(response.status).to.equal(200);
                 expect(response.body.status).to.equal('success');
-                expect(response.body.payload.products).to.have.lengthOf(1);
+                const { products } = response.body.payload;
+                const product = products.find(p => p.product === existingProductId1);
+                expect(product.product).to.equal(existingProductId1);
             });
-            it('Si el producto no existe, debería agregarlo al carrito', async () => {
-                const response = await requester.post(`/api/carts/${cartId}/products/${existingProductId2}`).set('Cookie', token).send({ quantity: quantity });
+            it('Debería agregar un producto a un carrito logueado como premium', async () => {
+                const response = await requester.post(`/api/carts/${premiumCartId}/products/${existingProductId1}`).set('Cookie', premiumToken).send({ quantity: quantity });
                 expect(response.status).to.equal(200);
                 expect(response.body.status).to.equal('success');
-                expect(response.body.payload.products).to.have.lengthOf(2);
+                const { products } = response.body.payload;
+                const product = products.find(p => p.product === existingProductId1);
+                expect(product.product).to.equal(existingProductId1);
+            });
+            it('Debería agregar un producto a un carrito logueado como admin', async () => {
+                const response = await requester.post(`/api/carts/${newCartId}/products/${existingProductId1}`).set('Cookie', adminToken).send({ quantity: quantity });
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+                const { products } = response.body.payload;
+                const product = products.find(p => p.product === existingProductId1);
+                expect(product.product).to.equal(existingProductId1);
+            });
+            it('No debería agregar un producto a un carrito que no le pertenece logueado como user', async () => {
+                const response = await requester.post(`/api/carts/${premiumCartId}/products/${existingProductId1}`).set('Cookie', userToken).send({ quantity: quantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería agregar un producto a un carrito que no le pertenece logueado como premium', async () => {
+                const response = await requester.post(`/api/carts/${userCartId}/products/${existingProductId1}`).set('Cookie', premiumToken).send({ quantity: quantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería agregar un producto a un carrito inexistente logueado como user', async () => {
+                const response = await requester.post(`/api/carts/${unexistingCartId}/products/${existingProductId1}`).set('Cookie', userToken).send({ quantity: quantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería agregar un producto a un carrito inexistente logueado como premium', async () => {
+                const response = await requester.post(`/api/carts/${unexistingCartId}/products/${existingProductId1}`).set('Cookie', premiumToken).send({ quantity: quantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería agregar un producto a un carrito inexistente logueado como admin', async () => {
+                const response = await requester.post(`/api/carts/${unexistingCartId}/products/${existingProductId1}`).set('Cookie', adminToken).send({ quantity: quantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería agregar un producto inexistente a un carrito logueado como user', async () => {
+                const response = await requester.post(`/api/carts/${userCartId}/products/${unexistingProductId}`).set('Cookie', userToken).send({ quantity: quantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería agregar un producto inexistente a un carrito logueado como premium', async () => {
+                const response = await requester.post(`/api/carts/${premiumCartId}/products/${unexistingProductId}`).set('Cookie', premiumToken).send({ quantity: quantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería agregar un producto inexistente a un carrito logueado como admin', async () => {
+                const response = await requester.post(`/api/carts/${newCartId}/products/${unexistingProductId}`).set('Cookie', adminToken).send({ quantity: quantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería agregar un producto que le pertenece logueado como premium', async () => {
+                const response = await requester.post(`/api/carts/${premiumCartId}/products/${newProductId}`).set('Cookie', premiumToken).send({ quantity: quantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
             });
         });
 
         describe('PUT /api/carts/:cid/products/:pid', () => {
-            it('Debería actualizar la cantidad de un producto en el carrito', async () => {
-                const response = await requester.put(`/api/carts/${cartId}/products/${existingProductId1}`).set('Cookie', token).send({ quantity: updatedQuantity });
+            it('No debería actualizar la cantidad de un producto en un carrito sin estar logueado', async () => {
+                const response = await requester.put(`/api/carts/${userCartId}/products/${existingProductId1}`).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(401);
+                expect(response.body.status).to.equal('error');
+            });
+            it('Debería actualizar la cantidad de un producto en un carrito logueado como user', async () => {
+                const response = await requester.put(`/api/carts/${userCartId}/products/${existingProductId1}`).set('Cookie', userToken).send({ quantity: updatedQuantity });
                 expect(response.status).to.equal(200);
                 expect(response.body.status).to.equal('success');
-                expect(response.body.payload.products[0].quantity).to.equal(updatedQuantity);
+                const { products } = response.body.payload;
+                const product = products.find(p => p.product === existingProductId1);
+                expect(product.quantity).to.equal(updatedQuantity);
+            });
+            it('Debería actualizar la cantidad de un producto en un carrito logueado como premium', async () => {
+                const response = await requester.put(`/api/carts/${premiumCartId}/products/${existingProductId1}`).set('Cookie', premiumToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+                const { products } = response.body.payload;
+                const product = products.find(p => p.product === existingProductId1);
+                expect(product.quantity).to.equal(updatedQuantity);
+            });
+            it('Debería actualizar la cantidad de un producto en un carrito logueado como admin', async () => {
+                const response = await requester.put(`/api/carts/${newCartId}/products/${existingProductId1}`).set('Cookie', adminToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+                const { products } = response.body.payload;
+                const product = products.find(p => p.product === existingProductId1);
+                expect(product.quantity).to.equal(updatedQuantity);
+            });
+            it('No debería actualizar la cantidad de un producto en un carrito que no le pertenece logueado como user', async () => {
+                const response = await requester.put(`/api/carts/${premiumCartId}/products/${existingProductId1}`).set('Cookie', userToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería actualizar la cantidad de un producto en un carrito que no le pertenece logueado como premium', async () => {
+                const response = await requester.put(`/api/carts/${userCartId}/products/${existingProductId1}`).set('Cookie', premiumToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería actualizar la cantidad de un producto en un carrito inexistente logueado como user', async () => {
+                const response = await requester.put(`/api/carts/${unexistingCartId}/products/${existingProductId1}`).set('Cookie', userToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería actualizar la cantidad de un producto en un carrito inexistente logueado como premium', async () => {
+                const response = await requester.put(`/api/carts/${unexistingCartId}/products/${existingProductId1}`).set('Cookie', premiumToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería actualizar la cantidad de un producto en un carrito inexistente logueado como admin', async () => {
+                const response = await requester.put(`/api/carts/${unexistingCartId}/products/${existingProductId1}`).set('Cookie', adminToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería actualizar la cantidad de un producto inexistente en un carrito logueado como user', async () => {
+                const response = await requester.put(`/api/carts/${userCartId}/products/${unexistingProductId}`).set('Cookie', userToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería actualizar la cantidad de un producto inexistente en un carrito logueado como premium', async () => {
+                const response = await requester.put(`/api/carts/${premiumCartId}/products/${unexistingProductId}`).set('Cookie', premiumToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería actualizar la cantidad de un producto inexistente en un carrito logueado como admin', async () => {
+                const response = await requester.put(`/api/carts/${newCartId}/products/${unexistingProductId}`).set('Cookie', adminToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería actualizar la cantidad de un producto que no se encuentra en el carrito logueado como user', async () => {
+                const response = await requester.put(`/api/carts/${userCartId}/products/${existingProductId2}`).set('Cookie', userToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería actualizar la cantidad de un producto que no se encuentra en el carrito logueado como premium', async () => {
+                const response = await requester.put(`/api/carts/${premiumCartId}/products/${existingProductId2}`).set('Cookie', premiumToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería actualizar la cantidad de un producto que no se encuentra en el carrito logueado como admin', async () => {
+                const response = await requester.put(`/api/carts/${newCartId}/products/${existingProductId2}`).set('Cookie', adminToken).send({ quantity: updatedQuantity });
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
             });
         });
 
         describe('DELETE /api/carts/:cid/products/:pid', () => {
-            it('Debería eliminar un producto del carrito', async () => {
-                await requester.post(`/api/carts/${cartId}/products/${existingProductId2}`).set('Cookie', token).send({ quantity: quantity });
-                const response = await requester.delete(`/api/carts/${cartId}/products/${existingProductId1}`).set('Cookie', token);
+            it('No debería eliminar un producto de un carrito sin estar logueado', async () => {
+                const response = await requester.delete(`/api/carts/${userCartId}/products/${existingProductId1}`);
+                expect(response.status).to.equal(401);
+                expect(response.body.status).to.equal('error');
+            });
+            it('Debería eliminar un producto de un carrito logueado como user', async () => {
+                const response = await requester.delete(`/api/carts/${userCartId}/products/${existingProductId1}`).set('Cookie', userToken);
                 expect(response.status).to.equal(200);
                 expect(response.body.status).to.equal('success');
-                expect(response.body.payload.products).to.not.include({ _id: existingProductId1 });
+                const { products } = response.body.payload;
+                const productExists = products.some(p => p.product._id === existingProductId1);
+                expect(productExists).to.be.false;
+            });
+            it('Debería eliminar un producto de un carrito logueado como premium', async () => {
+                const response = await requester.delete(`/api/carts/${premiumCartId}/products/${existingProductId1}`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+                const { products } = response.body.payload;
+                const productExists = products.some(p => p.product._id === existingProductId1);
+                expect(productExists).to.be.false;
+            });
+            it('Debería eliminar un producto de un carrito logueado como admin', async () => {
+                const response = await requester.delete(`/api/carts/${newCartId}/products/${existingProductId1}`).set('Cookie', adminToken);
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+                const { products } = response.body.payload;
+                const productExists = products.some(p => p.product._id === existingProductId1);
+                expect(productExists).to.be.false;
+            });
+            it('No debería eliminar un producto de un carrito que no le pertenece logueado como user', async () => {
+                const response = await requester.delete(`/api/carts/${premiumCartId}/products/${existingProductId1}`).set('Cookie', userToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería eliminar un producto de un carrito que no le pertenece logueado como premium', async () => {
+                const response = await requester.delete(`/api/carts/${userCartId}/products/${existingProductId1}`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería eliminar un producto de un carrito inexistente logueado como user', async () => {
+                const response = await requester.delete(`/api/carts/${unexistingCartId}/products/${existingProductId1}`).set('Cookie', userToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería eliminar un producto de un carrito inexistente logueado como premium', async () => {
+                const response = await requester.delete(`/api/carts/${unexistingCartId}/products/${existingProductId1}`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería eliminar un producto de un carrito inexistente logueado como admin', async () => {
+                const response = await requester.delete(`/api/carts/${unexistingCartId}/products/${existingProductId1}`).set('Cookie', adminToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería eliminar un producto inexistente de un carrito logueado como user', async () => {
+                const response = await requester.delete(`/api/carts/${userCartId}/products/${unexistingProductId}`).set('Cookie', userToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería eliminar un producto inexistente de un carrito logueado como premium', async () => {
+                const response = await requester.delete(`/api/carts/${premiumCartId}/products/${unexistingProductId}`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería eliminar un producto inexistente de un carrito logueado como admin', async () => {
+                const response = await requester.delete(`/api/carts/${newCartId}/products/${unexistingProductId}`).set('Cookie', adminToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería eliminar un producto que no se encuentra en el carrito logueado como user', async () => {
+                const response = await requester.delete(`/api/carts/${userCartId}/products/${existingProductId2}`).set('Cookie', userToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería eliminar un producto que no se encuentra en el carrito logueado como premium', async () => {
+                const response = await requester.delete(`/api/carts/${premiumCartId}/products/${existingProductId2}`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería eliminar un producto que no se encuentra en el carrito logueado como admin', async () => {
+                const response = await requester.delete(`/api/carts/${newCartId}/products/${existingProductId2}`).set('Cookie', adminToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
             });
         });
 
-        describe('DELETE /api/carts/:cid', () => {
-            it('Debería vaciar un carrito', async () => {
-                const response = await requester.delete(`/api/carts/${cartId}`).set('Cookie', token);
+        describe('PUT /api/carts/:cid', () => {
+            before(async () => {
+                try {
+                    await requester.post(`/api/carts/${userCartId}/products/${existingProductId1}`).set('Cookie', userToken).send({ quantity: quantity });
+                    await requester.post(`/api/carts/${premiumCartId}/products/${existingProductId1}`).set('Cookie', premiumToken).send({ quantity: quantity });
+                    await requester.post(`/api/carts/${newCartId}/products/${existingProductId1}`).set('Cookie', adminToken).send({ quantity: quantity });
+                } catch (error) {
+                    console.log(`Error en before de PUT /api/carts/:cid: ${error.message}`);
+                }
+            });
+            it('No debería vaciar un carrito sin estar logueado', async () => {
+                const response = await requester.put(`/api/carts/${newCartId}`);
+                expect(response.status).to.equal(401);
+                expect(response.body.status).to.equal('error');
+            });
+            it('Debería vaciar un carrito logueado como user', async () => {
+                const response = await requester.put(`/api/carts/${userCartId}`).set('Cookie', userToken);
                 expect(response.status).to.equal(200);
                 expect(response.body.status).to.equal('success');
                 expect(response.body.payload.products).to.be.empty;
             });
-        }); */
+            it('Debería vaciar un carrito logueado como premium', async () => {
+                const response = await requester.put(`/api/carts/${premiumCartId}`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+                expect(response.body.payload.products).to.be.empty;
+            });
+            it('Debería vaciar un carrito logueado como admin', async () => {
+                const response = await requester.put(`/api/carts/${newCartId}`).set('Cookie', adminToken);
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+                expect(response.body.payload.products).to.be.empty;
+            });
+            it('No debería vaciar un carrito que no le pertenece logueado como user', async () => {
+                const response = await requester.put(`/api/carts/${premiumCartId}`).set('Cookie', userToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería vaciar un carrito que no le pertenece logueado como premium', async () => {
+                const response = await requester.put(`/api/carts/${userCartId}`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería vaciar un carrito inexistente logueado como user', async () => {
+                const response = await requester.put(`/api/carts/${unexistingCartId}`).set('Cookie', userToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería vaciar un carrito inexistente logueado como premium', async () => {
+                const response = await requester.put(`/api/carts/${unexistingCartId}`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería vaciar un carrito inexistente logueado como admin', async () => {
+                const response = await requester.put(`/api/carts/${unexistingCartId}`).set('Cookie', adminToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+        });
+
+        describe('POST /api/carts/:cid/purchase', () => {
+            it('No debería realizar una compra sin estar logueado', async () => {
+                const response = await requester.post(`/api/carts/${userCartId}/purchase`);
+                expect(response.status).to.equal(401);
+                expect(response.body.status).to.equal('error');
+            });
+            it('Debería realizar una compra logueado como user', async () => {
+                const response = await requester.post(`/api/carts/${userCartId}/purchase`).set('Cookie', userToken);
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+            });
+            it('Debería realizar una compra logueado como premium', async () => {
+                const response = await requester.post(`/api/carts/${premiumCartId}/purchase`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+            });
+            it('No debería realizar una compra logueado como admin', async () => {
+                const response = await requester.post(`/api/carts/${newCartId}/purchase`).set('Cookie', adminToken);
+                expect(response.status).to.equal(403);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería realizar una compra de un carrito inexistente logueado como user', async () => {
+                const response = await requester.post(`/api/carts/${unexistingCartId}/purchase`).set('Cookie', userToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería realizar una compra de un carrito inexistente logueado como premium', async () => {
+                const response = await requester.post(`/api/carts/${unexistingCartId}/purchase`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería realizar una compra de un carrito que no le pertenece logueado como user', async () => {
+                const response = await requester.post(`/api/carts/${premiumCartId}/purchase`).set('Cookie', userToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería realizar una compra de un carrito que no le pertenece logueado como premium', async () => {
+                const response = await requester.post(`/api/carts/${userCartId}/purchase`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería realizar una compra de un carrito que contiene productos sin stock logueado como user', async () => {
+                const response = await requester.post(`/api/carts/${userCartId}/purchase`).set('Cookie', userToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería realizar una compra de un carrito que contiene productos sin stock logueado como premium', async () => {
+                const response = await requester.post(`/api/carts/${premiumCartId}/purchase`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+            it('Debería realizar parcialmente una compra de un carrito que contiene productos sin stock logueado como user', async () => {
+                const response = await requester.post(`/api/carts/${userCartId}/purchase`).set('Cookie', userToken);
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+            });
+            it('Debería realizar parcialmente una compra de un carrito que contiene productos sin stock logueado como premium', async () => {
+                const response = await requester.post(`/api/carts/${premiumCartId}/purchase`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+            });
+        });
+
+        describe('DELETE /api/carts/:cid', () => {
+            it('No debería eliminar un carrito sin estar logueado', async () => {
+                const response = await requester.delete(`/api/carts/${newCartId}`);
+                expect(response.status).to.equal(401);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería eliminar un carrito logueado como user', async () => {
+                const response = await requester.delete(`/api/carts/${userCartId}`).set('Cookie', userToken);
+                expect(response.status).to.equal(403);
+                expect(response.body.status).to.equal('error');
+            });
+            it('No debería eliminar un carrito logueado como premium', async () => {
+                const response = await requester.delete(`/api/carts/${premiumCartId}`).set('Cookie', premiumToken);
+                expect(response.status).to.equal(403);
+                expect(response.body.status).to.equal('error');
+            });
+            it('Debería eliminar un carrito logueado como admin', async () => {
+                const response = await requester.delete(`/api/carts/${newCartId}`).set('Cookie', adminToken);
+                expect(response.status).to.equal(200);
+                expect(response.body.status).to.equal('success');
+            });
+            it('No debería eliminar un carrito inexistente logueado como admin', async () => {
+                const response = await requester.delete(`/api/carts/${unexistingCartId}`).set('Cookie', adminToken);
+                expect(response.status).to.equal(400);
+                expect(response.body.status).to.equal('error');
+            });
+        });
+
+        after(async () => {
+            try {
+                await requester.delete(`/api/products/${newProductId}`).set('Cookie', adminToken);
+            } catch (error) {
+                console.log(`Error en after de carts: ${error.message}`);
+            }
+        });
     });
 
-    describe('Test de Users', () => {
-        /* describe('POST /api/sessions/register', () => {
+    /* describe('Test de Users', () => {
+        describe('POST /api/sessions/register', () => {
             it('Debería crear un usuario', async () => {
                 const response = await requester.post('/api/sessions/register').send(newUser);
                 expect(response.status).to.equal(200);
@@ -536,6 +979,6 @@ describe('Test del proyecto final del curso de Programación Backend de Coderhou
                 expect(response.status).to.equal(401);
                 expect(response.body.status).to.equal('error');
             });
-        }); */
-    });
+        });
+    }); */
 });
