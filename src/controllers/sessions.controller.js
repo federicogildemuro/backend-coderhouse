@@ -8,7 +8,7 @@ export default class SessionsController {
     static register(req, res) {
         const user = req.user;
         req.logger.info(`Usuario id ${user._id} registrado exitosamente`);
-        res.sendSuccessPayload(user);
+        res.sendSuccess(user);
     }
 
     static async login(req, res) {
@@ -22,7 +22,7 @@ export default class SessionsController {
                 user = await UsersServices.updateUser(user._id, user);
             }
             req.logger.info(`Sesión de usuario id ${user._id} iniciada exitosamente`);
-            res.sendSuccessPayload(user);
+            res.sendSuccess(user);
         } catch (error) {
             req.logger.error(`Error al iniciar sesión de usuario id ${user._id}: ${error.message}`);
             res.sendServerError(error.message);
@@ -61,7 +61,7 @@ export default class SessionsController {
             // Se envía un correo electrónico con el enlace de reestablecimiento
             await MailingServices.getInstance().sendResetPasswordEmail(user, resetLink);
             req.logger.info(`Enlace de restauración de contraseña enviado exitosamente a usuario id ${user._id}`);
-            res.sendSuccessPayload(token);
+            res.sendSuccess(token);
         } catch (error) {
             req.loger.error(`Error al restaurar contraseña de usuario id ${user._id}: ${error.message}`);
             res.sendServerError(error.message);
@@ -101,7 +101,7 @@ export default class SessionsController {
             user.password = password;
             await UsersServices.updateUserPassword(user._id, user);
             req.logger.info(`Contraseña de usuario id ${user._id} reestablecida exitosamente`);
-            res.sendSuccessPayload(user);
+            res.sendSuccess(user);
         } catch (error) {
             req.logger.error(`Error al reestablecer contraseña de usuario id ${user._id}: ${error.message}`);
             res.sendServerError(error.message);
@@ -110,7 +110,7 @@ export default class SessionsController {
 
     static current(req, res) {
         const user = req.user;
-        res.sendSuccessPayload(user);
+        res.sendSuccess(user);
     }
 
     static async logout(req, res) {
@@ -123,7 +123,7 @@ export default class SessionsController {
                 await UsersServices.updateUser(user._id, user);
             }
             req.logger.info(`Sesión de usuario id ${user._id} cerrada exitosamente`);
-            res.sendSuccessPayload(user);
+            res.sendSuccess(user);
         } catch (error) {
             req.logger.error(`Error al cerrar sesión de usuario id ${user._id}: ${error.message}`);
             res.sendServerError(error.message);

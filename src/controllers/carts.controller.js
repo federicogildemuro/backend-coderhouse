@@ -16,7 +16,7 @@ export default class CartsController {
                 return res.sendUserError(`No existe un carrito con el id ${cid}`);
             }
             req.logger.info(`Consulta de carrito id ${cid} exitosa`);
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al consultar carrito id ${cid}: ${error.message}`);
             res.sendServerError(error.message);
@@ -27,7 +27,7 @@ export default class CartsController {
         try {
             const payload = await CartsServices.createCart();
             req.logger.info(`Carrito id ${payload._id} creado exitosamente`);
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al crear carrito: ${error.message}`);
             res.sendServerError(error.message);
@@ -49,7 +49,7 @@ export default class CartsController {
             }
             const payload = await CartsServices.clearCart(cid);
             req.logger.info(`Carrito id ${cid} vaciado exitosamente`);
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al vaciar carrito id ${cid}: ${error.message}`);
             res.sendServerError(error.message);
@@ -66,7 +66,7 @@ export default class CartsController {
             }
             const payload = await CartsServices.deleteCart(cid);
             req.logger.info(`Carrito id ${cid} eliminado exitosamente`);
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al eliminar carrito id ${cid}: ${error.message}`);
             res.sendServerError(error.message);
@@ -98,7 +98,7 @@ export default class CartsController {
             }
             const payload = await CartsServices.addProduct(cart, product, quantity);
             req.logger.info(`Producto id ${pid} agregado al carrito id ${cid} existosamente`);
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al agregar producto id ${pid} al carrito id ${cid}: ${error.message}`);
             res.sendServerError(error.message);
@@ -130,7 +130,7 @@ export default class CartsController {
                 return res.sendUserError(`No se encontro el producto con id ${pid} en el carrito con id ${cid}`);
             }
             req.logger.info(`Cantidad del producto id ${pid} del carrito id ${cid} actualizada a ${quantity} exitosamente`);
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al actualizar cantidad del producto id ${pid} en el carrito id ${cid}: ${error.message}`);
             res.sendServerError(error.message);
@@ -161,7 +161,7 @@ export default class CartsController {
                 return res.sendUserError(`No se encontro el producto id ${pid} en el carrito id ${cid}`);
             }
             req.logger.info(`Producto id ${pid} eliminado del carrito id ${cid} existosamente`);
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al eliminar producto id ${pid} del carrito id ${cid}: ${error.message}`);
             res.sendServerError(error.message);
@@ -187,7 +187,7 @@ export default class CartsController {
                 return res.sendUserError('No se pudo realizar la compra porque no hay stock suficiente de los productos del carrito');
             }
             req.logger.info(`Compra del carrito id ${cid} realizada exitosamente`);
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al comprar carrito id ${cid}: ${error.message}`);
             res.sendServerError(error.message);

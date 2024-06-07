@@ -7,7 +7,7 @@ export default class ProductsController {
             const queryParams = req.query;
             const payload = await ProductsServices.getProducts(queryParams);
             req.logger.info('Consulta de productos exitosa');
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al consultar productos: ${error.message}`);
             res.sendServerError(error.message);
@@ -23,7 +23,7 @@ export default class ProductsController {
                 return res.sendUserError(`No existe un producto con el id ${pid}`);
             }
             req.logger.info(`Consulta del producto id ${pid} exitosa`);
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al consultar producto id ${pid}: ${error.message}`);
             res.sendServerError(error.message);
@@ -40,7 +40,7 @@ export default class ProductsController {
             }
             const payload = await ProductsServices.createProduct(newProduct);
             req.logger.info(`Producto id ${payload._id} creado exitosamente`);
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al crear producto: ${error.message}`);
             res.sendServerError(error.message);
@@ -70,7 +70,7 @@ export default class ProductsController {
             }
             const payload = await ProductsServices.updateProduct(pid, updatedProduct);
             req.logger.info(`Producto id ${pid} actualizado exitosamente`);
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al actualizar producto id ${pid}: ${error.message}`);
             res.sendServerError(error.message);
@@ -95,7 +95,7 @@ export default class ProductsController {
             if (product.owner !== 'admin') {
                 MailingServices.getInstance().sendProductDeletedEmail(user, product);
             }
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al eliminar producto id ${pid}: ${error.message}`);
             res.sendServerError(error.message);

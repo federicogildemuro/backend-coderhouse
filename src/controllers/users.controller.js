@@ -13,7 +13,7 @@ export default class UsersController {
             // Se eliminan las contraseñas de los usuarios
             payload.docs = payload.docs.map(user => new UserWithoutPasswordDTO(user));
             req.logger.info('Consulta de usuarios exitosa');
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al consultar usuarios: ${error.message}`);
             res.sendServerError(error.message);
@@ -34,7 +34,7 @@ export default class UsersController {
                 return res.sendUserError(`No existe un usuario con el id ${uid}`);
             }
             req.logger.info(`Consulta del usuario id ${uid} exitosa`);
-            res.sendSuccessPayload(payload);
+            res.sendSuccess(payload);
         } catch (error) {
             req.logger.error(`Error al consultar usuario id ${uid}: ${error.message}`);
             res.sendServerError(error.message);
@@ -85,7 +85,7 @@ export default class UsersController {
             const token = generateToken(req.user);
             res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
             req.logger.info(`Documentos subidos exitosamente por el usuario id ${uid}`);
-            res.sendSuccessPayload(user);
+            res.sendSuccess(user);
         } catch (error) {
             req.logger.error(`Error al subir documentos del usuario ${uid}: ${error.message}`);
             res.sendServerError(error.message);
@@ -123,7 +123,7 @@ export default class UsersController {
             const token = generateToken(req.user);
             res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
             req.logger.info(`Rol de usuario id ${uid} modificado exitosamente a ${user.role}`);
-            res.sendSuccessPayload(user);
+            res.sendSuccess(user);
         } catch (error) {
             req.logger.error(`Error al cambiar rol de usuario id ${uid}: ${error.message}`);
             res.sendServerError(error.message);
@@ -138,7 +138,7 @@ export default class UsersController {
                 await MailingServices.getInstance().sendUserDeletedEmail(user);
             });
             req.logger.info('Usuarios inactivos eliminados exitosamente');
-            res.sendSuccessPayload(deletedUsers);
+            res.sendSuccess(deletedUsers);
         } catch (error) {
             req.logger.error(`Error al eliminar usuarios inactivos: ${error.message}`);
             res.sendServerError(error.message);
@@ -157,7 +157,7 @@ export default class UsersController {
             await CartsServices.deleteCart(user.cart);
             await MailingServices.getInstance().sendUserDeletedEmail(user);
             req.logger.info(`Usuario id ${uid} eliminado exitosamente`);
-            res.sendSuccessPayload(deletedUser);
+            res.sendSuccess(deletedUser);
         } catch (error) {
             req.logger.error(`Error al eliminar usuario id ${uid}: ${error.message}`);
             res.sendServerError(error.message);
