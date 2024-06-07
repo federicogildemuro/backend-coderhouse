@@ -1,5 +1,5 @@
-import ProductDTO from '../dao/dtos/product.dto.js';
 import { Products } from '../dao/factory.js';
+import ProductDTO from '../dao/dtos/product.dto.js';
 
 export default class ProductsServices {
     static async getProducts(queryParams) {
