@@ -15,16 +15,15 @@ loginForm.addEventListener('submit', async (event) => {
             }
         });
         const data = await response.json();
-        if (data.status === 'error') {
-            alert(data.message);
-        } else {
+        if (data.status === 'success') {
             alert('Sesión iniciada exitosamente');
-            const user = data.payload;
-            if (user.role === 'admin') {
-                window.location.href = '/admin/main';
-                return;
+            if (data.payload.role === 'admin') {
+                window.location.href = '/admin';
+            } else {
+                window.location.href = '/products';
             }
-            window.location.href = '/products';
+        } else {
+            alert(data.message);
         }
     } catch (error) {
         alert(error);

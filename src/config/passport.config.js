@@ -2,10 +2,10 @@ import passport from 'passport';
 import local from 'passport-local';
 import github from 'passport-github2';
 import jwt from 'passport-jwt';
-import { ExtractJwt } from 'passport-jwt';
-import { isValidPassword } from '../utils/passwords.utils.js';
 import UsersServices from '../services/users.services.js';
 import config from './config.js';
+import { isValidPassword } from '../utils/passwords.utils.js';
+import { ExtractJwt } from 'passport-jwt';
 
 const cookieExtractor = req => req?.signedCookies?.token ?? null;
 

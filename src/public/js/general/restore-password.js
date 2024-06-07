@@ -12,11 +12,11 @@ restorePasswordForm.addEventListener('submit', async (event) => {
             }
         });
         const data = await response.json();
-        if (data.status === 'error') {
-            alert(data.message);
+        if (data.status === 'success') {
+            alert('Se ha enviado un enlace de restauración de contraseña a tu correo electrónico');
+            window.location.href = '/';
         } else {
             alert(data.message);
-            window.location.href = '/';
         }
     } catch (error) {
         alert(error);

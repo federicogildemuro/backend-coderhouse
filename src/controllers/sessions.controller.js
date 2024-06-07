@@ -6,23 +6,25 @@ import { isValidPassword } from '../utils/passwords.utils.js';
 
 export default class SessionsController {
     static register(req, res) {
-        req.logger.info(`Usuario ${req.body.email} registrado exitosamente`);
-        res.sendSuccessMessage('Usuario registrado exitosamente');
+        const user = req.user;
+        req.logger.info(`Usuario id ${user._id} registrado exitosamente`);
+        res.sendSuccessPayload(user);
     }
 
     static async login(req, res) {
         try {
-            const token = generateToken(req.user);
+            let user = req.user;
+            const token = generateToken(user);
             res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
-            if (req.user.role !== 'admin') {
-                const user = await UsersServices.getUserById(req.user._id);
+            if (user.role !== 'admin') {
+                user = await UsersServices.getUserById(user._id);
                 user.last_connection = new Date();
-                await UsersServices.updateUser(user._id, user);
+                user = await UsersServices.updateUser(user._id, user);
             }
-            req.logger.info(`Sesión de usuario ${req.user.email} iniciada exitosamente`);
-            res.sendSuccessPayload(req.user);
+            req.logger.info(`Sesión de usuario id ${user._id} iniciada exitosamente`);
+            res.sendSuccessPayload(user);
         } catch (error) {
-            req.logger.error(`Error al iniciar sesión de usuario ${req.user.email}: ${error.message}`);
+            req.logger.error(`Error al iniciar sesión de usuario id ${user._id}: ${error.message}`);
             res.sendServerError(error.message);
         }
     }
@@ -31,7 +33,7 @@ export default class SessionsController {
         const user = req.user;
         const token = generateToken(user);
         res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
-        req.logger.info(`Sesión de usuario ${user.email} iniciada exitosamente con GitHub`);
+        req.logger.info(`Sesión de usuario id ${user._id} iniciada exitosamente con GitHub`);
         res.redirect('/products');
     }
 
@@ -58,10 +60,10 @@ export default class SessionsController {
             const resetLink = `${config.frontendUrl}/reset-password?token=${token}`;
             // Se envía un correo electrónico con el enlace de reestablecimiento
             await MailingServices.getInstance().sendResetPasswordEmail(user, resetLink);
-            req.logger.info(`Correo electrónico enviado exitosamente a ${user.email} con las instrucciones para restaurar contraseña`);
-            res.sendSuccessMessage(`Se ha enviado un correo electrónico a ${user.email} con las instrucciones para restaurar tu contraseña`);
+            req.logger.info(`Enlace de restauración de contraseña enviado exitosamente a usuario id ${user._id}`);
+            res.sendSuccessPayload(token);
         } catch (error) {
-            req.loger.error(`Error al restaurar contraseña de usuario ${email}: ${error.message}`);
+            req.loger.error(`Error al restaurar contraseña de usuario id ${user._id}: ${error.message}`);
             res.sendServerError(error.message);
         }
     }
@@ -98,30 +100,32 @@ export default class SessionsController {
             // Se actualiza la contraseña del usuario
             user.password = password;
             await UsersServices.updateUserPassword(user._id, user);
-            req.logger.info(`Contraseña de usuario ${user.email} reestablecida exitosamente`);
-            res.sendSuccessMessage('Contraseña reestablecida exitosamente');
+            req.logger.info(`Contraseña de usuario id ${user._id} reestablecida exitosamente`);
+            res.sendSuccessPayload(user);
         } catch (error) {
-            req.logger.error(`Error al reestablecer contraseña de usuario ${decoded.email}: ${error.message}`);
+            req.logger.error(`Error al reestablecer contraseña de usuario id ${user._id}: ${error.message}`);
             res.sendServerError(error.message);
         }
     }
 
     static current(req, res) {
-        res.sendSuccessPayload(req.user);
+        const user = req.user;
+        res.sendSuccessPayload(user);
     }
 
     static async logout(req, res) {
         try {
+            let user = req.user;
             res.clearCookie('token');
-            if (req.user.role !== 'admin') {
-                const user = await UsersServices.getUserById(req.user._id);
+            if (user.role !== 'admin') {
+                user = await UsersServices.getUserById(user._id);
                 user.last_connection = new Date();
                 await UsersServices.updateUser(user._id, user);
             }
-            req.logger.info(`Sesión de usuario ${req.user.email} cerrada exitosamente`);
-            res.sendSuccessMessage('Sesión cerrada exitosamente');
+            req.logger.info(`Sesión de usuario id ${user._id} cerrada exitosamente`);
+            res.sendSuccessPayload(user);
         } catch (error) {
-            req.logger.error(`Error al cerrar sesión de usuario ${req.user.email}: ${error.message}`);
+            req.logger.error(`Error al cerrar sesión de usuario id ${user._id}: ${error.message}`);
             res.sendServerError(error.message);
         }
     }
