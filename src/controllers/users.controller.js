@@ -23,6 +23,11 @@ export default class UsersController {
     static async getUserById(req, res) {
         try {
             const { uid } = req.params;
+            const user = req.user;
+            if (user.role !== 'admin' && user._id !== uid) {
+                req.logger.warning(`El usuario id ${user._id} no puede consultar el usuario id ${uid} porque no le pertenece`);
+                return res.sendUserError(`El usuario ${user._id} no puede consultar el usuario ${uid} porque no le pertenece`);
+            }
             const payload = await UsersServices.getUserById(uid);
             if (!payload) {
                 req.logger.warning(`No existe un usuario con el id ${uid}`);
@@ -40,7 +45,12 @@ export default class UsersController {
         try {
             const { uid } = req.params;
             const documents = req.files;
-            const user = await UsersServices.getUserById(uid);
+            let user = req.user;
+            if (user.role !== 'admin' && user._id !== uid) {
+                req.logger.warning(`El usuario id ${user._id} no puede subir documentos al usuario id ${uid} porque no le pertenece`);
+                return res.sendUserError(`El usuario ${user._id} no puede subir documentos al usuario ${uid} porque no le pertenece`);
+            }
+            user = await UsersServices.getUserById(uid);
             if (!user) {
                 req.logger.warning(`No existe un usuario con el id ${uid}`);
                 return res.sendUserError(`No existe un usuario con el id ${uid}`);
@@ -85,7 +95,12 @@ export default class UsersController {
     static async changeUserRole(req, res) {
         try {
             const { uid } = req.params;
-            const user = await UsersServices.getUserById(uid);
+            let user = req.user;
+            if (user.role !== 'admin' && user._id !== uid) {
+                req.logger.warning(`El usuario id ${user._id} no puede cambiar el rol del usuario id ${uid} porque no le pertenece`);
+                return res.sendUserError(`El usuario ${user._id} no puede cambiar el rol del usuario ${uid} porque no le pertenece`);
+            }
+            user = await UsersServices.getUserById(uid);
             if (!user) {
                 req.logger.warning(`No existe un usuario con el id ${uid}`);
                 return res.sendUserError(`No existe un usuario con el id ${uid}`);
@@ -94,8 +109,8 @@ export default class UsersController {
             if (user.role === 'user') {
                 const documents = user.documents.map(document => document.name);
                 if (!documents.includes('id') || !documents.includes('adress') || !documents.includes('account')) {
-                    req.logger.warning(`No se puedo cambiar el rol del usuario id ${uid} a premium porque no ha subido los documentos necesarios`);
-                    return res.sendUserError('No se puede cambiar el rol del usuario a premium si no se han subido los documentos necesarios');
+                    req.logger.warning(`No se puede cambiar el rol del usuario id ${uid} a premium porque no ha subido los documentos necesarios`);
+                    return res.sendUserError(`No se puede cambiar el rol del usuario id ${uid} a premium porque no ha subido los documentos necesarios`);
                 }
             }
             // Se cambia el rol del usuario y se actualiza en la base de datos
@@ -122,10 +137,10 @@ export default class UsersController {
                 await CartsServices.deleteCart(user.cart);
                 await MailingServices.getInstance().sendUserDeletedEmail(user);
             });
-            req.logger.info('Usuarios eliminados exitosamente');
+            req.logger.info('Usuarios inactivos eliminados exitosamente');
             res.sendSuccessPayload(deletedUsers);
         } catch (error) {
-            req.logger.error(`Error al eliminar usuarios: ${error.message}`);
+            req.logger.error(`Error al eliminar usuarios inactivos: ${error.message}`);
             res.sendServerError(error.message);
         }
     }

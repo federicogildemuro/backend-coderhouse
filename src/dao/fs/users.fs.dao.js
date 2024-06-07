@@ -23,7 +23,7 @@ export default class UsersFsDAO {
             const totalDocs = this.users.length;
             const startIndex = (page - 1) * limit;
             const endIndex = startIndex + limit;
-            const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+            const paginatedUsers = this.users.slice(startIndex, endIndex);
             const totalPages = Math.ceil(totalDocs / limit);
             const pagingCounter = (page - 1) * limit + 1;
             const hasPrevPage = page > 1;
@@ -47,17 +47,14 @@ export default class UsersFsDAO {
         }
     }
 
-    getUserById(id) {
+    getUser(filter) {
         try {
-            return this.users.find(user => user._id === id);
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    getUserByEmail(email) {
-        try {
-            return this.users.find(user => user.email === email);
+            const key = Object.keys(filter)[0];
+            let value = filter[key];
+            if (key === '_id') {
+                value = parseInt(value);
+            }
+            return this.users.find(user => user[key] === value);
         } catch (error) {
             throw error;
         }
@@ -80,25 +77,22 @@ export default class UsersFsDAO {
 
     updateUser(id, user) {
         try {
-            const index = this.users.findIndex(user => user._id === id);
-            if (index === -1) {
-                return null;
-            }
+            id = parseInt(id);
             const updatedUser = {
                 _id: id,
                 ...user
             }
+            const index = this.users.findIndex(user => user._id === id);
             this.users[index] = updatedUser;
             fs.writeFileSync(this.url, JSON.stringify(this.users, null, '\t'));
-            return updatedUser;
+            return this.user[index];
         } catch (error) {
             throw error;
         }
     }
 
-    deleteInactiveUsers() {
+    deleteInactiveUsers(cutOffDate) {
         try {
-            const cutOffDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
             const deletedUsers = this.users.filter(user => new Date(user.last_connection) < cutOffDate);
             const updatedUsers = users.filter(user => new Date(user.last_connection) >= cutOffDate);
             fs.writeFileSync(this.url, JSON.stringify(updatedUsers, null, '\t'));

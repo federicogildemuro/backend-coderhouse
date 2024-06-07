@@ -21,17 +21,9 @@ export default class UsersMongoDAO {
         }
     }
 
-    async getUserById(id) {
+    async getUser(filter) {
         try {
-            return await userModel.findById(id).lean();
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async getUserByEmail(email) {
-        try {
-            return await userModel.findOne({ email }).lean();
+            return await userModel.findOne(filter).lean();
         } catch (error) {
             throw error;
         }
@@ -53,10 +45,8 @@ export default class UsersMongoDAO {
         }
     }
 
-    async deleteInactiveUsers() {
+    async deleteInactiveUsers(cutOffDate) {
         try {
-            /* const cutOffDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); */
-            const cutOffDate = new Date(Date.now() - 30 * 60 * 1000);
             const deletedUsers = await userModel.find({ last_connection: { $lt: cutOffDate } });
             await userModel.deleteMany({ last_connection: { $lt: cutOffDate } });
             return deletedUsers;

@@ -1,7 +1,7 @@
 import { Users } from '../dao/factory.js';
+import UserDTO from '../dao/dtos/user.dto.js';
 import { createHash } from '../utils/passwords.utils.js';
 import CartsServices from './carts.services.js';
-import UserDTO from '../dao/dtos/user.dto.js';
 
 export default class UsersServices {
     static async getUsers(queryParams) {
@@ -16,7 +16,7 @@ export default class UsersServices {
 
     static async getUserById(id) {
         try {
-            return await Users.getInstance().getUserById(id);
+            return await Users.getInstance().getUser({ _id: id });
         } catch (error) {
             throw error;
         }
@@ -24,7 +24,7 @@ export default class UsersServices {
 
     static async getUserByEmail(email) {
         try {
-            return await Users.getInstance().getUserByEmail(email);
+            return await Users.getInstance().getUser({ email: email });
         } catch (error) {
             throw error;
         }
@@ -69,7 +69,8 @@ export default class UsersServices {
 
     static async deleteInactiveUsers() {
         try {
-            return await Users.getInstance().deleteInactiveUsers();
+            const cutOffDate = new Date(Date.now() - 30 * 60 * 1000);
+            return await Users.getInstance().deleteInactiveUsers(cutOffDate);
         } catch (error) {
             throw error;
         }
