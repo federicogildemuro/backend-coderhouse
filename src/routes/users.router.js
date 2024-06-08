@@ -1,6 +1,6 @@
 import CustomRouter from './custom.router.js';
 import UsersController from '../controllers/users.controller.js';
-import uploader from '../utils/multer.utils.js';
+import uploader from '../config/multer.config.js';
 
 export default class UsersRouter extends CustomRouter {
     static #instance;

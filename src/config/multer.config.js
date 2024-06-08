@@ -1,5 +1,5 @@
 import multer from 'multer';
-import __dirname from '../utils/dirname.js';
+import __dirname from '../utils/dirname.utils.js';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -29,12 +29,25 @@ const storage = multer.diskStorage({
     }
 });
 
-const uploader = multer({ storage }).fields([
-    { name: 'product', maxCount: 2 },
-    { name: 'profile', maxCount: 1 },
-    { name: 'id', maxCount: 1 },
-    { name: 'adress', maxCount: 1 },
-    { name: 'account', maxCount: 1 }
-]);
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
+        cb(null, true);
+    } else {
+        cb(new Error('Solo se permiten archivos JPG'), false);
+    }
+};
+
+const uploader = multer(
+    {
+        storage,
+        fileFilter
+    })
+    .fields([
+        { name: 'profile', maxCount: 1 },
+        { name: 'product', maxCount: 2 },
+        { name: 'id', maxCount: 1 },
+        { name: 'adress', maxCount: 1 },
+        { name: 'account', maxCount: 1 }
+    ]);
 
 export default uploader;
