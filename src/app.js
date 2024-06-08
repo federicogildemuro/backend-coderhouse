@@ -3,7 +3,7 @@ import initializePersistence from './dao/factory.js';
 import express from 'express';
 import cors from 'cors';
 import compression from 'express-compression';
-import __dirname from './utils/dirname.js';
+import __dirname from './utils/dirname.utils.js';
 import cookieParser from 'cookie-parser';
 import config from './config/config.js';
 import { addLogger } from './config/logger.config.js';

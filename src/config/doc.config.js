@@ -1,4 +1,4 @@
-import __dirname from '../utils/dirname.js';
+import __dirname from '../utils/dirname.utils.js';
 import swaggerJsDoc from 'swagger-jsdoc';
 
 const swaggerOptions = {
