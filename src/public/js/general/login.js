@@ -18,7 +18,7 @@ loginForm.addEventListener('submit', async (event) => {
         if (data.status === 'success') {
             alert('Sesión iniciada exitosamente');
             if (data.payload.role === 'admin') {
-                window.location.href = '/admin';
+                window.location.href = '/admin/main';
             } else {
                 window.location.href = '/products';
             }
