@@ -6,7 +6,6 @@
 
 <form id="editProductForm">
     <input type="hidden" id="productId" name="productId" value="{{product._id}}">
-    <input type="hidden" id="owner" name="owner" value="{{product.owner}}">
 
     <div>
         <label for="title">Título</label>
@@ -50,6 +49,8 @@
         <label for="thumbnails">Imagenes</label>
         <input type="text" id="thumbnails" name="thumbnails" value="{{product.thumbnails}}">
     </div>
+
+    <input type="hidden" id="owner" name="owner" value="{{product.owner}}">
 
     <div>
         <button type="submit">Editar producto</button>

@@ -37,7 +37,7 @@
     {{/each}}
 </table>
 
-<h3>Total del carrito ${{cart.total}}</h3>
+<h2>Total del carrito ${{cart.total}}</h2>
 
 <div>
     <button onclick="clearCart('{{cart._id}}')">Vaciar carrito</button>
@@ -45,7 +45,7 @@
 </div>
 
 {{else}}
-<h3>No hay productos en el carrito</h3>
+<h2>No hay productos</h2>
 {{/if}}
 
 <script src="/js/user/cart.js"></script>

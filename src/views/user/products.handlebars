@@ -14,6 +14,7 @@
     <button onclick="logout()">Cerrar sesión</button>
 </nav>
 
+{{#if products}}
 <form class="query-params-form" id="queryParamsForm">
     <div>
         <label for="limit">Límite</label>
@@ -79,5 +80,9 @@
     <a>Siguiente</a>
     {{/if}}
 </div>
+
+{{else}}
+<h3>No hay productos</h3>
+{{/if}}
 
 <script src="/js/user/products.js"></script>

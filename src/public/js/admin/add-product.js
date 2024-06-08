@@ -21,11 +21,11 @@ addProductForm.addEventListener('submit', async (event) => {
             }
         });
         const data = await response.json();
-        if (data.status === 'error') {
-            alert(data.message);
-        } else {
+        if (data.status === 'success') {
             alert('Producto agregado exitosamente');
             window.location.href = '/admin/products';
+        } else {
+            alert(data.message);
         }
     } catch (error) {
         alert(error);

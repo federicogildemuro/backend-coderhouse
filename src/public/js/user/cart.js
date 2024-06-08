@@ -10,6 +10,8 @@ async function updateProductQuantity(productId, cartId) {
         if (data.status === 'success') {
             alert('Cantidad del producto actualizada exitosamente');
             window.location.reload();
+        } else {
+            alert(data.message);
         }
     } catch (error) {
         alert(error);
@@ -23,6 +25,8 @@ async function removeProductFromCart(productId, cartId) {
         if (data.status === 'success') {
             alert('Producto eliminado del carrito exitosamente');
             window.location.reload();
+        } else {
+            alert(data.message);
         }
     } catch (error) {
         alert(error);
@@ -36,6 +40,8 @@ async function clearCart(cartId) {
         if (data.status === 'success') {
             alert('Carrito vaciado exitosamente');
             window.location.reload();
+        } else {
+            alert(data.message);
         }
     } catch (error) {
         alert(error);

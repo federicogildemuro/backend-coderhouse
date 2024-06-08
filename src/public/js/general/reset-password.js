@@ -14,7 +14,7 @@ resetPasswordForm.addEventListener('submit', async (event) => {
         });
         const data = await response.json();
         if (data.status === 'success') {
-            alert(data.message);
+            alert('Contraseña restablecida exitosamente');
             window.location.href = '/login';
         } else {
             if (data.message === 'No se ha proporcionado un token válido') {
