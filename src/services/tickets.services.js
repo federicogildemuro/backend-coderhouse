@@ -18,4 +18,12 @@ export default class TicketsServices {
             throw error;
         }
     }
+
+    static async deleteTickets() {
+        try {
+            return await Tickets.getInstance().deleteTickets();
+        } catch (error) {
+            throw error;
+        }
+    }
 }

@@ -27,4 +27,14 @@ export default class TicketsMongoDAO {
             throw error;
         }
     }
+
+    async deleteTickets() {
+        try {
+            const deletedTickets = await ticketModel.find();
+            await ticketModel.deleteMany();
+            return deletedTickets;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

@@ -39,4 +39,15 @@ export default class TicketsFsDAO {
             throw error;
         }
     }
+
+    deleteTickets() {
+        try {
+            const deletedTickets = this.tickets;
+            this.tickets = [];
+            fs.writeFileSync(this.url, JSON.stringify(this.tickets, null, '\t'));
+            return deletedTickets;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
