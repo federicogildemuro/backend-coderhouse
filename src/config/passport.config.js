@@ -14,7 +14,7 @@ const initializePassport = () => {
         { usernameField: 'email', passReqToCallback: true },
         async (req, username, password, done) => {
             try {
-                const { first_name, last_name, age } = req.body;
+                const { first_name, last_name, age, role, documents } = req.body;
                 if (!first_name || !last_name || !username || !password) {
                     return done(null, false, 'Los campos nombre, apellido, correo electrónico y contraseña son obligatorios');
                 }
@@ -35,7 +35,9 @@ const initializePassport = () => {
                     last_name,
                     email: username,
                     age,
-                    password
+                    password,
+                    role,
+                    documents,
                 });
                 return done(null, newUser);
             } catch (error) {
