@@ -85,7 +85,7 @@ export default class UsersFsDAO {
             const index = this.users.findIndex(user => user._id === id);
             this.users[index] = updatedUser;
             fs.writeFileSync(this.url, JSON.stringify(this.users, null, '\t'));
-            return this.user[index];
+            return this.users[index];
         } catch (error) {
             throw error;
         }
