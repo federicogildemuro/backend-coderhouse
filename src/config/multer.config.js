@@ -29,19 +29,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
-        cb(null, true);
-    } else {
-        cb(new Error('Solo se permiten archivos JPG'), false);
-    }
-};
-
-const uploader = multer(
-    {
-        storage,
-        fileFilter
-    })
+const uploader = multer({ storage })
     .fields([
         { name: 'profile', maxCount: 1 },
         { name: 'product', maxCount: 2 },
