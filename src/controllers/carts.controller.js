@@ -6,7 +6,7 @@ export default class CartsController {
         try {
             const { cid } = req.params;
             const user = req.user;
-            if (user.role !== 'admin' && user.cart !== cid) {
+            if (user.role !== 'admin' && user.cart != cid) {
                 req.logger.warning(`El usuario id ${user._id} no puede consultar el carrito id ${cid} porque no le pertenece`);
                 return res.sendUserError(`El usuario ${user._id} no puede consultar el carrito id ${cid} porque no le pertenece`);
             }
@@ -38,7 +38,7 @@ export default class CartsController {
         try {
             const { cid } = req.params;
             const user = req.user;
-            if (user.role !== 'admin' && user.cart !== cid) {
+            if (user.role !== 'admin' && user.cart != cid) {
                 req.logger.warning(`El usuario id ${user._id} no puede vaciar el carrito id ${cid} porque no le pertenece`);
                 return res.sendUserError(`El usuario ${user._id} no puede vaciar el carrito id ${cid} porque no le pertenece`);
             }
@@ -78,7 +78,7 @@ export default class CartsController {
             const { cid, pid } = req.params;
             const quantity = req.body.quantity;
             const user = req.user;
-            if (user.role !== 'admin' && user.cart !== cid) {
+            if (user.role !== 'admin' && user.cart != cid) {
                 req.logger.warning(`El usuario id ${user._id} no puede agregar productos al carrito id ${cid} porque no le pertenece`);
                 return res.sendUserError(`El usuario ${user._id} no puede agregar productos al carrito id ${cid} porque no le pertenece`);
             }
@@ -110,7 +110,7 @@ export default class CartsController {
             const { cid, pid } = req.params;
             const quantity = req.body.quantity;
             const user = req.user;
-            if (user.role !== 'admin' && user.cart !== cid) {
+            if (user.role !== 'admin' && user.cart != cid) {
                 req.logger.warning(`El usuario id ${user._id} no puede actualizar la cantidad del producto id ${pid} en el carrito id ${cid} porque no le pertenece`);
                 return res.sendUserError(`El usuario ${user._id} no puede actualizar la cantidad del producto id ${pid} en el carrito id ${cid} porque no le pertenece`);
             }
@@ -141,7 +141,7 @@ export default class CartsController {
         try {
             const { cid, pid } = req.params;
             const user = req.user;
-            if (user.role !== 'admin' && user.cart !== cid) {
+            if (user.role !== 'admin' && user.cart != cid) {
                 req.logger.warning(`El usuario id ${user._id} no puede eliminar productos del carrito id ${cid} porque no le pertenece`);
                 return res.sendUserError(`El usuario ${user._id} no puede eliminar productos del carrito id ${cid} porque no le pertenece`);
             }
@@ -177,7 +177,7 @@ export default class CartsController {
                 req.logger.warning(`No existe un carrito con el id ${cid}`);
                 return res.sendUserError(`No existe un carrito con el id ${cid}`);
             }
-            if (user.cart !== cid) {
+            if (user.cart != cid) {
                 req.logger.warning(`El usuario id ${user._id} no puede comprar el carrito id ${cid} porque no le pertenece`);
                 return res.sendUserError(`El usuario ${user._id} no puede comprar el carrito id ${cid} porque no le pertenece`);
             }

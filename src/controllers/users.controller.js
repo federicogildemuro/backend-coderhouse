@@ -25,7 +25,7 @@ export default class UsersController {
         try {
             const { uid } = req.params;
             const user = req.user;
-            if (user.role !== 'admin' && user._id !== uid) {
+            if (user.role !== 'admin' && user._id != uid) {
                 req.logger.warning(`El usuario id ${user._id} no puede consultar el usuario id ${uid} porque no le pertenece`);
                 return res.sendUserError(`El usuario ${user._id} no puede consultar el usuario ${uid} porque no le pertenece`);
             }
@@ -47,7 +47,7 @@ export default class UsersController {
             const { uid } = req.params;
             const documents = req.files;
             let user = req.user;
-            if (user.role !== 'admin' && user._id !== uid) {
+            if (user.role !== 'admin' && user._id != uid) {
                 req.logger.warning(`El usuario id ${user._id} no puede subir documentos al usuario id ${uid} porque no le pertenece`);
                 return res.sendUserError(`El usuario ${user._id} no puede subir documentos al usuario ${uid} porque no le pertenece`);
             }
@@ -112,7 +112,7 @@ export default class UsersController {
         try {
             const { uid } = req.params;
             let user = req.user;
-            if (user.role !== 'admin' && user._id !== uid) {
+            if (user.role !== 'admin' && user._id != uid) {
                 req.logger.warning(`El usuario id ${user._id} no puede cambiar el rol del usuario id ${uid} porque no le pertenece`);
                 return res.sendUserError(`El usuario ${user._id} no puede cambiar el rol del usuario ${uid} porque no le pertenece`);
             }
