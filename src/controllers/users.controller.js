@@ -4,6 +4,7 @@ import { generateToken } from '../utils/tokens.utils.js';
 import config from '../config/config.js';
 import CartsServices from '../services/carts.services.js';
 import MailingServices from '../services/mailing.services.js';
+import path from 'path';
 
 export default class UsersController {
     static async getUsers(req, res) {
@@ -55,11 +56,26 @@ export default class UsersController {
                 req.logger.warning(`No existe un usuario con el id ${uid}`);
                 return res.sendUserError(`No existe un usuario con el id ${uid}`);
             }
-            // Se recorren los documentos subidos
+            // Array para almacenar los errores de formato
+            const formatErrors = [];
+            // Se recorren los documentos subidos para verificar si son de formato válido
             Object.keys(documents).forEach(documentKey => {
-                // Se obtiene el array de documentos por cada tipo
                 const documentArray = documents[documentKey];
-                // Se busca si el tipo de documento ya existe en el usuario
+                documentArray.forEach(document => {
+                    const fileExtension = path.extname(document.originalname).toLowerCase();
+                    if (fileExtension !== '.jpeg' && fileExtension !== '.jpg') {
+                        formatErrors.push(`No se puede subir el documento ${document.originalname} como ${documentKey} porque no se admite la extensión ${fileExtension}`);
+                    }
+                });
+            });
+            // Si hubo errores de formato se envía una respuesta con los errores
+            if (formatErrors.length > 0) {
+                req.logger.warning(formatErrors.join(', '));
+                return res.sendUserError(formatErrors.join(', '));
+            }
+            // Se recorren los documentos subidos para verificar si ya existen en el usuario
+            Object.keys(documents).forEach(documentKey => {
+                const documentArray = documents[documentKey];
                 documentArray.forEach(document => {
                     const existingDocument = user.documents.find(doc => doc.name === documentKey);
                     // Si el documento existe se actualiza la referencia, sino se agrega
