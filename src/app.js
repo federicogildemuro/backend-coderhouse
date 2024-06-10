@@ -10,10 +10,11 @@ import { addLogger } from './config/logger.config.js';
 import handlebars from 'express-handlebars';
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
+import SessionsRouter from './routes/sessions.router.js';
+import UsersRouter from './routes/users.router.js';
 import ProductsRouter from './routes/products.router.js';
 import CartsRouter from './routes/carts.router.js';
-import UsersRouter from './routes/users.router.js';
-import SessionsRouter from './routes/sessions.router.js';
+import TicketsRouter from './routes/tickets.router.js';
 import swaggerSpecs from './config/doc.config.js';
 import swaggerUi from 'swagger-ui-express';
 import ViewsRouter from './routes/views.router.js';
@@ -49,10 +50,11 @@ initializePassport();
 app.use(passport.initialize());
 
 // Rutas de la API
+app.use('/api/sessions', SessionsRouter.getInstance().getRouter());
+app.use('/api/users', UsersRouter.getInstance().getRouter());
 app.use('/api/products', ProductsRouter.getInstance().getRouter());
 app.use('/api/carts', CartsRouter.getInstance().getRouter());
-app.use('/api/users', UsersRouter.getInstance().getRouter());
-app.use('/api/sessions', SessionsRouter.getInstance().getRouter());
+app.use('/api/tickets', TicketsRouter.getInstance().getRouter());
 
 // Documentación de la API
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
