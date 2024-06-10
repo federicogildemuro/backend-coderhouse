@@ -16,6 +16,8 @@ export default class ViewsRouter extends CustomRouter {
     }
 
     init() {
+        this.getRouter().get('/favicon.ico', (req, res) => res.status(204).end());
+
         this.get('/', ['PUBLIC'], ViewsController.getInstance().renderIndex);
 
         this.get('/login', ['PUBLIC'], ViewsController.getInstance().renderLogin);
