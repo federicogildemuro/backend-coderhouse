@@ -113,7 +113,7 @@ export default class ProductsFsDAO {
         try {
             id = parseInt(id);
             const index = this.products.findIndex(product => product._id === id);
-            const deletedProduct = this.products.splice(index, 1);
+            const deletedProduct = this.products.splice(index, 1)[0];
             fs.writeFileSync(this.url, JSON.stringify(this.products, null, '\t'));
             return deletedProduct;
         } catch (error) {

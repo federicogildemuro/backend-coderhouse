@@ -56,7 +56,7 @@ export default class CartsFsDAO {
         try {
             id = parseInt(id);
             const index = this.carts.findIndex(cart => cart._id === id);
-            const deletedCart = this.carts.splice(index, 1);
+            const deletedCart = this.carts.splice(index, 1)[0];
             fs.writeFileSync(this.url, JSON.stringify(this.carts, null, '\t'));
             return deletedCart;
         } catch (error) {

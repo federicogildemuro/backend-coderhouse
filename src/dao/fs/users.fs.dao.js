@@ -94,7 +94,7 @@ export default class UsersFsDAO {
     deleteInactiveUsers(cutOffDate) {
         try {
             const deletedUsers = this.users.filter(user => new Date(user.last_connection) < cutOffDate);
-            const updatedUsers = users.filter(user => new Date(user.last_connection) >= cutOffDate);
+            const updatedUsers = this.users.filter(user => new Date(user.last_connection) >= cutOffDate);
             fs.writeFileSync(this.url, JSON.stringify(updatedUsers, null, '\t'));
             return deletedUsers;
         } catch (error) {
@@ -106,7 +106,7 @@ export default class UsersFsDAO {
         try {
             id = parseInt(id);
             const index = this.users.findIndex(user => user._id === id);
-            const deletedUser = this.users.splice(index, 1);
+            const deletedUser = this.users.splice(index, 1)[0];
             fs.writeFileSync(this.url, JSON.stringify(this.users, null, '\t'));
             return deletedUser;
         } catch (error) {
