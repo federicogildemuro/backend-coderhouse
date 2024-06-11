@@ -1,4 +1,5 @@
 import winston from 'winston';
+import options from './args.config.js';
 
 const customLevelOptions = {
     levels: {
@@ -53,7 +54,7 @@ winston.addColors(customLevelOptions.colors);
 
 export const addLogger = (req, res, next) => {
     // Se obtiene el entorno de ejecución
-    const environment = process.env.NODE_ENV || 'development';
+    const environment = options.environment;
     // Se carga el logger correspondiente al entorno
     const logger = environment === 'development' ? devLogger : prodLogger;
     // Se añaden los métodos para cada nivel de log

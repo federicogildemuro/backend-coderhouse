@@ -5,11 +5,11 @@
     "main": "./src/app.js",
     "type": "module",
     "scripts": {
-        "start": "cross-env NODE_ENV=production node ./src/app.js -p mongo",
-        "start-fs": "cross-env NODE_ENV=production node ./src/app.js -p fs",
-        "start:dev": "cross-env NODE_ENV=development nodemon ./src/app.js -p mongo",
-        "start:dev-fs": "cross-env NODE_ENV=development nodemon --ignore '*.json' ./src/app.js -p fs",
-        "supertest": "cross-env NODE_ENV=development mocha ./test/supertest.js --timeout 30000"
+        "start": "node ./src/app.js -e production",
+        "start-fs": "node ./src/app.js -s fs -e production",
+        "start:dev": "nodemon ./src/app.js",
+        "start:dev-fs": "nodemon --ignore '*.json' -- ./src/app.js -s fs",
+        "supertest": "mocha ./test/supertest.js --timeout 30000"
     },
     "keywords": [],
     "author": "Federico Gil de Muro",
@@ -41,7 +41,6 @@
     "devDependencies": {
         "@faker-js/faker": "^8.4.1",
         "chai": "^5.1.1",
-        "cross-env": "^7.0.3",
         "mocha": "^10.4.0",
         "nodemon": "^3.1.0",
         "supertest": "^7.0.0"

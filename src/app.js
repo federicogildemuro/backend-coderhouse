@@ -1,4 +1,4 @@
-import { program } from 'commander';
+import options from './config/args.config.js';
 import initializePersistence from './dao/factory.js';
 import express from 'express';
 import cors from 'cors';
@@ -21,12 +21,7 @@ import ViewsRouter from './routes/views.router.js';
 import initializeSocket from './config/socket.config.js';
 
 // Inicialización de la persistencia
-program.option('-p, --persistence <type>', 'Tipo de persistencia (mongo o fs)').parse();
-if (!program.opts().persistence) {
-    console.log('El parámetro --persistence es obligatorio y debe ser mongo o fs');
-    process.exit(1);
-}
-initializePersistence(program.opts().persistence);
+initializePersistence(options.storage);
 
 // Inicialización de Express
 const app = express();
