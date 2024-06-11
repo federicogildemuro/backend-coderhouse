@@ -43,7 +43,8 @@ const productWithoutStock = generateProduct();
 productWithoutStock.stock = 0;
 let productWithoutStockId;
 
-describe('Test del proyecto final del curso de Programación Backend de Coderhouse', () => {
+describe('Test del proyecto final del curso de Programación Backend de Coderhouse', function () {
+    this.timeout(30000);
     before(async () => {
         try {
             let response = await requester.post('/api/sessions/login').send({ email: config.adminEmail, password: config.adminPassword });

@@ -9,7 +9,7 @@
         "start-fs": "node ./src/app.js -s fs -e production",
         "start:dev": "nodemon ./src/app.js",
         "start:dev-fs": "nodemon --ignore '*.json' -- ./src/app.js -s fs",
-        "supertest": "mocha ./test/supertest.js --timeout 30000"
+        "supertest": "mocha ./test/supertest.js"
     },
     "keywords": [],
     "author": "Federico Gil de Muro",
