@@ -132,12 +132,14 @@ export default class UsersController {
             // Se cambia el rol del usuario y se actualiza en la base de datos
             user.role = user.role === 'user' ? 'premium' : 'user';
             await UsersServices.updateUser(uid, user);
-            // Se elimina la contraseña del usuario y se actualiza la petición
-            const UserWithoutPassword = new UserWithoutPasswordDTO(user);
-            req.user = { ...UserWithoutPassword };
-            // Se genera un nuevo token con el usuario actualizado y se almacena en una cookie
-            const token = generateToken(req.user);
-            res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
+            if (req.user.role !== 'admin') {
+                // Se elimina la contraseña del usuario y se actualiza la petición
+                const UserWithoutPassword = new UserWithoutPasswordDTO(user);
+                req.user = { ...UserWithoutPassword };
+                // Se genera un nuevo token con el usuario actualizado y se almacena en una cookie
+                const token = generateToken(req.user);
+                res.cookie('token', token, { maxAge: config.cookieMaxAge, httpOnly: true, signed: true });
+            }
             req.logger.info(`Rol de usuario id ${uid} modificado exitosamente a ${user.role}`);
             res.sendSuccess(user);
         } catch (error) {
