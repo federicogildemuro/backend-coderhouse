@@ -69,7 +69,7 @@ export default class UsersServices {
 
     static async deleteInactiveUsers() {
         try {
-            const cutOffDate = new Date(Date.now() - 30 * 60 * 1000);
+            const cutOffDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
             return await Users.getInstance().deleteInactiveUsers(cutOffDate);
         } catch (error) {
             throw error;
