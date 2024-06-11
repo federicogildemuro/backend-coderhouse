@@ -16,15 +16,15 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         const user = req.user;
         if (file.fieldname === 'profile') {
-            cb(null, `${user._id}.${Date.now()}`);
+            cb(null, `${user._id}-profile.jpg`);
         } else if (file.fieldname === 'product') {
-            cb(null, `${user._id}.${Date.now()}`);
+            cb(null, `${user._id}-${Date.now()}.jpg`);
         } else if (file.fieldname === 'id') {
-            cb(null, `${user._id}.${Date.now()}.id`);
+            cb(null, `${user._id}-id.jpg`);
         } else if (file.fieldname === 'adress') {
-            cb(null, `${user._id}.${Date.now()}.adress`);
+            cb(null, `${user._id}-adress.jpg`);
         } else if (file.fieldname === 'account') {
-            cb(null, `${user._id}.${Date.now()}.account`);
+            cb(null, `${user._id}-account.jpg`);
         }
     }
 });
