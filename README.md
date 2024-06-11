@@ -8,13 +8,13 @@ El mismo utiliza:
 
 - **Express**: Es un framework de aplicaciones web para Node.js que simplifica el proceso de creación de servidores web y APIs.
 
+- **MongoDB y Mongoose**: MongoDB es una base de datos NoSQL orientada a documentos, mientras que Mongoose es una biblioteca de modelado de objetos MongoDB para Node.js. Se utilizan para almacenar y manipular los datos del ecommerce de forma eficiente.
+
 - **File System**: Esta opción de persistencia almacena los datos directamente en el sistema de archivos del servidor.
 
 - **Handlebars**: Es un motor de plantillas que permite generar HTML de forma dinámica basado en templates. Se utiliza para renderizar las vistas del lado del servidor.
 
 - **Socket.IO**: Es una biblioteca JavaScript para aplicaciones web en tiempo real. Permite la comunicación bidireccional en tiempo real entre clientes web y servidores. Se utiliza para el chat entre usuarios.
-
-- **MongoDB y Mongoose**: MongoDB es una base de datos NoSQL orientada a documentos, mientras que Mongoose es una biblioteca de modelado de objetos MongoDB para Node.js. Se utilizan para almacenar y manipular los datos del ecommerce de forma eficiente.
 
 - **Cookie Parser**: Es una librería de Node.js que analiza las cookies adjuntas a las solicitudes HTTP. Se utiliza para facilitar el manejo de cookies en la autenticación de usuarios y otras funcionalidades relacionadas con la sesión.
 
@@ -22,13 +22,17 @@ El mismo utiliza:
 
 - **Passport.js**: Es un middleware de autenticación para Node.js que se utiliza en aplicaciones web para autenticar a los usuarios mediante diversas estrategias. Se utiliza junto con las estrategias Local, JWT y GitHub para gestionar la autenticación de usuarios.
 
-- **Dotenv**: Es una librería que carga variables de entorno desde un archivo .env en el entorno de ejecución. Se utiliza para cargar configuraciones sensibles de forma segura, sin necesidad de exponerlas en el código fuente.
+- **Multer**: es un middleware de Node.js para el manejo de archivos en formularios HTML. Permite cargar archivos desde el cliente al servidor de manera fácil y segura. Se utilizar para que los usuarios puedan cargar distintos tipos de documentos en su perfil.
 
-- **Commander**: Es una librería de Node.js que simplifica la creación de interfaces de línea de comandos (CLI). Se utiliza para definir la persistencia que se utilizará, permitiendo al usuario elegir entre las diferentes opciones de almacenamiento de datos.
+- **Bcrypt**: es una biblioteca de cifrado de contraseñas diseñada para almacenar contraseñas de manera segura. Utiliza un algoritmo de hashing irreversible para proteger las contraseñas de los usuarios contra ataques de fuerza bruta y otros intentos de compromiso de seguridad.
 
 - **UUID**: Es una biblioteca que ofrece herramientas para generar Identificadores Únicos Universales (UUIDs), los que se utilizan para la generación de los códigos de los tickets de compra, garantizando la unicidad de cada transacción.
 
 - **Nodemailer**: Es una librería de Node.js que simplifica el proceso de enviar correos electrónicos desde una aplicación Node, que se utiliza para enviar los vínculos de reestablecimiento de contraseñas y tickets de compra.
+
+- **Dotenv**: Es una librería que carga variables de entorno desde un archivo .env en el entorno de ejecución. Se utiliza para cargar configuraciones sensibles de forma segura, sin necesidad de exponerlas en el código fuente.
+
+- **Commander**: Es una librería de Node.js que simplifica la creación de interfaces de línea de comandos (CLI). Se utiliza para definir la persistencia que se utilizará, permitiendo al usuario elegir entre las diferentes opciones de almacenamiento de datos.
 
 - **CORS**: Es un mecanismo de seguridad que permite a los servidores indicar a los navegadores si deben permitir que una solicitud web acceda a recursos de otro dominio. Se utiliza para controlar y autorizar solicitudes HTTP entre diferentes dominios, asegurando un intercambio de datos seguro y controlado.
 
@@ -38,7 +42,11 @@ El mismo utiliza:
 
 - **Swagger**: es una herramienta de documentación y diseño de APIs que permite describir, producir, consumir y visualizar APIs RESTful de manera interactiva, la que se utiliza con relación a las rutas api/products y api/carts.
 
-**Mocha, Chai y Supertest**: bibliotecas que se utilizan en forma conjunta para pruebas de solicitudes HTTP y validación de las respuestas del servidor, asegurando que las rutas y los controladores funcionen correctamente.
+- **Nodemon**: es una herramienta que supervisa los cambios en los archivos de tu aplicación Node.js y reinicia automáticamente el servidor cuando se detectan cambios, el cual se utiliza en los scripts de desarrollo.
+
+- **Faker**: es una biblioteca que genera datos falsos para pruebas y desarrollo que resulta de gran utilidad para crear conjuntos de datos de prueba o para poblar una base de datos con datos de muestra.
+
+- **Mocha, Chai y Supertest**: bibliotecas que se utilizan en forma conjunta para pruebas de solicitudes HTTP y validación de las respuestas del servidor, asegurando que las rutas y los controladores funcionen correctamente.
 
 ## Requisitos previos
 
@@ -83,11 +91,12 @@ De esta forma se ejecutará en un entorno de producción utilizando la persisten
 
 Aquí puedes encontrar una breve descripción de los endpoints disponibles en la API:
 
+- `/api/sessions`: Endpoint para gestionar las sesiones de usuarios.
+- `/api/users`: Endpoint para gestionar usuarios.
 - `/api/products`: Endpoint para gestionar productos.
 - `/api/carts`: Endpoint para gestionar carritos.
-- `/api/sessions`: Endpoint para gestionar las sesiones de usuarios.
 
-Puedes encontrar una documentación más detallada de la API en el archivo `API_DOCS.md`.
+Puedes encontrar una documentación más detallada de la API en la ruta `/api/docs`, donde encontrarás detalles sobre los endpoints disponibles y cómo interactuar con ellos.
 
 ## Contribución
 
